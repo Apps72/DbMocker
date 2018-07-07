@@ -1,0 +1,10 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.1</TargetFramework>
+    <AssemblyName>Apps72.Dev.Data.DbMocker</AssemblyName>
+    <RootNamespace>Apps72.Dev.Data.DbMocker</RootNamespace>
+    <Version>1.1.0</Version>
+  </PropertyGroup>
+
+</Project>

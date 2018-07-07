@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.27703.2026
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Apps72.Dev.Data.DbMocker", "DbMocker\DbMocker.csproj", "{2B1EE9B3-93D8-4209-907E-0D29DAC089D3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DbMocker.Tests", "DbMocker.Tests\DbMocker.Tests.csproj", "{2E00ABB2-ECB5-486E-B33E-2CE7531D1772}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{2B1EE9B3-93D8-4209-907E-0D29DAC089D3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2B1EE9B3-93D8-4209-907E-0D29DAC089D3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2B1EE9B3-93D8-4209-907E-0D29DAC089D3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2B1EE9B3-93D8-4209-907E-0D29DAC089D3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2E00ABB2-ECB5-486E-B33E-2CE7531D1772}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2E00ABB2-ECB5-486E-B33E-2CE7531D1772}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2E00ABB2-ECB5-486E-B33E-2CE7531D1772}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2E00ABB2-ECB5-486E-B33E-2CE7531D1772}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {43013FEE-E372-4866-91B7-2EFE840E3345}
+	EndGlobalSection
+EndGlobal
