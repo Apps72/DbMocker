@@ -5,15 +5,19 @@ using System.Linq;
 
 namespace Apps72.Dev.Data.DbMocker
 {
+    /// <summary />
     public class MockManager
     {
+        /// <summary />
         internal MockManager(MockDbConnection connection)
         {
             
         }
 
+        /// <summary />
         internal List<MockCondition> Conditions = new List<MockCondition>();
 
+        /// <summary />
         public MockCondition When(Func<MockCommand, bool> condition)
         {
             var mock = new MockCondition() { Condition = condition };
@@ -21,6 +25,7 @@ namespace Apps72.Dev.Data.DbMocker
             return mock;
         }
 
+        /// <summary />
         internal object GetFirstReturnsFound(MockCommand command)
         {
             foreach (var item in this.Conditions)
@@ -33,44 +38,5 @@ namespace Apps72.Dev.Data.DbMocker
 
             throw new ArgumentException("No mock found. Use MockDbConnection.Mocks.Where(...).Returns(...) methods to define mocks.");
         }
-    }
-
-    public class MockCondition
-    {
-        private object returnsValue = null;
-        private Func<MockCommand, object> returnsFunction = null;
-
-        internal Func<MockCommand, bool> Condition { get; set; }
-        
-        public void Returns(Func<MockCommand, object> returns)
-        {
-            returnsFunction = returns;
-        }
-
-        public void Returns(object returns)
-        {
-            returnsValue = returns;
-        }
-
-        internal object GetReturnsValue(MockCommand command)
-        {
-            if (returnsFunction != null)
-                return returnsFunction.Invoke(command);
-            else
-                return returnsValue;
-
-        }
-    }
-
-    public class MockCommand
-    {
-        internal MockCommand(MockDbCommand command)
-        {
-            this.CommandText = command.CommandText;
-            this.Parameters = command.Parameters.Cast<DbParameter>();
-        }
-
-        public string CommandText { get; set; }
-        public IEnumerable<DbParameter> Parameters { get; set; }
-    }
+    }    
 }

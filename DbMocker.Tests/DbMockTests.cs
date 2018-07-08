@@ -28,13 +28,29 @@ namespace DbMocker.Tests
         //}
 
         [TestMethod]
-        public void Mock_ContainsSql_IntegerScalar_Test()
+        public void Mock_ContainsSql_ReturnsInteger_Test()
         {
             var conn = new MockDbConnection();
 
             conn.Mocks
                 .When(c => c.CommandText.Contains("SELECT"))
                 .Returns(14);
+
+            var cmd = conn.CreateCommand();
+            cmd.CommandText = "SELECT COUNT(*) FROM EMP";
+            var result = cmd.ExecuteScalar();
+
+            Assert.AreEqual(14, result);
+        }
+
+        [TestMethod]
+        public void Mock_ContainsSql_ReturnsScalarInteger_Test()
+        {
+            var conn = new MockDbConnection();
+
+            conn.Mocks
+                .When(c => c.CommandText.Contains("SELECT"))
+                .ReturnsScalar(14);
 
             var cmd = conn.CreateCommand();
             cmd.CommandText = "SELECT COUNT(*) FROM EMP";
@@ -71,6 +87,22 @@ namespace DbMocker.Tests
             conn.Mocks
                 .When(c => c.CommandText.Contains("SELECT"))
                 .Returns(c => c.CommandText.Length);
+
+            var cmd = conn.CreateCommand();
+            cmd.CommandText = "SELECT ...";     // This string contains 10 chars
+            var result = cmd.ExecuteScalar();
+
+            Assert.AreEqual(10, result);
+        }
+
+        [TestMethod]
+        public void Mock_ReturnsScalarFunction_Test()
+        {
+            var conn = new MockDbConnection();
+
+            conn.Mocks
+                .When(c => c.CommandText.Contains("SELECT"))
+                .ReturnsScalar(c => c.CommandText.Length);
 
             var cmd = conn.CreateCommand();
             cmd.CommandText = "SELECT ...";     // This string contains 10 chars

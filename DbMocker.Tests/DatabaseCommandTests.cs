@@ -54,7 +54,7 @@ namespace DbMocker.Tests
             var conn = new MockDbConnection();
 
             conn.Mocks
-                .When(c => c.CommandText.Contains("SELECT") && 
+                .When(c => c.CommandText.Contains("SELECT") &&
                            c.Parameters.Any(p => p.ParameterName == "@ID"))
                 .Returns(14);
 
@@ -86,5 +86,37 @@ namespace DbMocker.Tests
                 Assert.AreEqual(14, result);
             }
         }
+
+        [TestMethod]
+        public void Mock_ExecuteTable_Test()
+        {
+            var conn = new MockDbConnection();
+
+            conn.Mocks
+                .When(c => c.CommandText.Contains("SELECT"))
+                .Returns(new object[,]
+                {
+                    { "Col1", "Col2", "Col3" },
+                    {  0,      1,      2 },
+                    {  9,      8,      7 },
+                    {  4,      5,      6 }
+                });
+
+            using (var cmd = new DatabaseCommand(conn))
+            {
+                cmd.CommandText.AppendLine("SELECT ...");
+                var result = cmd.ExecuteTable(new
+                {
+                    Col1 = 0,
+                    Col2 = 0,
+                    Col3 = 0
+                });
+
+                Assert.AreEqual(2, result.Count());          // 2 rows
+                Assert.AreEqual(1, result.First().Col2);     // First row / Col2
+            }
+
+        }
+
     }
 }

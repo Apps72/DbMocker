@@ -1,29 +1,74 @@
 ﻿using System;
 using System.Collections;
-using System.Data;
+using System.Linq;
 using System.Data.Common;
+using System.Collections.Generic;
 
 namespace Apps72.Dev.Data.DbMocker
 {
     public class MockDbDataReader : DbDataReader
     {
-        internal MockDbDataReader(MockDbCommand command)
+        private List<string> _columns = new List<string>();
+        private List<object[]> _rows = new List<object[]>();
+        private int currentRowIndex = 0;
+
+        internal MockDbDataReader(object result)
         {
+            object[,] data = result as object[,];
+
+            if (data == null)
+                throw new ArgumentException("Returns object must be a bi-dimensional array.");
+
+            var dataConverted = this.ConvertArrayToColsAndRows(data);
+            _columns = dataConverted.Columns;
+            _rows = dataConverted.Rows;
         }
+
+        /// <summary>
+        /// Convert an object[,] to Columns / Rows
+        /// </summary>
+        /// <param name="data"></param>
+        /// <returns></returns>
+        private (List<string> Columns, List<object[]> Rows) ConvertArrayToColsAndRows(object[,] data)
+        {
+            var cols = new List<string>();
+            var rows = new List<object[]>();
+            int rowCount = data.GetUpperBound(0);
+            int colCount = data.GetUpperBound(1);
+
+            for (int c = 0; c <= colCount; c++)
+            {
+                cols.Add(Convert.ToString(data[0, c]));
+            }
+
+            for (int r = 1; r <= rowCount; r++)
+            {
+                object[] row = new object[colCount + 1];
+                for (int c = 0; c <= colCount; c++)
+                {
+                    row[c] = data[r, c];
+                }
+                rows.Add(row);
+            }
+
+            return (cols, rows);
+        }
+
+        #region LEGACY METHODS
 
         public override object this[int ordinal] => throw new NotImplementedException();
 
         public override object this[string name] => throw new NotImplementedException();
 
-        public override int Depth => throw new NotImplementedException();
+        public override int Depth => 0;
 
-        public override int FieldCount => throw new NotImplementedException();
+        public override int FieldCount => _columns.Count;
 
-        public override bool HasRows => throw new NotImplementedException();
+        public override bool HasRows => _rows.Count > 1;
 
-        public override bool IsClosed => throw new NotImplementedException();
+        public override bool IsClosed => false;
 
-        public override int RecordsAffected => throw new NotImplementedException();
+        public override int RecordsAffected => 0;
 
         public override bool GetBoolean(int ordinal)
         {
@@ -142,7 +187,10 @@ namespace Apps72.Dev.Data.DbMocker
 
         public override bool Read()
         {
-            throw new NotImplementedException();
+            currentRowIndex++;
+            return _rows.Count > currentRowIndex;
         }
+
+        #endregion
     }
 }

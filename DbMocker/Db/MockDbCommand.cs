@@ -19,6 +19,32 @@ namespace Apps72.Dev.Data.DbMocker
         }
 
         /// <summary />
+        public override int ExecuteNonQuery()
+        {
+            int? returns = _connection.Mocks.GetFirstReturnsFound(new MockCommand(this)) as int?;
+
+            if (returns.HasValue)
+                return returns.Value;
+            else
+                return 0;
+        }
+
+        /// <summary />
+        public override object ExecuteScalar()
+        {
+            return _connection.Mocks.GetFirstReturnsFound(new MockCommand(this));
+        }
+
+        /// <summary />
+        protected override DbDataReader ExecuteDbDataReader(CommandBehavior behavior)
+        {
+            var result = _connection.Mocks.GetFirstReturnsFound(new MockCommand(this));
+            return new MockDbDataReader(result);
+        }
+
+        #region LEGACY METHODS
+
+        /// <summary />
         public override string CommandText { get; set; }
 
         /// <summary />
@@ -48,23 +74,6 @@ namespace Apps72.Dev.Data.DbMocker
         }
 
         /// <summary />
-        public override int ExecuteNonQuery()
-        {
-            int? returns = _connection.Mocks.GetFirstReturnsFound(new MockCommand(this)) as int?;
-
-            if (returns.HasValue)
-                return returns.Value;
-            else
-                return 0;
-        }
-
-        /// <summary />
-        public override object ExecuteScalar()
-        {
-            return _connection.Mocks.GetFirstReturnsFound(new MockCommand(this));
-        }
-
-        /// <summary />
         public override void Prepare()
         {
         }
@@ -74,10 +83,6 @@ namespace Apps72.Dev.Data.DbMocker
             return new MockDbParameter(this);
         }
 
-        /// <summary />
-        protected override DbDataReader ExecuteDbDataReader(CommandBehavior behavior)
-        {
-            return new MockDbDataReader(this);
-        }
+        #endregion
     }
 }
