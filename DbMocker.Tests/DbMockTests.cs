@@ -1,5 +1,6 @@
 using Apps72.Dev.Data.DbMocker;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System;
 using System.Data.SqlClient;
 using System.Linq;
 
@@ -86,6 +87,37 @@ namespace DbMocker.Tests
         }
 
         [TestMethod]
+        public void Mock_ReturnsEmptyTable_Test()
+        {
+            var conn = new MockDbConnection();
+
+            conn.Mocks
+                .WhenAlways()
+                .ReturnsTable(new MockTable());
+
+            var cmd = conn.CreateCommand();
+            cmd.CommandText = "SELECT COUNT(*) FROM EMP";
+            var result = cmd.ExecuteScalar();
+
+            Assert.AreEqual(null, result);
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentException))]
+        public void Mock_MockNotFound_Test()
+        {
+            var conn = new MockDbConnection();
+
+            conn.Mocks
+                .When(c => c.CommandText.Contains("NOT PRESENT"))
+                .ReturnsScalar(14);
+
+            var cmd = conn.CreateCommand();
+            cmd.CommandText = "SELECT COUNT(*) FROM EMP";
+            var result = cmd.ExecuteScalar();
+        }
+
+        [TestMethod]
         public void Mock_ReturnsScalarValue_Test()
         {
             var conn = new MockDbConnection();
@@ -155,7 +187,28 @@ namespace DbMocker.Tests
         }
 
         [TestMethod]
-        public void Mock_ReturnsFunction_Test()
+        public void Mock_ReturnsTableFunction_Test()
+        {
+            var conn = new MockDbConnection();
+
+            conn.Mocks
+                .When(c => c.CommandText.Contains("SELECT"))
+                .ReturnsTable(c => new MockTable(
+                    columns: new[] { "X" },
+                    rows: new object[,]
+                        {
+                            { 10 }
+                        }));
+
+            var cmd = conn.CreateCommand();
+            cmd.CommandText = "SELECT ...";     // This string contains 10 chars
+            var result = cmd.ExecuteScalar();
+
+            Assert.AreEqual(10, result);
+        }
+
+        [TestMethod]
+        public void Mock_ReturnsScalarFunction_Test()
         {
             var conn = new MockDbConnection();
 

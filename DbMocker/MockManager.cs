@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data.Common;
-using System.Linq;
 
 namespace Apps72.Dev.Data.DbMocker
 {
@@ -23,6 +21,12 @@ namespace Apps72.Dev.Data.DbMocker
             var mock = new MockCondition() { Condition = condition };
             Conditions.Add(mock);
             return mock;
+        }
+
+        /// <summary />
+        public MockCondition WhenAlways()
+        {
+            return When(null);
         }
 
         /// <summary />

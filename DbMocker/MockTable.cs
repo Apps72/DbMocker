@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 
 namespace Apps72.Dev.Data.DbMocker
 {
@@ -27,7 +26,7 @@ namespace Apps72.Dev.Data.DbMocker
         /// <summary />
         public object GetFirstColRowOrNull()
         {
-            if (Rows.GetLength(0) > 0 && Rows.GetLength(1) > 0)
+            if (Rows != null && Rows.GetLength(0) > 0 && Rows.GetLength(1) > 0)
                 return Rows[0, 0];
             else
                 return null;
