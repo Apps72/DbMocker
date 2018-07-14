@@ -11,7 +11,7 @@ namespace Apps72.Dev.Data.DbMocker
         /// <summary />
         internal MockManager(MockDbConnection connection)
         {
-            
+
         }
 
         /// <summary />
@@ -26,17 +26,17 @@ namespace Apps72.Dev.Data.DbMocker
         }
 
         /// <summary />
-        internal object GetFirstReturnsFound(MockCommand command)
+        internal MockTable GetFirstMockTableFound(MockCommand command)
         {
             foreach (var item in this.Conditions)
             {
-                if (item.Condition.Invoke(command))
+                if (item.Condition == null || item.Condition?.Invoke(command) == true)
                 {
-                    return item.GetReturnsValue(command);
+                    return item.ReturnsFunction(command);
                 }
             }
 
             throw new ArgumentException("No mock found. Use MockDbConnection.Mocks.Where(...).Returns(...) methods to define mocks.");
         }
-    }    
+    }
 }

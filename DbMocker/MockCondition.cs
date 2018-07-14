@@ -7,44 +7,48 @@ namespace Apps72.Dev.Data.DbMocker
     /// <summary />
     public class MockCondition
     {
-        private object returnsValue = null;
-        private Func<MockCommand, object> returnsFunction = null;
+        internal Func<MockCommand, MockTable> ReturnsFunction { get; set; }
 
         /// <summary />
         internal Func<MockCommand, bool> Condition { get; set; }
 
         /// <summary />
-        public void Returns(Func<MockCommand, object> returns)
+        public void ReturnsTable(Func<MockCommand, MockTable> returns)
         {
-            returnsFunction = returns;
+            ReturnsFunction = returns;
         }
 
         /// <summary />
-        public void Returns(object returns)
+        public void ReturnsTable(MockTable returns)
         {
-            returnsValue = returns;
+            ReturnsFunction = (cmd) => returns;
         }
 
         /// <summary />
         public void ReturnsScalar<T>(Func<MockCommand, T> returns)
         {
-            returnsFunction = (MockCommand cmd) => returns.Invoke(cmd);
+            ReturnsFunction = (cmd) => new MockTable()
+            {
+                Columns = new[] { String.Empty },
+                Rows = new object[,]
+                    {
+                        { returns.Invoke(cmd) }
+                    }
+            };
         }
 
         /// <summary />
         public void ReturnsScalar<T>(T returns)
         {
-            returnsValue = returns;
+            ReturnsFunction = (cmd) => new MockTable()
+            {
+                Columns = new[] { String.Empty },
+                Rows = new object[,]
+                    {
+                        { returns }
+                    }
+            };
         }
 
-        /// <summary />
-        internal object GetReturnsValue(MockCommand command)
-        {
-            if (returnsFunction != null)
-                return returnsFunction.Invoke(command);
-            else
-                return returnsValue;
-
-        }
     }
 }

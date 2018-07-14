@@ -8,63 +8,27 @@ namespace Apps72.Dev.Data.DbMocker
 {
     public class MockDbDataReader : DbDataReader
     {
-        private List<string> _columns = new List<string>();
-        private List<object[]> _rows = new List<object[]>();
-        private int currentRowIndex = 0;
+        private string[] _columns;
+        private object[,] _rows;
+        private int _currentRowIndex = -1;
 
-        internal MockDbDataReader(object result)
+        internal MockDbDataReader(MockTable table)
         {
-            object[,] data = result as object[,];
-
-            if (data == null)
-                throw new ArgumentException("Returns object must be a bi-dimensional array.");
-
-            var dataConverted = this.ConvertArrayToColsAndRows(data);
-            _columns = dataConverted.Columns;
-            _rows = dataConverted.Rows;
-        }
-
-        /// <summary>
-        /// Convert an object[,] to Columns / Rows
-        /// </summary>
-        /// <param name="data"></param>
-        /// <returns></returns>
-        private (List<string> Columns, List<object[]> Rows) ConvertArrayToColsAndRows(object[,] data)
-        {
-            var cols = new List<string>();
-            var rows = new List<object[]>();
-            int rowCount = data.GetUpperBound(0);
-            int colCount = data.GetUpperBound(1);
-
-            for (int c = 0; c <= colCount; c++)
-            {
-                cols.Add(Convert.ToString(data[0, c]));
-            }
-
-            for (int r = 1; r <= rowCount; r++)
-            {
-                object[] row = new object[colCount + 1];
-                for (int c = 0; c <= colCount; c++)
-                {
-                    row[c] = data[r, c];
-                }
-                rows.Add(row);
-            }
-
-            return (cols, rows);
+            _columns = table.Columns ?? Array.Empty<string>();
+            _rows = table.Rows ?? new object[,] { };
         }
 
         #region LEGACY METHODS
 
-        public override object this[int ordinal] => throw new NotImplementedException();
+        public override object this[int ordinal] => GetValue(ordinal);
 
-        public override object this[string name] => throw new NotImplementedException();
+        public override object this[string name] => GetValue(GetOrdinal(name));
 
         public override int Depth => 0;
 
-        public override int FieldCount => _columns.Count;
+        public override int FieldCount => _columns.Length;
 
-        public override bool HasRows => _rows.Count > 1;
+        public override bool HasRows => _rows.Length > 1;
 
         public override bool IsClosed => false;
 
@@ -72,47 +36,47 @@ namespace Apps72.Dev.Data.DbMocker
 
         public override bool GetBoolean(int ordinal)
         {
-            throw new NotImplementedException();
+            return (bool)GetValue(ordinal);
         }
 
         public override byte GetByte(int ordinal)
         {
-            throw new NotImplementedException();
+            return (byte)GetValue(ordinal);
         }
 
         public override long GetBytes(int ordinal, long dataOffset, byte[] buffer, int bufferOffset, int length)
         {
-            throw new NotImplementedException();
+            return length;
         }
 
         public override char GetChar(int ordinal)
         {
-            throw new NotImplementedException();
+            return (char)GetValue(ordinal);
         }
 
         public override long GetChars(int ordinal, long dataOffset, char[] buffer, int bufferOffset, int length)
         {
-            throw new NotImplementedException();
+            return (long)GetValue(ordinal);
         }
 
         public override string GetDataTypeName(int ordinal)
         {
-            throw new NotImplementedException();
+            return _columns[ordinal].GetType().Name;
         }
 
         public override DateTime GetDateTime(int ordinal)
         {
-            throw new NotImplementedException();
+            return (DateTime)GetValue(ordinal);
         }
 
         public override decimal GetDecimal(int ordinal)
         {
-            throw new NotImplementedException();
+            return (Decimal)GetValue(ordinal);
         }
 
         public override double GetDouble(int ordinal)
         {
-            throw new NotImplementedException();
+            return (double)GetValue(ordinal);
         }
 
         public override IEnumerator GetEnumerator()
@@ -122,73 +86,87 @@ namespace Apps72.Dev.Data.DbMocker
 
         public override Type GetFieldType(int ordinal)
         {
-            throw new NotImplementedException();
+            return GetValue(ordinal).GetType();
         }
 
         public override float GetFloat(int ordinal)
         {
-            throw new NotImplementedException();
+            return (float)GetValue(ordinal);
         }
 
         public override Guid GetGuid(int ordinal)
         {
-            throw new NotImplementedException();
+            return (Guid)GetValue(ordinal);
         }
 
         public override short GetInt16(int ordinal)
         {
-            throw new NotImplementedException();
+            return (short)GetValue(ordinal);
         }
 
         public override int GetInt32(int ordinal)
         {
-            throw new NotImplementedException();
+            return (int)GetValue(ordinal);
         }
 
         public override long GetInt64(int ordinal)
         {
-            throw new NotImplementedException();
+            return (long)GetValue(ordinal);
         }
 
         public override string GetName(int ordinal)
         {
-            throw new NotImplementedException();
+            return _columns[ordinal];
         }
 
         public override int GetOrdinal(string name)
         {
-            throw new NotImplementedException();
+            for (int i = 0; i < _columns.Length; i++)
+            {
+                if (_columns[i] == name)
+                    return i;
+            }
+            return -1;
         }
 
         public override string GetString(int ordinal)
         {
-            throw new NotImplementedException();
+            return (string)GetValue(ordinal);
         }
 
         public override object GetValue(int ordinal)
         {
-            throw new NotImplementedException();
+            return _rows[_currentRowIndex, ordinal];
         }
 
         public override int GetValues(object[] values)
         {
-            throw new NotImplementedException();
+            if (values != null)
+            {
+                for (int i = 0; i < values.Length; i++)
+                {
+                    values[i] = _rows[_currentRowIndex, i];
+                }
+                return values.Length;
+            }
+
+            return 0;
         }
 
         public override bool IsDBNull(int ordinal)
         {
-            throw new NotImplementedException();
+            return GetValue(ordinal) == null;
         }
 
         public override bool NextResult()
         {
-            throw new NotImplementedException();
+            return false;       // TODO when using datasets
         }
 
         public override bool Read()
         {
-            currentRowIndex++;
-            return _rows.Count > currentRowIndex;
+            _currentRowIndex++;
+            return _rows.GetLength(0) > _currentRowIndex;
         }
 
         #endregion

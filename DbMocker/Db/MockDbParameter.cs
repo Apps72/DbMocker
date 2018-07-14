@@ -8,6 +8,11 @@ namespace Apps72.Dev.Data.DbMocker
     public class MockDbParameter : DbParameter
     {
         /// <summary />
+        public MockDbParameter()
+        {
+        }
+
+        /// <summary />
         internal MockDbParameter(DbParameter parameter)
         {
             if (parameter != null)

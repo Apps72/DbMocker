@@ -21,7 +21,7 @@ namespace Apps72.Dev.Data.DbMocker
         /// <summary />
         public override int ExecuteNonQuery()
         {
-            int? returns = _connection.Mocks.GetFirstReturnsFound(new MockCommand(this)) as int?;
+            int? returns = this.ExecuteScalar() as int?;
 
             if (returns.HasValue)
                 return returns.Value;
@@ -32,13 +32,17 @@ namespace Apps72.Dev.Data.DbMocker
         /// <summary />
         public override object ExecuteScalar()
         {
-            return _connection.Mocks.GetFirstReturnsFound(new MockCommand(this));
+            return _connection.Mocks
+                              .GetFirstMockTableFound(new MockCommand(this))
+                              .GetFirstColRowOrNull();
         }
 
         /// <summary />
         protected override DbDataReader ExecuteDbDataReader(CommandBehavior behavior)
         {
-            var result = _connection.Mocks.GetFirstReturnsFound(new MockCommand(this));
+            var result = _connection.Mocks
+                                    .GetFirstMockTableFound(new MockCommand(this));
+
             return new MockDbDataReader(result);
         }
 
