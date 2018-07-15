@@ -24,7 +24,7 @@ namespace Apps72.Dev.Data.DbMocker
         }
 
         /// <summary />
-        public MockCondition WhenAlways()
+        public MockCondition WhenAny()
         {
             return When(null);
         }

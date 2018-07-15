@@ -3,6 +3,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Data.SqlClient;
 using System.Linq;
+using Apps72.Dev.Data.DbMocker;
 
 namespace DbMocker.Tests
 {
@@ -10,7 +11,7 @@ namespace DbMocker.Tests
     public class DbMockTests
     {
         [TestMethod]
-        public void Mock_CheckBiDimenstionalObject_Test()
+        public void Mock_CheckTwoDimensionalObject_Test()
         {
             var x = new object[,] 
             {
@@ -42,6 +43,40 @@ namespace DbMocker.Tests
             Assert.AreEqual(0, z.Length);
             Assert.AreEqual(0, z.GetLength(0));
             Assert.AreEqual(0, z.GetLength(1));
+        }
+
+        [TestMethod]
+        public void Mock_ConvertToJaggedArray_Test()
+        {
+            var source = new object[,]
+            {
+                { "Col1", "Col2" },
+                { "abc" , "def" },
+                { "ghi" , "jkl" }
+            };
+
+            var target = source.ToJaggedArray();
+
+            Assert.AreEqual("Col1", target[0][0]);
+            Assert.AreEqual("def", target[1][1]);
+            Assert.AreEqual("ghi", target[2][0]);
+        }
+
+        [TestMethod]
+        public void Mock_ConvertToTwoDimensionalArray_Test()
+        {
+            var source = new object[][]
+            {
+                new [] { "Col1", "Col2" },
+                new [] { "abc" , "def" },
+                new [] { "ghi" , "jkl" }
+            };
+
+            var target = source.ToTwoDimensionalArray();
+
+            Assert.AreEqual("Col1", target[0, 0]);
+            Assert.AreEqual("def", target[1, 1]);
+            Assert.AreEqual("ghi", target[2, 0]);
         }
 
         [TestMethod]
@@ -92,7 +127,7 @@ namespace DbMocker.Tests
             var conn = new MockDbConnection();
 
             conn.Mocks
-                .WhenAlways()
+                .WhenAny()
                 .ReturnsTable(new MockTable());
 
             var cmd = conn.CreateCommand();
