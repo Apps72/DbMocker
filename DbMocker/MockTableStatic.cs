@@ -12,6 +12,15 @@ namespace Apps72.Dev.Data.DbMocker
         }
 
         /// <summary />
+        public static MockTable WithColumns(params string[] columns)
+        {
+            return new MockTable()
+            {
+                Columns = columns
+            };
+        }
+
+        /// <summary />
         public static MockTable SingleCell(string columnName, object value)
         {
             return new MockTable()

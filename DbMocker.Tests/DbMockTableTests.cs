@@ -15,6 +15,7 @@ namespace DbMocker.Tests
             var table = MockTable.Empty()
                                  .AddColumns("Col1")
                                  .AddRow(11);
+
             conn.Mocks
                 .WhenAny()
                 .ReturnsTable(table);
@@ -30,8 +31,7 @@ namespace DbMocker.Tests
         {
             var conn = new MockDbConnection();
 
-            var table = MockTable.Empty()
-                                 .AddColumns("Col1", "Col2")
+            var table = MockTable.WithColumns("Col1", "Col2")
                                  .AddRow(11, 12)
                                  .AddRow(13, 14);
             conn.Mocks
@@ -58,6 +58,7 @@ namespace DbMocker.Tests
             var conn = new MockDbConnection();
 
             var table = MockTable.SingleCell("Col1", 11);
+
             conn.Mocks
                 .WhenAny()
                 .ReturnsTable(table);
