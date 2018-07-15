@@ -3,9 +3,14 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.27703.2026
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Apps72.Dev.Data.DbMocker", "DbMocker\DbMocker.csproj", "{2B1EE9B3-93D8-4209-907E-0D29DAC089D3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DbMocker", "DbMocker\DbMocker.csproj", "{2B1EE9B3-93D8-4209-907E-0D29DAC089D3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DbMocker.Tests", "DbMocker.Tests\DbMocker.Tests.csproj", "{2E00ABB2-ECB5-486E-B33E-2CE7531D1772}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DbMocker.Tests", "DbMocker.Tests\DbMocker.Tests.csproj", "{2E00ABB2-ECB5-486E-B33E-2CE7531D1772}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{7F2EDDB2-DD57-42B4-8687-E1D0ED15D4E1}"
+	ProjectSection(SolutionItems) = preProject
+		ReadMe.md = ReadMe.md
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
