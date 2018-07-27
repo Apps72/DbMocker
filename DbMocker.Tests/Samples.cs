@@ -4,7 +4,9 @@ using System;
 using System.Data.SqlClient;
 using System.Linq;
 using Apps72.Dev.Data.DbMocker;
+using System.Data;
 using System.Data.Common;
+using System.Collections.Generic;
 
 namespace DbMocker.Tests
 {
@@ -21,6 +23,26 @@ namespace DbMocker.Tests
             }
         }
 
+        // Sample method from your DataService
+        public object[][] GetEmployees(DbConnection connection)
+        {
+            using (var cmd = connection.CreateCommand())
+            {
+                cmd.CommandText = "SELECT ID, Name FROM Employees";
+                var reader = cmd.ExecuteReader();
+
+                var data = new List<object[]>();
+                while (reader.Read())
+                {
+                    var row = new object[reader.FieldCount];
+                    reader.GetValues(row);
+                    data.Add(row);
+                }
+
+                return data.ToArray();
+            }
+        }
+
         [TestMethod]
         public void UnitTest1()
         {
@@ -31,14 +53,30 @@ namespace DbMocker.Tests
             // But returns this MockTable.
             conn.Mocks
                 .When(cmd => cmd.CommandText.StartsWith("SELECT COUNT(*)") &&
-                                cmd.Parameters.Count() == 0)
+                             cmd.Parameters.Count() == 0)
                 .ReturnsTable(MockTable.WithColumns("Count")
-                                        .AddRow(14));
+                                       .AddRow(14));
 
             // Call your "classic" methods to tests
             int count = GetNumberOfEmployees(conn);
 
             Assert.AreEqual(14, count);
+        }
+
+        [TestMethod]
+        public void UnitTest2()
+        {
+            var conn = new MockDbConnection();
+
+            conn.Mocks
+                .WhenAny()
+                .ReturnsTable(new MockTable().AddColumns("ID", "Name")
+                                             .AddRow(1, "Scott")
+                                             .AddRow(2, "Bill"));
+
+            var data = GetEmployees(conn);
+
+            Assert.AreEqual("Scott", data[0][1]);
         }
     }
 }

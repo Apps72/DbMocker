@@ -52,7 +52,7 @@ namespace Apps72.Dev.Data.DbMocker
         /// <summary />
         public MockTable AddColumns(params string[] columns)
         {
-            this.Columns.Concat(columns).ToArray();
+            this.Columns = this.Columns.Concat(columns).ToArray();
             return this;
         }
 

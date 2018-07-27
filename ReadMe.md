@@ -6,8 +6,8 @@ This .NET library simplifies data mocking for UnitTests, to avoid a connection t
 DbMocker use the standard Microsoft .NET DbConnection object. So, you can mock any toolkit, 
 including EntityFramework, Dapper or ADO.NET; And for all database servers (SQL Server, Oracle, SQLite).
 
-First, add the DbMocker NuGet packages.
-Second, mock you SQL requests using this library like this.
+First, add the (DbMocker NuGet packages)[https://www.nuget.org/packages/DbMocker].
+Next, instanciate a `MockDbConnection` and mock you SQL requests using a condition and return a DataTable.
 
 Please, contact me if you want other features or to solve bugs.
 
@@ -31,7 +31,7 @@ public void UnitTest1()
     // Don't execute the query to your SQL Server,
     // But returns this MockTable.
     conn.Mocks
-        .When(cmd => cmd.CommandText.StartsWith("SELECT COUNT(*)") &&
+        .When(cmd => cmd.CommandText.StartsWith("SELECT") &&
                      cmd.Parameters.Count() == 0)
         .ReturnsTable(MockTable.WithColumns("Count")
                                .AddRow(14));
@@ -42,6 +42,40 @@ public void UnitTest1()
     Assert.AreEqual(14, count);
 }
 ```
+
+## Conditions
+
+Use the 'When' method to describe the condition to be detected. 
+This condition is based on a Lambda expression containing a CommandText or Parameters check.
+
+```CSharp
+conn.Mocks
+    .When(cmd => cmd.CommandText.StartsWith("SELECT") &&
+                 cmd.Parameters.Count() == 0)
+    .ReturnsTable(...);
+```
+
+Use `WhenAny` to detect all SQL queries. In this case, all queries to the database will return the data specified by WhenAny.
+
+```CSharp
+conn.Mocks
+    .WhenAny()
+    .ReturnsTable(...);
+```
+
+## ReturnsTable
+
+When the previous condition occured, a mocked table will be return :
+
+```CSharp
+conn.Mocks
+    .WhenAny()
+    .ReturnsTable(new MockTable().AddColumns("ID", "Name")
+                                 .AddRow(1, "Scott")
+                                 .AddRow(2, "Bill"));
+```
+
+TODO MockTable.Empty, MockTable.WithColumns, MockTable.SingleCell
 
 ## Road map
 
