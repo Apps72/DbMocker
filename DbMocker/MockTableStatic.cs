@@ -35,5 +35,26 @@ namespace Apps72.Dev.Data.DbMocker
         {
             return SingleCell(String.Empty, value);
         }
+
+        public static MockTable FromCsv(string content, string delimiter)
+        {
+            var table = MockTable.Empty();
+            bool isFirstRow = true;
+
+            foreach (string row in content.Split(Environment.NewLine))
+            {
+                if (!string.IsNullOrEmpty(row))
+                {
+                    var data = row.Split(delimiter);
+                    if (isFirstRow)
+                        table.AddColumns(data);
+                    else
+                        table.AddRow(data);
+                    isFirstRow = false;
+                }
+            }
+
+            return table;
+        }
     }
 }

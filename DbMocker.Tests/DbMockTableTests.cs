@@ -84,5 +84,24 @@ namespace DbMocker.Tests
 
             Assert.AreEqual(11, result);
         }
+
+        [TestMethod]
+        public void Mock_MockTable_FromCsv_Test()
+        {
+            var conn = new MockDbConnection();
+
+            string csv = @"
+Id	Name
+1	Scott
+2	Bill
+3	Anders
+";
+
+            var table = MockTable.FromCsv(csv, "\t");
+
+            Assert.AreEqual(2, table.Columns.Length);
+            Assert.AreEqual(3, table.Rows.GetLength(0));
+        }
+        
     }
 }
