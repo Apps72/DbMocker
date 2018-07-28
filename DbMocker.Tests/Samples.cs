@@ -37,6 +37,9 @@ namespace DbMocker.Tests
                     var row = new object[reader.FieldCount];
                     reader.GetValues(row);
                     data.Add(row);
+
+                    int id = reader.GetInt32(reader.GetOrdinal("ID"));
+                    string name = reader.GetString(reader.GetOrdinal("NAME"));
                 }
 
                 return data.ToArray();
@@ -77,6 +80,50 @@ namespace DbMocker.Tests
             var data = GetEmployees(conn);
 
             Assert.AreEqual("Scott", data[0][1]);
+        }
+
+        [TestMethod]
+        public void UnitTest3()
+        {
+            var conn = new MockDbConnection();
+
+            conn.Mocks
+                .WhenAny()
+                .ReturnsTable(MockTable.Empty()
+                                       .AddColumns("ID", "Name")
+                                       .AddRow(1, "Scott"));
+
+            var data = GetEmployees(conn);
+
+            Assert.AreEqual("Scott", data[0][1]);
+        }
+
+        [TestMethod]
+        public void UnitTest4()
+        {
+            var conn = new MockDbConnection();
+
+            conn.Mocks
+                .WhenAny()
+                .ReturnsTable(MockTable.SingleCell("Count", 14));
+
+            int count = GetNumberOfEmployees(conn);
+
+            Assert.AreEqual(14, count);
+        }
+
+        [TestMethod]
+        public void UnitTest5()
+        {
+            var conn = new MockDbConnection();
+
+            conn.Mocks
+                .WhenAny()
+                .ReturnsScalar<int>(14);
+
+            int count = GetNumberOfEmployees(conn);
+
+            Assert.AreEqual(14, count);
         }
     }
 }

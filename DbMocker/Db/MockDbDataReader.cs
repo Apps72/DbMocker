@@ -123,7 +123,7 @@ namespace Apps72.Dev.Data.DbMocker
         {
             for (int i = 0; i < _columns.Length; i++)
             {
-                if (_columns[i] == name)
+                if (String.Compare(_columns[i], name, ignoreCase: true) == 0)
                     return i;
             }
             return -1;

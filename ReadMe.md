@@ -65,7 +65,9 @@ conn.Mocks
 
 ## ReturnsTable
 
-When the previous condition occured, a mocked table will be return :
+When the previous condition occured, a mocked table will be return:
+
+Creating an new instance of **MockTable**.
 
 ```CSharp
 conn.Mocks
@@ -75,7 +77,44 @@ conn.Mocks
                                  .AddRow(2, "Bill"));
 ```
 
-TODO MockTable.Empty, MockTable.WithColumns, MockTable.SingleCell
+Using a **MockTable.Empty()** table... to complete.
+
+```CSharp
+conn.Mocks
+    .WhenAny()
+    .ReturnsTable(MockTable.Empty()
+                           .AddColumns("ID", "Name")
+                           .AddRow(1, "Scott")
+                           .AddRow(2, "Bill"));
+```
+
+Using a **MockTable.WithColumns()** table... to complete.
+
+```CSharp
+conn.Mocks
+    .WhenAny()
+    .ReturnsTable(MockTable.WithColumns("ID", "Name")
+                           .AddRow(1, "Scott")
+                           .AddRow(2, "Bill"));
+```
+
+Returning a **MockTable.SingleCell()** table... to complete.
+
+```CSharp
+conn.Mocks
+    .WhenAny()
+    .ReturnsTable(MockTable.SingleCell("Count", 14));
+```
+
+## ReturnsScalar
+
+When a condition occured, a scalar value will be return:
+
+```CSharp
+conn.Mocks
+    .WhenAny()
+    .ReturnsScalar<int>(14);
+```
 
 ## Road map
 
