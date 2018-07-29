@@ -25,7 +25,7 @@ namespace Apps72.Dev.Data.DbMocker
         {
             return new MockTable()
             {
-                Columns = new [] { columnName },
+                Columns = new[] { columnName },
                 Rows = new[,] { { value } },
             };
         }
@@ -36,25 +36,58 @@ namespace Apps72.Dev.Data.DbMocker
             return SingleCell(String.Empty, value);
         }
 
-        public static MockTable FromCsv(string content, string delimiter)
+        /// <summary />
+        public static MockTable FromCsv(string content, string delimiter, ImportOptions options)
         {
             var table = MockTable.Empty();
             bool isFirstRow = true;
+            bool mustRemoveEmptyLines = (options & ImportOptions.RemoveEmptyLines) == ImportOptions.RemoveEmptyLines;
+            bool mustTrimLines = (options & ImportOptions.TrimLines) == ImportOptions.TrimLines;
 
             foreach (string row in content.Split(Environment.NewLine))
             {
-                if (!string.IsNullOrEmpty(row))
+                if (mustRemoveEmptyLines && string.IsNullOrEmpty(row))
                 {
-                    var data = row.Split(delimiter);
+
+                }
+                else
+                {
+                    string[] data;
+
+                    if (mustTrimLines)
+                        data = row.Trim().Split(delimiter);
+                    else
+                        data = row.Split(delimiter);
+
                     if (isFirstRow)
                         table.AddColumns(data);
                     else
                         table.AddRow(data);
+
                     isFirstRow = false;
                 }
             }
 
             return table;
         }
+
+        /// <summary />
+        public static MockTable FromCsv(string content, string delimiter)
+        {
+            return FromCsv(content, delimiter, ImportOptions.RemoveEmptyLines | ImportOptions.TrimLines);
+        }
+
+        /// <summary />
+        public static MockTable FromCsv(string content)
+        {
+            return FromCsv(content, "\t", ImportOptions.RemoveEmptyLines | ImportOptions.TrimLines);
+        }
+    }
+
+    public enum ImportOptions
+    {
+        None = 0,
+        RemoveEmptyLines = 1,
+        TrimLines = 2,
     }
 }

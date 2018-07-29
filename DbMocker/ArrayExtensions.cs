@@ -4,6 +4,7 @@ namespace Apps72.Dev.Data.DbMocker
 {
     public static class ArrayExtensions
     {
+        /// <summary/>
         public static T[][] ToJaggedArray<T>(this T[,] twoDimensionalArray)
         {
             if (twoDimensionalArray == null)
@@ -30,6 +31,7 @@ namespace Apps72.Dev.Data.DbMocker
             return jaggedArray;
         }
 
+        /// <summary/>
         public static T[,] ToTwoDimensionalArray<T>(this T[][] jaggedArray)
         {
             if (jaggedArray == null)
@@ -56,6 +58,18 @@ namespace Apps72.Dev.Data.DbMocker
 
             return twoDimensionalArray;
 
+        }
+
+        /// <summary/>
+        public static int ColumnsCount(this object[,] twoDimensionalArray)
+        {
+            return twoDimensionalArray.GetLength(1);
+        }
+
+        /// <summary/>
+        public static int RowsCount(this object[,] twoDimensionalArray)
+        {
+            return twoDimensionalArray.GetLength(0);
         }
     }
 }

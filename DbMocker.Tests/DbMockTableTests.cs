@@ -90,17 +90,19 @@ namespace DbMocker.Tests
         {
             var conn = new MockDbConnection();
 
-            string csv = @"
-Id	Name
-1	Scott
-2	Bill
-3	Anders
-";
+            string csv = @" Id	Name
+                            1	Scott
+                            2	Bill
+                            3	Anders ";
 
-            var table = MockTable.FromCsv(csv, "\t");
+            var table = MockTable.FromCsv(csv);
 
-            Assert.AreEqual(2, table.Columns.Length);
-            Assert.AreEqual(3, table.Rows.GetLength(0));
+            Assert.AreEqual("Id", table.Columns[0]);
+            Assert.AreEqual("Name", table.Columns[1]);
+
+            Assert.AreEqual(3, table.Rows.RowsCount());
+            Assert.AreEqual("Scott", table.Rows[0, 1]);
+            Assert.AreEqual("3", table.Rows[2, 0]);
         }
         
     }
