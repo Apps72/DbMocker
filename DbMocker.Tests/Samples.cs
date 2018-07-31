@@ -1,10 +1,7 @@
 using Apps72.Dev.Data.DbMocker;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
-using System.Data.SqlClient;
 using System.Linq;
-using Apps72.Dev.Data.DbMocker;
-using System.Data;
 using System.Data.Common;
 using System.Collections.Generic;
 
