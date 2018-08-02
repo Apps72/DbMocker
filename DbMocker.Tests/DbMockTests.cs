@@ -151,6 +151,62 @@ namespace DbMocker.Tests
         }
 
         [TestMethod]
+        public void Mock_ReturnsRow_ExpressionTo_TypedData_Test()
+        {
+            var conn = new MockDbConnection();
+
+            conn.Mocks
+                .WhenAny()
+                .ReturnsRow((c) => new { Id = 11, Name = "Denis" });
+
+            var cmd = conn.CreateCommand();
+            var result = cmd.ExecuteReader();
+
+            result.Read();
+
+            Assert.AreEqual(11, result.GetInt32(0));
+            Assert.AreEqual("Denis", result.GetString(1));
+            Assert.AreEqual(false, result.Read());
+        }
+
+        [TestMethod]
+        public void Mock_ReturnsRow_TypedData_Test()
+        {
+            var conn = new MockDbConnection();
+
+            conn.Mocks
+                .WhenAny()
+                .ReturnsRow(new { Id = 11, Name = "Denis" });
+
+            var cmd = conn.CreateCommand();
+            var result = cmd.ExecuteReader();
+
+            result.Read();
+
+            Assert.AreEqual(11, result.GetInt32(0));
+            Assert.AreEqual("Denis", result.GetString(1));
+            Assert.AreEqual(false, result.Read());
+        }
+
+        [TestMethod]
+        public void Mock_ReturnsRow_PrimitiveType_Test()
+        {
+            var conn = new MockDbConnection();
+
+            conn.Mocks
+                .WhenAny()
+                .ReturnsRow(11);
+
+            var cmd = conn.CreateCommand();
+            var result = cmd.ExecuteReader();
+
+            result.Read();
+
+            Assert.AreEqual(11, result.GetInt32(0));
+            Assert.AreEqual(false, result.Read());
+        }
+
+        [TestMethod]
         public void Mock_ReturnsScalarValue_Test()
         {
             var conn = new MockDbConnection();

@@ -116,11 +116,27 @@ namespace DbMocker.Tests
 
             conn.Mocks
                 .WhenAny()
+                .ReturnsTable(cmd => MockTable.SingleCell("Count", cmd.Parameters.Count()));
+
+            int count = GetNumberOfEmployees(conn);
+
+            Assert.AreEqual(0, count);
+        }
+
+        [TestMethod]
+        public void UnitTest6()
+        {
+            var conn = new MockDbConnection();
+
+            conn.Mocks
+                .WhenAny()
                 .ReturnsScalar<int>(14);
 
             int count = GetNumberOfEmployees(conn);
 
             Assert.AreEqual(14, count);
         }
+
+
     }
 }

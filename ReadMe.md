@@ -106,6 +106,35 @@ conn.Mocks
     .ReturnsTable(MockTable.SingleCell("Count", 14));
 ```
 
+Using an expression to customize the return.
+
+```CSharp
+conn.Mocks
+    .WhenAny()
+    .ReturnsTable(cmd => cmd.Parameters.Count() > 0 ? 14 : 99);
+```
+
+## ReturnsRow
+
+When a condition occured, a single data row will be return.
+The specified typed object will generate a MockTable where property names will be the column names
+and proerty values will be the first row data.
+
+```CSharp
+conn.Mocks
+    .WhenAny()
+    .ReturnsRow(new { Id = 1, Name = "Denis" });
+```
+
+
+Using an expression to customize the return.
+
+```
+conn.Mocks
+    .WhenAny()
+    .ReturnsRow(cmd => new { Id = 1, Name = "Denis" });
+```
+
 ## ReturnsScalar
 
 When a condition occured, a scalar value will be return:
@@ -115,6 +144,18 @@ conn.Mocks
     .WhenAny()
     .ReturnsScalar<int>(14);
 ```
+
+```
+conn.Mocks
+    .WhenAny()
+    .ReturnsScalar<int>(cmd => DateTime.Today.Year > 2000 ? 14 : 0);
+```
+
+## Releases
+
+### Version 1.3
+
+- Add `ReturnsRow(T)` and `ReturnsRow(Func<MockCommand, T>)` methods.
 
 ## Road map
 

@@ -52,6 +52,7 @@ namespace DbMocker.Tests
             Assert.AreEqual(14, result.GetInt32(1));
         }
 
+
         [TestMethod]
         public void Mock_ReturnsScalar_MockTableSingle_Test()
         {
