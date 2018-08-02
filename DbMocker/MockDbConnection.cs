@@ -19,13 +19,13 @@ namespace Apps72.Dev.Data.DbMocker
         #region LEGACY METHODS
 
         /// <summary />
-        public override string ConnectionString { get; set; }
+        public override string ConnectionString { get; set; } = $"Server=DbMockerServer;Database=DbMockerDatabase";
 
         /// <summary />
-        public override string Database => "Mock Database";
+        public override string Database => "DbMockerDatabase";
 
         /// <summary />
-        public override string DataSource => "Mock Data Source";
+        public override string DataSource => "DbMockerServer";
 
         /// <summary />
         public override string ServerVersion => "1.0";
