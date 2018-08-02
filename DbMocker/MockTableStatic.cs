@@ -80,7 +80,7 @@ namespace Apps72.Dev.Data.DbMocker
         /// <summary />
         public static MockTable FromCsv(string content)
         {
-            return FromCsv(content, "\t", CsvImportOptions.RemoveEmptyLines | CsvImportOptions.TrimLines);
+            return FromCsv(content, "\t");
         }
     }
 

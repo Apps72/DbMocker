@@ -53,6 +53,67 @@ namespace DbMocker.Tests
             Assert.AreEqual(14, result.GetInt32(1));
         }
 
+        [TestMethod]
+        public void Mock_ReturnsSimple_DBNull_Test()
+        {
+            var conn = new MockDbConnection();
+
+            conn.Mocks
+                .WhenAny()
+                .ReturnsScalar<object>(DBNull.Value);
+
+            var result = conn.CreateCommand().ExecuteScalar();
+
+            Assert.AreEqual(DBNull.Value, result);
+        }
+
+        [TestMethod]
+        public void Mock_ReturnsSimple_Null_Test()
+        {
+            var conn = new MockDbConnection();
+
+            conn.Mocks
+                .WhenAny()
+                .ReturnsScalar<object>(null);
+
+            var result = conn.CreateCommand().ExecuteScalar();
+
+            Assert.AreEqual(DBNull.Value, result);
+        }
+
+        [TestMethod]
+        public void Mock_ReturnsRow_DBNull_Test()
+        {
+            var conn = new MockDbConnection();
+
+            conn.Mocks
+                .WhenAny()
+                .ReturnsRow(new { id = 1, Name = DBNull.Value } );
+
+            var result = conn.CreateCommand().ExecuteReader();
+
+            result.Read();
+
+            Assert.AreEqual(1, result.GetInt32(0));
+            Assert.AreEqual(true, result.IsDBNull(1));
+        }
+
+        [TestMethod]
+        public void Mock_ReturnsRow_Null_Test()
+        {
+            var conn = new MockDbConnection();
+
+            conn.Mocks
+                .WhenAny()
+                .ReturnsRow(new { id = 1, Name = (string)null });
+
+            var result = conn.CreateCommand().ExecuteReader();
+
+            result.Read();
+
+            Assert.AreEqual(1, result.GetInt32(0));
+            Assert.AreEqual(true, result.IsDBNull(1));
+        }
 
         [TestMethod]
         public void Mock_ReturnsScalar_MockTableSingle_Test()

@@ -29,6 +29,78 @@ namespace DbMocker.Tests
         }
 
         [TestMethod]
+        public void Mock_ContainsSql_IntegerScalar_Null_Test()
+        {
+            var conn = new MockDbConnection();
+
+            conn.Mocks
+                .When(c => c.CommandText.Contains("SELECT"))
+                .ReturnsScalar((int?)null);
+
+            using (var cmd = new DatabaseCommand(conn))
+            {
+                cmd.CommandText.AppendLine("SELECT ...");
+                var result = cmd.ExecuteScalar<int>();
+
+                Assert.AreEqual(0, result);
+            }
+        }
+
+        [TestMethod]
+        public void Mock_ContainsSql_IntegerScalar_DbNull_Test()
+        {
+            var conn = new MockDbConnection();
+
+            conn.Mocks
+                .When(c => c.CommandText.Contains("SELECT"))
+                .ReturnsScalar(System.DBNull.Value);
+
+            using (var cmd = new DatabaseCommand(conn))
+            {
+                cmd.CommandText.AppendLine("SELECT ...");
+                var result = cmd.ExecuteScalar<int>();
+
+                Assert.AreEqual(0, result);
+            }
+        }
+
+        [TestMethod]
+        public void Mock_ContainsSql_StringScalar_DbNull_Test()
+        {
+            var conn = new MockDbConnection();
+
+            conn.Mocks
+                .When(c => c.CommandText.Contains("SELECT"))
+                .ReturnsScalar(System.DBNull.Value);
+
+            using (var cmd = new DatabaseCommand(conn))
+            {
+                cmd.CommandText.AppendLine("SELECT ...");
+                var result = cmd.ExecuteScalar<string>();
+
+                Assert.AreEqual(null, result);
+            }
+        }
+
+        [TestMethod]
+        public void Mock_ContainsSql_StringScalar_Null_Test()
+        {
+            var conn = new MockDbConnection();
+
+            conn.Mocks
+                .When(c => c.CommandText.Contains("SELECT"))
+                .ReturnsScalar((string)null);
+
+            using (var cmd = new DatabaseCommand(conn))
+            {
+                cmd.CommandText.AppendLine("SELECT ...");
+                var result = cmd.ExecuteScalar<string>();
+
+                Assert.AreEqual(null, result);
+            }
+        }
+
+        [TestMethod]
         public void Mock_ContainsSql_And_Parameter_Test()
         {
             var conn = new MockDbConnection();

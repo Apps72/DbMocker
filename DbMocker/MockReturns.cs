@@ -60,7 +60,10 @@ namespace Apps72.Dev.Data.DbMocker
         /// <param name="returns">Value to return</param>
         public void ReturnsScalar<T>(Func<MockCommand, T> returns)
         {
-            ReturnsFunction = (cmd) => ConvertToMockTable(returns.Invoke(cmd));
+            if (returns == null)
+                ReturnsFunction = (cmd) => ConvertToMockTable(returns);
+            else
+                ReturnsFunction = (cmd) => ConvertToMockTable(returns.Invoke(cmd));
         }
 
         /// <summary>
@@ -75,14 +78,14 @@ namespace Apps72.Dev.Data.DbMocker
         /// <summary />
         private MockTable ConvertToMockTable<T>(T returns)
         {
-            if (Helpers.TypeExtension.IsPrimitive(typeof(T)))
+            if (returns == null || returns is DBNull || TypeExtension.IsPrimitive(typeof(T)))
             {
                 return new MockTable()
                 {
                     Columns = new[] { String.Empty },
                     Rows = new object[,]
                     {
-                        { returns }
+                        { GetValueOrDbNull(returns) }
                     }
                 };
             }
@@ -96,12 +99,18 @@ namespace Apps72.Dev.Data.DbMocker
                 foreach (var property in properties)
                 {
                     columns.Add(property.Name);
-                    values.Add(property.GetValue(returns));
+                    values.Add(GetValueOrDbNull(property.GetValue(returns)));
                 }
 
                 return new MockTable(columns.ToArray(),
                                      new object[][] { values.ToArray() }.ToTwoDimensionalArray());
             }
+        }
+
+        /// <summary />
+        private object GetValueOrDbNull(object value)
+        {
+            return value == null ? DBNull.Value : value;
         }
     }
 }
