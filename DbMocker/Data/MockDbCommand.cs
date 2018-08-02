@@ -2,7 +2,7 @@
 using System.Data;
 using System.Data.Common;
 
-namespace Apps72.Dev.Data.DbMocker
+namespace Apps72.Dev.Data.DbMocker.Data
 {
     /// <summary />
     public class MockDbCommand : DbCommand
@@ -22,7 +22,7 @@ namespace Apps72.Dev.Data.DbMocker
         public override int ExecuteNonQuery()
         {
             int? returns = this.ExecuteScalar() as int?;
-
+            
             if (returns.HasValue)
                 return returns.Value;
             else

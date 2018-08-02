@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Apps72.Dev.Data.DbMocker.Helpers;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -74,7 +75,7 @@ namespace Apps72.Dev.Data.DbMocker
         /// <summary />
         private MockTable ConvertToMockTable<T>(T returns)
         {
-            if (TypeExtension.IsPrimitive(typeof(T)))
+            if (Helpers.TypeExtension.IsPrimitive(typeof(T)))
             {
                 return new MockTable()
                 {

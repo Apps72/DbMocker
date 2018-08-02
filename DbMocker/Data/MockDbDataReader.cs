@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Collections;
-using System.Linq;
 using System.Data.Common;
-using System.Collections.Generic;
 
-namespace Apps72.Dev.Data.DbMocker
+namespace Apps72.Dev.Data.DbMocker.Data
 {
     public class MockDbDataReader : DbDataReader
     {

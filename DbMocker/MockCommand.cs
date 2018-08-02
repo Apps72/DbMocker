@@ -9,7 +9,7 @@ namespace Apps72.Dev.Data.DbMocker
     public class MockCommand
     {
         /// <summary />
-        internal MockCommand(MockDbCommand command)
+        internal MockCommand(Data.MockDbCommand command)
         {
             this.CommandText = command.CommandText;
             this.Parameters = command.Parameters.Cast<DbParameter>();

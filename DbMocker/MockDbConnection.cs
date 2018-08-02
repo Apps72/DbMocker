@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Data;
 using System.Data.Common;
 
@@ -57,7 +56,7 @@ namespace Apps72.Dev.Data.DbMocker
         protected override DbTransaction BeginDbTransaction(IsolationLevel isolationLevel)
         {
             if (this.Transaction == null)
-                this.Transaction = new MockDbTransaction(this);
+                this.Transaction = new Data.MockDbTransaction(this);
 
             return this.Transaction;
         }
@@ -65,7 +64,7 @@ namespace Apps72.Dev.Data.DbMocker
         /// <summary />
         protected override DbCommand CreateDbCommand()
         {
-            return new MockDbCommand(this);
+            return new Data.MockDbCommand(this);
         }
 
         #endregion

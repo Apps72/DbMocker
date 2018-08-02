@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Apps72.Dev.Data.DbMocker
+namespace Apps72.Dev.Data.DbMocker.Helpers
 {
     /// <summary />
     internal class TypeExtension

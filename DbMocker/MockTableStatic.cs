@@ -37,12 +37,12 @@ namespace Apps72.Dev.Data.DbMocker
         }
 
         /// <summary />
-        public static MockTable FromCsv(string content, string delimiter, ImportOptions options)
+        public static MockTable FromCsv(string content, string delimiter, CsvImportOptions options)
         {
             var table = MockTable.Empty();
             bool isFirstRow = true;
-            bool mustRemoveEmptyLines = (options & ImportOptions.RemoveEmptyLines) == ImportOptions.RemoveEmptyLines;
-            bool mustTrimLines = (options & ImportOptions.TrimLines) == ImportOptions.TrimLines;
+            bool mustRemoveEmptyLines = (options & CsvImportOptions.RemoveEmptyLines) == CsvImportOptions.RemoveEmptyLines;
+            bool mustTrimLines = (options & CsvImportOptions.TrimLines) == CsvImportOptions.TrimLines;
 
             foreach (string row in content.Split(Environment.NewLine))
             {
@@ -74,17 +74,17 @@ namespace Apps72.Dev.Data.DbMocker
         /// <summary />
         public static MockTable FromCsv(string content, string delimiter)
         {
-            return FromCsv(content, delimiter, ImportOptions.RemoveEmptyLines | ImportOptions.TrimLines);
+            return FromCsv(content, delimiter, CsvImportOptions.RemoveEmptyLines | CsvImportOptions.TrimLines);
         }
 
         /// <summary />
         public static MockTable FromCsv(string content)
         {
-            return FromCsv(content, "\t", ImportOptions.RemoveEmptyLines | ImportOptions.TrimLines);
+            return FromCsv(content, "\t", CsvImportOptions.RemoveEmptyLines | CsvImportOptions.TrimLines);
         }
     }
 
-    public enum ImportOptions
+    public enum CsvImportOptions
     {
         None = 0,
         RemoveEmptyLines = 1,

@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Data.Common;
 using System.Linq;
 
-namespace Apps72.Dev.Data.DbMocker
+namespace Apps72.Dev.Data.DbMocker.Data
 {
     /// <summary />
     public class MockDbParameterCollection : DbParameterCollection

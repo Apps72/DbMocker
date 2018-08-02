@@ -2,7 +2,7 @@
 using System.Data;
 using System.Data.Common;
 
-namespace Apps72.Dev.Data.DbMocker
+namespace Apps72.Dev.Data.DbMocker.Data
 {
     /// <summary />
     public class MockDbTransaction : DbTransaction

@@ -17,12 +17,12 @@ namespace DbMocker.Tests
             {
                 cmd.CommandText = "SELECT COUNT(*) FROM Employees";
                 return Convert.ToInt32(cmd.ExecuteScalar());
-            }
+            }            
         }
 
         // Sample method from your DataService
         public object[][] GetEmployees(DbConnection connection)
-        {
+        {            
             using (var cmd = connection.CreateCommand())
             {
                 cmd.CommandText = "SELECT ID, Name FROM Employees";
