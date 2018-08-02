@@ -170,4 +170,5 @@ conn.Mocks
 
 ## Road map
 
+- To create a MockTable from a CSV, to detect column type from values of first row (like Excel)
 - DataSets are not yet implemented.
