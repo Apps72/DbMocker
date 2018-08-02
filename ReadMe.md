@@ -43,6 +43,17 @@ public void UnitTest1()
 }
 ```
 
+Tip: To easily detect SQL queries to intercept, we advise you to add a comment that identifies the SQL query 
+and use it in DBMocker.
+
+```CSharp
+    cmd.CommandText = " -- [Request to Update Employees] ...";
+    ...
+    conn.Mocks
+        .When(cmd => cmd.CommandText.Contains("[Request to Update Employees]")
+        .ReturnsScalar(14);
+```
+
 ## Conditions
 
 Use the 'When' method to describe the condition to be detected. 
@@ -129,7 +140,7 @@ conn.Mocks
 
 Using an expression to customize the return.
 
-```
+```CSharp
 conn.Mocks
     .WhenAny()
     .ReturnsRow(cmd => new { Id = 1, Name = "Denis" });
@@ -145,7 +156,7 @@ conn.Mocks
     .ReturnsScalar<int>(14);
 ```
 
-```
+```CSharp
 conn.Mocks
     .WhenAny()
     .ReturnsScalar<int>(cmd => DateTime.Today.Year > 2000 ? 14 : 0);
