@@ -4,27 +4,27 @@ using System.Collections.Generic;
 namespace Apps72.Dev.Data.DbMocker
 {
     /// <summary />
-    public class MockManager
+    public class MockConditions
     {
         /// <summary />
-        internal MockManager(MockDbConnection connection)
+        internal MockConditions(MockDbConnection connection)
         {
 
         }
 
         /// <summary />
-        internal List<MockCondition> Conditions = new List<MockCondition>();
+        internal List<MockReturns> Conditions = new List<MockReturns>();
 
         /// <summary />
-        public MockCondition When(Func<MockCommand, bool> condition)
+        public MockReturns When(Func<MockCommand, bool> condition)
         {
-            var mock = new MockCondition() { Condition = condition };
+            var mock = new MockReturns() { Condition = condition };
             Conditions.Add(mock);
             return mock;
         }
 
         /// <summary />
-        public MockCondition WhenAny()
+        public MockReturns WhenAny()
         {
             return When(null);
         }

@@ -12,10 +12,10 @@ namespace Apps72.Dev.Data.DbMocker
 
         public MockDbConnection()
         {
-            this.Mocks = new MockManager(this);
+            this.Mocks = new MockConditions(this);
         }
 
-        public MockManager Mocks;
+        public MockConditions Mocks;
 
         #region LEGACY METHODS
 
