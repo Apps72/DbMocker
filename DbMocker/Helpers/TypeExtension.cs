@@ -3,7 +3,7 @@
 namespace Apps72.Dev.Data.DbMocker.Helpers
 {
     /// <summary />
-    internal class TypeExtension
+    internal static class TypeExtension
     {
         /// <summary>
         /// Returns True if this object is a simple type.
@@ -11,7 +11,7 @@ namespace Apps72.Dev.Data.DbMocker.Helpers
         /// </summary>
         /// <param name="type"></param>
         /// <returns></returns>
-        public static bool IsPrimitive(Type type)
+        public static bool IsPrimitive(this Type type)
         {
             return type == typeof(DateTime) || type == typeof(Nullable<DateTime>) ||
                    type == typeof(Decimal) || type == typeof(Nullable<Decimal>) ||
@@ -30,6 +30,18 @@ namespace Apps72.Dev.Data.DbMocker.Helpers
                    type == typeof(Char) || type == typeof(Nullable<Char>) ||
                    type == typeof(Double) || type == typeof(Nullable<Double>) ||
                    type == typeof(Single) || type == typeof(Nullable<Single>);
+        }
+
+        public static Type BestType(this string text)
+        {
+            if (DateTime.TryParse(text, out DateTime _)) return typeof(DateTime);
+            if (Boolean.TryParse(text, out Boolean _)) return typeof(DateTime);
+            if (Int32.TryParse(text, out Int32 _)) return typeof(Int32);
+            if (Int64.TryParse(text, out Int64 _)) return typeof(Int64);
+            if (Double.TryParse(text, out Double _)) return typeof(Double);
+            if (Decimal.TryParse(text, out Decimal _)) return typeof(Decimal);
+            if (Char.TryParse(text, out Char _)) return typeof(Char);
+            return typeof(string);
         }
     }
 }

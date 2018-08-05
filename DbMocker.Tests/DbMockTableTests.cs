@@ -153,10 +153,10 @@ namespace DbMocker.Tests
         {
             var conn = new MockDbConnection();
 
-            string csv = @" Id	Name
-                            1	Scott
-                            2	Bill
-                            3	Anders ";
+            string csv = @" Id	Name	Birthdate
+                            1	Scott	1980-02-03
+                            2	Bill	1972-01-12
+                            3	Anders	1965-03-14 ";
 
             var table = MockTable.FromCsv(csv);
 
@@ -164,8 +164,15 @@ namespace DbMocker.Tests
             Assert.AreEqual("Name", table.Columns[1]);
 
             Assert.AreEqual(3, table.Rows.RowsCount());
+
             Assert.AreEqual("Scott", table.Rows[0, 1]);
-            Assert.AreEqual("3", table.Rows[2, 0]);
+            Assert.IsInstanceOfType(table.Rows[0, 1], typeof(string));
+
+            Assert.AreEqual(3, table.Rows[2, 0]);
+            Assert.IsInstanceOfType(table.Rows[2, 0], typeof(int));
+
+            Assert.AreEqual(new DateTime(1972, 1, 12), table.Rows[1, 2]);
+            Assert.IsInstanceOfType(table.Rows[1, 2], typeof(DateTime));
         }
         
     }

@@ -125,6 +125,21 @@ conn.Mocks
     .ReturnsTable(cmd => cmd.Parameters.Count() > 0 ? 14 : 99);
 ```
 
+using a **CSV string** with all data.
+The first row contains the column names.
+The first data row defines types for each columns (like in a Excel importation).
+
+```CSharp
+string csv = @" Id	Name	Birthdate
+                1	Scott	1980-02-03
+                2	Bill	1972-01-12
+                3	Anders	1965-03-14 ";
+
+conn.Mocks
+    .WhenAny()
+    .ReturnsTable(MockTable.FromCsv(csv));
+```
+
 ## ReturnsRow
 
 When a condition occured, a single data row will be return.
@@ -168,7 +183,9 @@ conn.Mocks
 
 - Add `ReturnsRow(T)` and `ReturnsRow(Func<MockCommand, T>)` methods.
 
+### Version 1.4
+- Add `MockTable.FromCsv(string)` method.
+
 ## Road map
 
-- To create a MockTable from a CSV, to detect column type from values of first row (like Excel)
 - DataSets are not yet implemented.

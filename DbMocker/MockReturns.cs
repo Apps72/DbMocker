@@ -78,7 +78,7 @@ namespace Apps72.Dev.Data.DbMocker
         /// <summary />
         private MockTable ConvertToMockTable<T>(T returns)
         {
-            if (returns == null || returns is DBNull || TypeExtension.IsPrimitive(typeof(T)))
+            if (returns == null || returns is DBNull || typeof(T).IsPrimitive())
             {
                 return new MockTable()
                 {
