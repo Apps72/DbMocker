@@ -58,6 +58,13 @@ namespace Apps72.Dev.Data.DbMocker
         }
 
         /// <summary />
+        public MockTable AddColumns(params (string Name, Type Type)[] columns)
+        {
+            this.Columns = this.Columns.Concat(DbMocker.Columns.WithNames(columns)).ToArray();
+            return this;
+        }
+
+        /// <summary />
         internal object GetFirstColRowOrNull()
         {
             if (Rows != null && Rows.GetLength(0) > 0 && Rows.GetLength(1) > 0)

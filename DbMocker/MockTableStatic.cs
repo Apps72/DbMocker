@@ -20,6 +20,14 @@ namespace Apps72.Dev.Data.DbMocker
             };
         }
 
+        public static MockTable WithColumns(params (string Name, Type Type)[] columns)
+        {
+            return new MockTable()
+            {
+                Columns = DbMocker.Columns.WithNames(columns)
+            };
+        }
+
         /// <summary />
         public static MockTable SingleCell(string columnName, object value)
         {

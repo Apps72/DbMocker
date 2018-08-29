@@ -46,6 +46,22 @@ namespace Apps72.Dev.Data.DbMocker
                 Type = typeof(object)
             };
         }
+
+        /// <summary />
+        public static implicit operator (string Name, Type Type)(MockColumn column)
+        {
+            return (column.Name, column.Type);
+        }
+
+        /// <summary />
+        public static implicit operator MockColumn((string Name, Type Type) column)
+        {
+            return new MockColumn()
+            {
+                Name = column.Name,
+                Type = column.Type
+            };
+        }
     }
 
     public static class Columns
@@ -53,6 +69,11 @@ namespace Apps72.Dev.Data.DbMocker
         public static MockColumn[] WithNames(params string[] names)
         {
             return names.Select(name => new MockColumn(name)).ToArray();
+        }
+
+        public static MockColumn[] WithNames(params (string Name, Type Type)[] columns)
+        {
+            return columns.Select(i => new MockColumn(i.Name, i.Type)).ToArray();
         }
     }
 }

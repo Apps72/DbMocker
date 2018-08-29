@@ -54,6 +54,57 @@ namespace DbMocker.Tests
         }
 
         [TestMethod]
+        public void Mock_ReturnsSimple_MockTableWithNull_Test()
+        {
+            var conn = new MockDbConnection();
+
+            var table = MockTable.WithColumns("Col1", "Col2")
+                                 .AddRow(null, 12)
+                                 .AddRow(13, 14);
+            conn.Mocks
+                .WhenAny()
+                .ReturnsTable(table);
+
+            var cmd = conn.CreateCommand();
+            var result = cmd.ExecuteReader();
+
+            result.Read();
+
+            Assert.AreEqual(null, result.GetValue(0));
+            Assert.IsTrue(result.GetFieldType(0) == typeof(object));
+
+            result.Read();
+
+            Assert.AreEqual(13, result.GetValue(0));
+            Assert.IsTrue(result.GetFieldType(0) == typeof(object));
+        }
+
+        [TestMethod]
+        public void Mock_ReturnsSimple_MockTypedTable_Test()
+        {
+            var conn = new MockDbConnection();
+
+            var table = MockTable.WithColumns(("Col1", typeof(int?)), 
+                                              ("Col2", typeof(int)))
+                                 .AddRow(null, 12)
+                                 .AddRow(13, 14);
+            conn.Mocks
+                .WhenAny()
+                .ReturnsTable(table);
+
+            var cmd = conn.CreateCommand();
+            var result = cmd.ExecuteReader();
+
+            result.Read();
+
+            Assert.AreEqual(null, result.GetValue(0));
+            Assert.IsTrue(result.GetFieldType(0) == typeof(int?));
+
+            Assert.AreEqual(12, result.GetValue(1));
+            Assert.IsTrue(result.GetFieldType(1) == typeof(int));
+        }
+
+        [TestMethod]
         public void Mock_ReturnsSimple_DBNull_Test()
         {
             var conn = new MockDbConnection();

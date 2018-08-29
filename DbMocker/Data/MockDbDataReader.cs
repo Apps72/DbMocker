@@ -84,7 +84,10 @@ namespace Apps72.Dev.Data.DbMocker.Data
 
         public override Type GetFieldType(int ordinal)
         {
-            return GetValue(ordinal).GetType();
+            if (ordinal < _columns.Length)
+                return _columns[ordinal].Type;
+            else
+                return GetValue(ordinal).GetType();
         }
 
         public override float GetFloat(int ordinal)

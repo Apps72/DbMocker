@@ -35,8 +35,9 @@ namespace DbMocker.Tests
                     reader.GetValues(row);
                     data.Add(row);
 
-                    int id = reader.GetInt32(reader.GetOrdinal("ID"));
-                    string name = reader.GetString(reader.GetOrdinal("NAME"));
+                    int id = reader.GetValue(0) == null ? 0 : reader.GetInt32(0);
+                    string name = reader.GetString(1);
+
                 }
 
                 return data.ToArray();
@@ -137,6 +138,24 @@ namespace DbMocker.Tests
             Assert.AreEqual(14, count);
         }
 
+        [TestMethod]
+        public void UnitTest7()
+        {
+            var conn = new MockDbConnection();
+
+            conn.Mocks
+                .WhenAny()
+                .ReturnsTable(MockTable.Empty()
+                                       .AddColumns("ID", "Name")
+                                       //.AddColumns(("ID", typeof(int?)), 
+                                       //            ("Name", typeof(string)))
+                                       .AddRow(null, null)
+                                       .AddRow(1, "Scott"));
+
+            var data = GetEmployees(conn);
+
+            Assert.AreEqual("Scott", data[1][1]);
+        }
 
     }
 }
