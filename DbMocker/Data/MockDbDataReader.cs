@@ -6,13 +6,13 @@ namespace Apps72.Dev.Data.DbMocker.Data
 {
     public class MockDbDataReader : DbDataReader
     {
-        private string[] _columns;
+        private MockColumn[] _columns;
         private object[,] _rows;
         private int _currentRowIndex = -1;
 
         internal MockDbDataReader(MockTable table)
         {
-            _columns = table.Columns ?? Array.Empty<string>();
+            _columns = table.Columns ?? Array.Empty<MockColumn>();
             _rows = table.Rows ?? new object[,] { };
         }
 
@@ -59,7 +59,7 @@ namespace Apps72.Dev.Data.DbMocker.Data
 
         public override string GetDataTypeName(int ordinal)
         {
-            return _columns[ordinal].GetType().Name;
+            return _columns[ordinal].Type.Name;
         }
 
         public override DateTime GetDateTime(int ordinal)
@@ -114,14 +114,14 @@ namespace Apps72.Dev.Data.DbMocker.Data
 
         public override string GetName(int ordinal)
         {
-            return _columns[ordinal];
+            return _columns[ordinal].Name;
         }
 
         public override int GetOrdinal(string name)
         {
             for (int i = 0; i < _columns.Length; i++)
             {
-                if (String.Compare(_columns[i], name, ignoreCase: true) == 0)
+                if (String.Compare(_columns[i].Name, name, ignoreCase: true) == 0)
                     return i;
             }
             return -1;

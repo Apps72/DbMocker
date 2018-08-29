@@ -88,7 +88,7 @@ namespace DbMocker.Tests
                 .When(c => c.CommandText.Contains("SELECT"))
                 .ReturnsTable(new MockTable()
                 {
-                    Columns = new[] { "X" },
+                    Columns = Columns.WithNames("X"),
                     Rows = new object[,] 
                     {
                         { 14 }

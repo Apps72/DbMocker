@@ -160,8 +160,8 @@ namespace DbMocker.Tests
 
             var table = MockTable.FromCsv(csv);
 
-            Assert.AreEqual("Id", table.Columns[0]);
-            Assert.AreEqual("Name", table.Columns[1]);
+            Assert.AreEqual("Id", table.Columns[0].Name);
+            Assert.AreEqual("Name", table.Columns[1].Name);
 
             Assert.AreEqual(3, table.Rows.RowsCount());
 

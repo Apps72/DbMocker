@@ -16,7 +16,7 @@ namespace Apps72.Dev.Data.DbMocker
         {
             return new MockTable()
             {
-                Columns = columns
+                Columns = DbMocker.Columns.WithNames(columns)
             };
         }
 
@@ -25,7 +25,7 @@ namespace Apps72.Dev.Data.DbMocker
         {
             return new MockTable()
             {
-                Columns = new[] { columnName },
+                Columns = DbMocker.Columns.WithNames(columnName),
                 Rows = new[,] { { value } },
             };
         }

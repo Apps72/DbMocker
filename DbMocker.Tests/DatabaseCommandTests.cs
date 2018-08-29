@@ -148,7 +148,7 @@ namespace DbMocker.Tests
                 .When(null)
                 .ReturnsTable(new MockTable()
                 {
-                    Columns = new[] { "Col1", "Col2", "Col3" },
+                    Columns = Columns.WithNames("Col1", "Col2", "Col3"),
                     Rows = new object[,]
                     {
                         { 0,      1,      2 },
