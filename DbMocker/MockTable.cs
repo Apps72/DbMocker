@@ -13,19 +13,19 @@ namespace Apps72.Dev.Data.DbMocker
         /// <summary />
         public MockTable()
         {
-            this.Columns = Array.Empty<string>();
+            this.Columns = Array.Empty<MockColumn>();
             this.Rows = null;
         }
 
         /// <summary />
         public MockTable(string[] columns, object[,] rows)
         {
-            this.Columns = columns;
+            this.Columns = columns.Select(name => new MockColumn(name)).ToArray();
             this.Rows = rows;
         }
 
         /// <summary />
-        public string[] Columns { get; set; }
+        public MockColumn[] Columns { get; set; }
 
         /// <summary />
         public object[,] Rows
@@ -53,7 +53,14 @@ namespace Apps72.Dev.Data.DbMocker
         /// <summary />
         public MockTable AddColumns(params string[] columns)
         {
-            this.Columns = this.Columns.Concat(columns).ToArray();
+            this.Columns = this.Columns.Concat(DbMocker.Columns.WithNames(columns)).ToArray();
+            return this;
+        }
+
+        /// <summary />
+        public MockTable AddColumns(params (string Name, Type Type)[] columns)
+        {
+            this.Columns = this.Columns.Concat(DbMocker.Columns.WithNames(columns)).ToArray();
             return this;
         }
 

@@ -148,7 +148,7 @@ namespace DbMocker.Tests
                 .When(null)
                 .ReturnsTable(new MockTable()
                 {
-                    Columns = new[] { "Col1", "Col2", "Col3" },
+                    Columns = Columns.WithNames("Col1", "Col2", "Col3"),
                     Rows = new object[,]
                     {
                         { 0,      1,      2 },
@@ -167,8 +167,43 @@ namespace DbMocker.Tests
                     Col3 = 0
                 });
 
-                Assert.AreEqual(3, result.Count());          // 2 rows
+                Assert.AreEqual(3, result.Count());          // 3 rows
                 Assert.AreEqual(1, result.First().Col2);     // First row / Col2
+            }
+
+        }
+
+        [TestMethod]
+        public void Mock_ExecuteTable_WithNullInFirstRow_Test()
+        {
+            var conn = new MockDbConnection();
+
+            conn.Mocks
+                .When(null)
+                .ReturnsTable(new MockTable()
+                {
+                    Columns = Columns.WithNames("Col1", "Col2", "Col3"),
+                    Rows = new object[,]
+                    {
+                        { null,   1,      2 },
+                        { null,      8,      7 },
+                        { 4,      5,      6 },
+                    }
+                });
+
+            using (var cmd = new DatabaseCommand(conn))
+            {
+                cmd.CommandText.AppendLine("SELECT ...");
+                var result = cmd.ExecuteTable(new
+                {
+                    Col1 = (int?)0,
+                    Col2 = 0,
+                    Col3 = 0
+                });
+
+                Assert.AreEqual(null, result.ElementAt(0).Col1);  
+                Assert.AreEqual(null, result.ElementAt(1).Col1);   
+                Assert.AreEqual(4, result.ElementAt(2).Col1);   
             }
 
         }

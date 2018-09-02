@@ -82,7 +82,7 @@ namespace Apps72.Dev.Data.DbMocker
             {
                 return new MockTable()
                 {
-                    Columns = new[] { String.Empty },
+                    Columns = Columns.WithNames(string.Empty),
                     Rows = new object[,]
                     {
                         { GetValueOrDbNull(returns) }

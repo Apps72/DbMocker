@@ -109,6 +109,17 @@ conn.Mocks
                            .AddRow(2, "Bill"));
 ```
 
+Using a **MockTable.WithColumns()** typed columns. In this case, columns are defined using a tuple (ColumnName, ColumnType).
+
+```CSharp
+conn.Mocks
+    .WhenAny()
+    .ReturnsTable(MockTable.WithColumns(("ID", typeof(int?)),
+                                        ("Name", typeof(string)))
+                            .AddRow(null, "Scott")
+                            .AddRow(2, "Bill"));
+```
+
 Returning a **MockTable.SingleCell()** table... to complete.
 
 ```CSharp
@@ -185,6 +196,10 @@ conn.Mocks
 
 ### Version 1.4
 - Add `MockTable.FromCsv(string)` method.
+
+### Version 1.5
+- Add a `MockColumn` class to manage the column type. See example using "typed columns" above.
+- Breaking change: to allow typed MockColumn, the property `MockTable.Columns` is now of type MockColumn[] (previously string[]).
 
 ## Road map
 
