@@ -114,10 +114,10 @@ Using a **MockTable.WithColumns()** typed columns. In this case, columns are def
 ```CSharp
 conn.Mocks
     .WhenAny()
-    .ReturnsTable(MockTable.WithColumns(("ID", typeof(int?), 
+    .ReturnsTable(MockTable.WithColumns(("ID", typeof(int?)),
                                         ("Name", typeof(string)))
-                           .AddRow(null, "Scott")
-                           .AddRow(2,    "Bill"));
+                            .AddRow(null, "Scott")
+                            .AddRow(2, "Bill"));
 ```
 
 Returning a **MockTable.SingleCell()** table... to complete.

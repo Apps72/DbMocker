@@ -17,12 +17,12 @@ namespace DbMocker.Tests
             {
                 cmd.CommandText = "SELECT COUNT(*) FROM Employees";
                 return Convert.ToInt32(cmd.ExecuteScalar());
-            }            
+            }
         }
 
         // Sample method from your DataService
         public object[][] GetEmployees(DbConnection connection)
-        {            
+        {
             using (var cmd = connection.CreateCommand())
             {
                 cmd.CommandText = "SELECT ID, Name FROM Employees";
@@ -145,16 +145,15 @@ namespace DbMocker.Tests
 
             conn.Mocks
                 .WhenAny()
-                .ReturnsTable(MockTable.Empty()
-                                       .AddColumns("ID", "Name")
-                                       //.AddColumns(("ID", typeof(int?)), 
-                                       //            ("Name", typeof(string)))
-                                       .AddRow(null, null)
-                                       .AddRow(1, "Scott"));
+                .ReturnsTable(MockTable.WithColumns(("ID", typeof(int?)),
+                                                    ("Name", typeof(string)))
+                                        .AddRow(null, "Scott")
+                                        .AddRow(2, "Bill"));
 
             var data = GetEmployees(conn);
 
-            Assert.AreEqual("Scott", data[1][1]);
+            Assert.AreEqual(null, data[0][0]);
+            Assert.AreEqual("Scott", data[0][1]);
         }
 
     }
