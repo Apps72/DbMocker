@@ -69,7 +69,11 @@ namespace Apps72.Dev.Data.DbMocker
                 }
             }
 
-            throw new ArgumentException("No mock found. Use MockDbConnection.Mocks.Where(...).Returns(...) methods to define mocks.");
+            throw new MockException("No mock found. Use MockDbConnection.Mocks.Where(...).Returns(...) methods to define mocks.")
+            {
+                CommandText = command.CommandText,
+                Parameters = command.Parameters
+            };
         }
     }
 }

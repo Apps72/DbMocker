@@ -51,7 +51,7 @@ namespace DbMocker.Tests
         }
 
         [TestMethod]
-        [ExpectedException(typeof(ArgumentException))]
+        [ExpectedException(typeof(MockException))]
         public void Mock_TagNotFound_Test()
         {
             var conn = new MockDbConnection();
@@ -66,7 +66,7 @@ namespace DbMocker.Tests
         }
 
         [TestMethod]
-        [ExpectedException(typeof(ArgumentException))]
+        [ExpectedException(typeof(MockException))]
         public void Mock_TagMustStartLine_Test()
         {
             var conn = new MockDbConnection();
@@ -82,7 +82,7 @@ namespace DbMocker.Tests
         }
 
         [TestMethod]
-        [ExpectedException(typeof(ArgumentException))]
+        [ExpectedException(typeof(MockException))]
         public void Mock_TagMustBeAlone_Test()
         {
             var conn = new MockDbConnection();

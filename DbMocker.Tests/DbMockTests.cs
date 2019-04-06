@@ -138,7 +138,7 @@ namespace DbMocker.Tests
         }
 
         [TestMethod]
-        [ExpectedException(typeof(ArgumentException))]
+        [ExpectedException(typeof(MockException))]
         public void Mock_MockNotFound_Test()
         {
             var conn = new MockDbConnection();

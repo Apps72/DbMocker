@@ -2,6 +2,8 @@ using Apps72.Dev.Data.DbMocker;
 using Apps72.Dev.Data.DbMocker.Helpers;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
+using System.Data.Common;
+using System.Linq;
 
 namespace DbMocker.Tests
 {
@@ -225,6 +227,32 @@ namespace DbMocker.Tests
             Assert.AreEqual(new DateTime(1972, 1, 12), table.Rows[1, 2]);
             Assert.IsInstanceOfType(table.Rows[1, 2], typeof(DateTime));
         }
-        
+
+        [TestMethod]
+        public void Mock_CheckException_Test()
+        {
+            var conn = new MockDbConnection();
+
+            conn.Mocks
+                .WhenTag("NotFoundTag")
+                .ReturnsScalar(99);
+
+            var cmd = conn.CreateCommand();
+            cmd.CommandText = "SELECT * FROM EMP";
+
+            var myParam = cmd.CreateParameter();
+            myParam.ParameterName = "MyParam";
+            cmd.Parameters.Add(myParam);
+
+            try
+            {
+                var result = cmd.ExecuteScalar();
+            }
+            catch (MockException ex)
+            {
+                Assert.AreEqual("SELECT * FROM EMP", ex.CommandText);
+                Assert.AreEqual("MyParam", ex.Parameters.First().ParameterName);
+            }
+        }
     }
 }
