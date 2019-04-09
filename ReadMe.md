@@ -201,6 +201,10 @@ conn.Mocks
 - Add a `MockColumn` class to manage the column type. See example using "typed columns" above.
 - Breaking change: to allow typed MockColumn, the property `MockTable.Columns` is now of type MockColumn[] (previously string[]).
 
+### Version 1.6
+- Add detailed SQL Query in the InnerException (#6).
+- Add a new WhenTag method (#7).
+
 ## Road map
 
 - DataSets are not yet implemented.
