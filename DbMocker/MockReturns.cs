@@ -9,6 +9,7 @@ namespace Apps72.Dev.Data.DbMocker
     /// <summary />
     public class MockReturns
     {
+        /// <summary />
         internal Func<MockCommand, MockTable> ReturnsFunction { get; set; }
 
         /// <summary />

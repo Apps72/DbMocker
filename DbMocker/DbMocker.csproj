@@ -23,4 +23,10 @@ conn.Mocks.WhenAny()..ReturnsScalar(14);</Description>
     <RepositoryUrl>https://github.com/Apps72/DbMocker</RepositoryUrl>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Reference Include="Microsoft.SqlServer.SqlParser">
+      <HintPath>..\Library\Microsoft.SqlServer.SqlParser.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
 </Project>

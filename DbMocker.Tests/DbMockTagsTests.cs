@@ -9,7 +9,7 @@ using System.Text;
 namespace DbMocker.Tests
 {
     [TestClass]
-    public class DbMockTags
+    public class DbMockTagsTests
     {
         [TestMethod]
         public void Mock_SimpleTag_Test()
