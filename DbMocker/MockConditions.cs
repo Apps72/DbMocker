@@ -7,6 +7,7 @@ namespace Apps72.Dev.Data.DbMocker
     public class MockConditions
     {
         private static readonly string NEW_LINE = Environment.NewLine;
+        private bool _validateSqlServerCommandText = false;
 
         /// <summary />
         internal MockConditions(MockDbConnection connection)
@@ -24,7 +25,17 @@ namespace Apps72.Dev.Data.DbMocker
         /// <returns></returns>
         public MockReturns When(Func<MockCommand, bool> condition)
         {
-            var mock = new MockReturns() { Condition = condition };
+            if (condition == null) condition = (cmd => true);
+
+            var mock = new MockReturns()
+            {
+                Condition = (cmd) => {
+                    if (_validateSqlServerCommandText)
+                        return condition.Invoke(cmd) && cmd.HasValidSqlServerCommandText();
+                    else
+                        return condition.Invoke(cmd);
+                                     }
+            };
             Conditions.Add(mock);
             return mock;
         }
@@ -36,17 +47,12 @@ namespace Apps72.Dev.Data.DbMocker
         /// <returns></returns>
         public MockReturns WhenTag(string tagName)
         {
-            var mock = new MockReturns()
-            {
-                Condition = (cmd) => 
+            return When((cmd) =>
                 {
                     string toSearch = $"-- {tagName}{NEW_LINE}";
-                    return cmd.CommandText.StartsWith(toSearch) || 
+                    return cmd.CommandText.StartsWith(toSearch) ||
                            cmd.CommandText.Contains($"{NEW_LINE}{toSearch}");
-                }
-            };
-            Conditions.Add(mock);
-            return mock;
+                });
         }
 
         /// <summary>
@@ -58,12 +64,22 @@ namespace Apps72.Dev.Data.DbMocker
             return When(null);
         }
 
+        /// <summary>
+        /// Check if queries have correct SQL Server syntax.
+        /// </summary>
+        /// <returns></returns>
+        public MockConditions HasValidSqlServerCommandText()
+        {
+            _validateSqlServerCommandText = true;
+            return this;
+        }
+
         /// <summary />
         internal MockTable GetFirstMockTableFound(MockCommand command)
         {
             foreach (var item in this.Conditions)
             {
-                if (item.Condition == null || item.Condition?.Invoke(command) == true)
+                if (item.Condition.Invoke(command) == true)
                 {
                     return item.ReturnsFunction(command);
                 }
