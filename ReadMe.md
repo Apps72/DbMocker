@@ -28,8 +28,8 @@ public void UnitTest1()
     var conn = new MockDbConnection();
 
     // When a specific SQL command is detected,
-    // Don't execute the query to your SQL Server,
-    // But returns this MockTable.
+    // Don't execute the query to your database engine (SQL Server, Oracle, SQLite, ...),
+    // But returns this _Table_.
     conn.Mocks
         .When(cmd => cmd.CommandText.StartsWith("SELECT") &&
                      cmd.Parameters.Count() == 0)
@@ -54,9 +54,11 @@ and use it in DBMocker.
         .ReturnsScalar(14);
 ```
 
+Since DBMocker 1.6, use the `WhenTag` method (see below).
+
 ## Conditions
 
-Use the 'When' method to describe the condition to be detected. 
+Use the `When` method to describe the condition to be detected. 
 This condition is based on a Lambda expression containing a CommandText or Parameters check.
 
 ```CSharp
@@ -65,6 +67,15 @@ conn.Mocks
                  cmd.Parameters.Count() == 0)
     .ReturnsTable(...);
 ```
+
+Use the `WhenTag` method to detect query containing a row starting with `-- MyTag`. 
+This is compatible with EFCore 2.2, containing a new extension method `WithTag` to identity a request.
+
+```CSharp
+conn.Mocks
+    .WhenTag("MyTag")
+    .ReturnsTable(...);
+``` 
 
 Use `WhenAny` to detect all SQL queries. In this case, all queries to the database will return the data specified by WhenAny.
 
@@ -188,6 +199,22 @@ conn.Mocks
     .ReturnsScalar<int>(cmd => DateTime.Today.Year > 2000 ? 14 : 0);
 ```
 
+## Check the SQL Server query syntax
+
+Call the method `Mocks.HasValidSqlServerCommandText()` 
+to check if your string **CommandText** respect the SQL Server syntax...
+without connection to SQL Server (but using the (Microsoft.SqlServer.SqlParser)[https://www.nuget.org/packages/Microsoft.SqlServer.SqlParser] package).
+
+```CSharp
+conn.Mocks
+    .HasValidSqlServerCommandText()
+    .WhenAny()
+    .ReturnsScalar(14);
+```
+
+So the `CommandText="SELECT ** FROM EMP"` (double *)
+will raised a **MockException** with the message "Incorrect syntax near '*'".
+
 ## Releases
 
 ### Version 1.3
@@ -202,8 +229,9 @@ conn.Mocks
 - Breaking change: to allow typed MockColumn, the property `MockTable.Columns` is now of type MockColumn[] (previously string[]).
 
 ### Version 1.6
-- Add detailed SQL Query in the InnerException (#6).
+- Add detailed SQL Query in MockException properties (#6).
 - Add a new WhenTag method (#7).
+- Add a method to validate the syntax of SQL queries without connection to SQL Server (only for SQL Server syntax) (#8).
 
 ## Road map
 
