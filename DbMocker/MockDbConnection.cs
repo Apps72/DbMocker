@@ -9,12 +9,31 @@ namespace Apps72.Dev.Data.DbMocker
     {
         private ConnectionState _connectionState = ConnectionState.Closed;
 
+        /// <summary />
         public MockDbConnection()
         {
             this.Mocks = new MockConditions(this);
         }
 
-        public MockConditions Mocks;
+        /// <summary>
+        /// Gets the list of database mocks.
+        /// </summary>
+        public MockConditions Mocks { get; private set; }
+
+        /// <summary>
+        /// Gets or sets the default value to validate queries (CommandText).
+        /// </summary>
+        public bool HasValidSqlServerCommandText
+        {
+            get
+            {
+                return this.Mocks.MustValidateSqlServerCommandText;
+            }
+            set
+            {
+                this.Mocks.MustValidateSqlServerCommandText = value;
+            }
+        }
 
         #region LEGACY METHODS
 

@@ -215,6 +215,15 @@ conn.Mocks
 So the `CommandText="SELECT ** FROM EMP"` (double *)
 will raised a **MockException** with the message "Incorrect syntax near '*'".
 
+You can also define a default value using the `MockDbConnection.HasValidSqlServerCommandText` property.
+
+```CSharp
+var conn = new MockDbConnection()
+{
+    HasValidSqlServerCommandText = true
+};
+```
+
 ## Releases
 
 ### Version 1.3

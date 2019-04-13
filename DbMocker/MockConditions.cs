@@ -7,12 +7,12 @@ namespace Apps72.Dev.Data.DbMocker
     public class MockConditions
     {
         private static readonly string NEW_LINE = Environment.NewLine;
-        private bool _validateSqlServerCommandText = false;
+        internal bool MustValidateSqlServerCommandText = false;
 
         /// <summary />
         internal MockConditions(MockDbConnection connection)
         {
-
+            
         }
 
         /// <summary />
@@ -30,7 +30,7 @@ namespace Apps72.Dev.Data.DbMocker
             var mock = new MockReturns()
             {
                 Condition = (cmd) => {
-                    if (_validateSqlServerCommandText)
+                    if (MustValidateSqlServerCommandText)
                         return condition.Invoke(cmd) && cmd.HasValidSqlServerCommandText();
                     else
                         return condition.Invoke(cmd);
@@ -70,7 +70,17 @@ namespace Apps72.Dev.Data.DbMocker
         /// <returns></returns>
         public MockConditions HasValidSqlServerCommandText()
         {
-            _validateSqlServerCommandText = true;
+            return HasValidSqlServerCommandText(toValidate: true);
+        }
+
+        /// <summary>
+        /// Check if queries have correct SQL Server syntax.
+        /// </summary>
+        /// <param name="toValidate">To validate or not, the SQL queries.</param>
+        /// <returns></returns>
+        public MockConditions HasValidSqlServerCommandText(bool toValidate)
+        {
+            MustValidateSqlServerCommandText = toValidate;
             return this;
         }
 

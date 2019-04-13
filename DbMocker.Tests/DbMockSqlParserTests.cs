@@ -89,6 +89,31 @@ namespace DbMocker.Tests
         }
 
         [TestMethod]
+        public void Mock_SqlParser_Invalid_HasNextWhen_Test()
+        {
+            var conn = new MockDbConnection();
+
+            conn.Mocks
+                .HasValidSqlServerCommandText()
+                .When(c => c.CommandText.Contains("FROM EMP"))
+                .ReturnsScalar(99);
+
+            var cmd = conn.CreateCommand();
+            cmd.CommandText = @"SELECT ** FROM EMP";
+
+            try
+            {
+                var result = cmd.ExecuteScalar();
+                Assert.Fail();
+            }
+            catch (MockException ex)
+            {
+                Assert.IsInstanceOfType(ex, typeof(MockException));
+                Assert.IsTrue(ex.InnerException.Message.Contains("Incorrect syntax near '*'"));
+            }
+        }
+
+        [TestMethod]
         public void Mock_SqlParser_Invalid_WhenTag_Test()
         {
             var conn = new MockDbConnection();
@@ -168,6 +193,33 @@ namespace DbMocker.Tests
             try
             {
                 var result = cmd2.ExecuteScalar();
+                Assert.Fail();
+            }
+            catch (MockException ex)
+            {
+                Assert.IsInstanceOfType(ex, typeof(MockException));
+                Assert.IsTrue(ex.InnerException.Message.Contains("Incorrect syntax near '*'"));
+            }
+        }
+
+        [TestMethod]
+        public void Mock_SqlParser_GlobalHas_Test()
+        {
+            var conn = new MockDbConnection()
+            {
+                HasValidSqlServerCommandText = true
+            };
+
+            conn.Mocks
+                .When(c => c.CommandText.Contains("FROM EMP"))
+                .ReturnsScalar(99);
+
+            var cmd = conn.CreateCommand();
+            cmd.CommandText = @"SELECT ** FROM EMP";
+
+            try
+            {
+                var result = cmd.ExecuteScalar();
                 Assert.Fail();
             }
             catch (MockException ex)
