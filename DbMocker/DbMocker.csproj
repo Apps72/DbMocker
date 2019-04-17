@@ -6,14 +6,21 @@
     <RootNamespace>Apps72.Dev.Data.DbMocker</RootNamespace>
     <Version>1.6.0</Version>
     <PackageId>DbMocker</PackageId>
+	<PackageLicenseExpression>MIT</PackageLicenseExpression>
     <Authors>Denis Voituron</Authors>
+	<Title>DBMocker to validate and mock SQL Queries</Title>
     <Product>DbMocker</Product>
     <Description>This .NET library simplifies data mocking for UnitTests, to avoid a connection to a relational database.
 DbMocker use the standard Microsoft .NET DbConnection object. So, you can mock any toolkit, 
 including EntityFramework, Dapper or ADO.NET; And for all database servers (SQL Server, Oracle, SQLite).
 
+```
 var conn = new MockDbConnection();
-conn.Mocks.WhenAny()..ReturnsScalar(14);</Description>
+conn.Mocks
+    .When(cmd => cmd.CommandText.Contains("SELECT COUNT(*) FROM EMP"))
+    .ReturnsScalar(14);
+```
+</Description>
     <Copyright>Denis Voituron</Copyright>
     <PackageTags>DbMocker, Mocker, SQLServer, Oracle, Sqlite, EntityFramework, EF, Dapper, UnitTest</PackageTags>
     <PackageReleaseNotes>https://github.com/Apps72/DbMocker</PackageReleaseNotes>
