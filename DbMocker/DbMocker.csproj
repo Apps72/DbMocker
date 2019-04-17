@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp2.1</TargetFramework>
+    <TargetFramework>netstandard2.0</TargetFramework>
     <AssemblyName>Apps72.Dev.Data.DbMocker</AssemblyName>
     <RootNamespace>Apps72.Dev.Data.DbMocker</RootNamespace>
     <Version>1.6.0</Version>
@@ -25,8 +25,13 @@ conn.Mocks.WhenAny()..ReturnsScalar(14);</Description>
 
   <ItemGroup>
     <Reference Include="Microsoft.SqlServer.SqlParser">
-      <HintPath>..\Library\Microsoft.SqlServer.SqlParser.dll</HintPath>
+      <HintPath>..\Library\Microsoft.SqlServer.SqlParser.dll</HintPath>	  
     </Reference>
+	<None Include="..\Library\Microsoft.SqlServer.SqlParser.dll">
+        <PackagePath>lib\netstandard2.0</PackagePath>
+        <Pack>true</Pack>
+        <Visible>false</Visible>
+    </None>
   </ItemGroup>
 
 </Project>
