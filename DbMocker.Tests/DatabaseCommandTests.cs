@@ -243,9 +243,9 @@ namespace DbMocker.Tests
             conn.Mocks
                 .WhenAny()
                 .ReturnsTable(
-                      MockTable.WithColumns("Col1", "Col2")
-                               .AddRow(10, 11)
-                               .AddRow(12, 13));
+                      new MockTable().AddColumns("Col1", "Col2")
+                                     .AddRow(10, 11)
+                                     .AddRow(12, 13));
 
             using (var cmd = new DatabaseCommand(conn))
             {

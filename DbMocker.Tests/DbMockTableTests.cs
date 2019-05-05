@@ -30,6 +30,25 @@ namespace DbMocker.Tests
         }
 
         [TestMethod]
+        public void Mock_ReturnsScalar_MockTable_TypedColumns_Test()
+        {
+            var conn = new MockDbConnection();
+
+            var table = MockTable.Empty()
+                                 .AddColumns(("Col1", typeof(int)))
+                                 .AddRow(11);
+
+            conn.Mocks
+                .WhenAny()
+                .ReturnsTable(table);
+
+            var cmd = conn.CreateCommand();
+            var result = cmd.ExecuteScalar();
+
+            Assert.AreEqual(11, result);
+        }
+
+        [TestMethod]
         public void Mock_ReturnsSimple_MockTable_Test()
         {
             var conn = new MockDbConnection();

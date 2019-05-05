@@ -13,7 +13,7 @@ namespace DbMocker.Tests
         [TestMethod]
         public void Mock_CheckTwoDimensionalObject_Test()
         {
-            var x = new object[,] 
+            var x = new object[,]
             {
                 { "Col1", "Col2" },
                 { "abc" , "def" },
@@ -23,7 +23,7 @@ namespace DbMocker.Tests
             {
                 { },
             };
-            var z = new object[,] 
+            var z = new object[,]
             {
             };
 
@@ -63,6 +63,32 @@ namespace DbMocker.Tests
         }
 
         [TestMethod]
+        public void Mock_ConnectionProperties_Test()
+        {
+            var conn = new MockDbConnection();
+
+            Assert.AreEqual("Server=DbMockerServer;Database=DbMockerDatabase", conn.ConnectionString);
+            Assert.AreEqual("DbMockerDatabase", conn.Database);
+            Assert.AreEqual("DbMockerServer", conn.DataSource);
+            Assert.AreEqual("1.0", conn.ServerVersion);
+        }
+
+        [TestMethod]
+        public void Mock_BeginTransaction_Test()
+        {
+            var conn = new MockDbConnection();
+            conn.Mocks.WhenAny().ReturnsScalar(14);
+
+            using (var trans = conn.BeginTransaction())
+            {
+                var result = conn.CreateCommand().ExecuteScalar();
+                trans.Rollback();
+
+                Assert.AreEqual(14, result);
+            }
+        }
+
+        [TestMethod]
         public void Mock_ConvertToTwoDimensionalArray_Test()
         {
             var source = new object[][]
@@ -89,7 +115,7 @@ namespace DbMocker.Tests
                 .ReturnsTable(new MockTable()
                 {
                     Columns = Columns.WithNames("X"),
-                    Rows = new object[,] 
+                    Rows = new object[,]
                     {
                         { 14 }
                     }

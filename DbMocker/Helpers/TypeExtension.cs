@@ -32,6 +32,11 @@ namespace Apps72.Dev.Data.DbMocker.Helpers
                    type == typeof(Single) || type == typeof(Nullable<Single>);
         }
 
+        /// <summary>
+        /// Returns the best data type infered from the value text.
+        /// </summary>
+        /// <param name="text"></param>
+        /// <returns></returns>
         public static Type BestType(this string text)
         {
             if (DateTime.TryParse(text, out DateTime _)) return typeof(DateTime);

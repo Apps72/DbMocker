@@ -38,7 +38,7 @@ namespace Apps72.Dev.Data.DbMocker
         #region LEGACY METHODS
 
         /// <summary />
-        public override string ConnectionString { get; set; } = $"Server=DbMockerServer;Database=DbMockerDatabase";
+        public override string ConnectionString { get; set; } = "Server=DbMockerServer;Database=DbMockerDatabase";
 
         /// <summary />
         public override string Database => "DbMockerDatabase";

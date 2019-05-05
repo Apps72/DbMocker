@@ -224,6 +224,7 @@ namespace DbMocker.Tests
             }
             catch (MockException ex)
             {
+                Assert.IsTrue(conn.HasValidSqlServerCommandText);
                 Assert.IsInstanceOfType(ex, typeof(MockException));
                 Assert.IsTrue(ex.InnerException.Message.Contains("Incorrect syntax near '*'"));
             }
