@@ -186,7 +186,7 @@ namespace DbMocker.Tests
                     Rows = new object[,]
                     {
                         { null,   1,      2 },
-                        { null,      8,      7 },
+                        { null,   8,      7 },
                         { 4,      5,      6 },
                     }
                 });
@@ -208,5 +208,53 @@ namespace DbMocker.Tests
 
         }
 
+        [TestMethod]
+        public void Mock_ExecuteRow_WithTable_Test()
+        {
+            var conn = new MockDbConnection();
+
+            conn.Mocks
+                .WhenAny()
+                .ReturnsTable(
+                      MockTable.WithColumns("Col1", "Col2")
+                               .AddRow(10, 11)
+                               .AddRow(12, 13));
+
+            using (var cmd = new DatabaseCommand(conn))
+            {
+                cmd.CommandText.AppendLine("SELECT ...");
+                var result = cmd.ExecuteRow(new
+                {
+                    Col1 = default(int?),
+                    Col2 = default(int),
+                });
+
+                Assert.AreEqual(10, result.Col1);
+                Assert.AreEqual(11, result.Col2);
+            }
+
+        }
+
+        [TestMethod]
+        public void Mock_ExecuteScalar_WithTable_Test()
+        {
+            var conn = new MockDbConnection();
+
+            conn.Mocks
+                .WhenAny()
+                .ReturnsTable(
+                      MockTable.WithColumns("Col1", "Col2")
+                               .AddRow(10, 11)
+                               .AddRow(12, 13));
+
+            using (var cmd = new DatabaseCommand(conn))
+            {
+                cmd.CommandText.AppendLine("SELECT ...");
+                var result = cmd.ExecuteRow<int>();
+
+                Assert.AreEqual(10, result);
+            }
+
+        }
     }
 }
