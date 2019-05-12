@@ -20,7 +20,7 @@ namespace DbMocker.Tests
 
             using (var cmd = new DatabaseCommand(conn))
             {
-                cmd.CommandText.AppendLine("SELECT ...");
+                cmd.CommandText.AppendLine("SELECT * FROM EMP WHERE ID = @ID");
                 cmd.AddParameter("@ID", 1);
                 var result = cmd.ExecuteScalar<int>();
 
