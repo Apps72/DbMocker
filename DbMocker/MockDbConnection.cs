@@ -86,6 +86,43 @@ namespace Apps72.Dev.Data.DbMocker
             return new Data.MockDbCommand(this);
         }
 
+        public override DataTable GetSchema()
+        {
+            return this.GetSchema(null, null);
+        }
+
+        public override DataTable GetSchema(string collectionName)
+        {
+            return this.GetSchema(null, null);
+        }
+
+        public override DataTable GetSchema(string collectionName, string[] restrictionValues)
+        {
+            var table = new DataTable("DbMockerSchema");
+
+            table.Columns.AddRange(new[]
+            {
+                new DataColumn("DataType", typeof(string)),
+                new DataColumn("TypeName", typeof(string)),
+                new DataColumn("ProviderDbType", typeof(string)),
+            });
+            
+            table.Rows.Add("System.Byte[]", "binary", "1");
+            table.Rows.Add("System.Byte", "tinyint", "2");
+            table.Rows.Add("System.Boolean", "bit", "3");
+            table.Rows.Add("System.Guid", "uniqueidentifier", "4");
+            table.Rows.Add("System.DateTime", "datetime", "6");
+            table.Rows.Add("System.Decimal", "numeric", "7");
+            table.Rows.Add("System.Double", "float", "8");
+            table.Rows.Add("System.Int16", "smallint", "10");
+            table.Rows.Add("System.Int32", "int", "11");
+            table.Rows.Add("System.Int64", "bigint", "12");
+            table.Rows.Add("System.Single", "single", "15");
+            table.Rows.Add("System.String", "varchar", "16");
+
+            return table;
+        }
+
         #endregion
     }
 }

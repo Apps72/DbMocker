@@ -1,6 +1,7 @@
 using Apps72.Dev.Data;
 using Apps72.Dev.Data.DbMocker;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System;
 using System.Data.SqlClient;
 using System.Linq;
 
@@ -255,6 +256,40 @@ namespace DbMocker.Tests
                 Assert.AreEqual(10, result);
             }
 
+        }
+
+        [TestMethod]
+        public void Mock_FormatedCommandText_Test()
+        {
+            var conn = new MockDbConnection();
+
+            conn.Mocks
+                .When(c => c.CommandText.Contains("SELECT"))
+                .ReturnsScalar(14);
+
+            using (var cmd = new DatabaseCommand(conn))
+            {
+                cmd.CommandText = @"SELECT * 
+                                      FROM EMP 
+                                     WHERE ID = @Id
+                                       AND ENAME = @Name 
+                                       AND HIREDATE = @HireDate";
+
+                cmd.AddParameter("@Id", 123);
+                cmd.AddParameter("@Name", "Denis");
+                cmd.AddParameter("@HireDate", new DateTime(2019, 05, 03));
+
+                var formatedCommandAsText = cmd.Formatted.CommandAsText;
+                var formatedCommandAsVariables = cmd.Formatted.CommandAsVariables;
+
+                Assert.IsTrue(formatedCommandAsText.Contains("ID = 123"));
+                Assert.IsTrue(formatedCommandAsText.Contains("ENAME = 'Denis'"));
+                Assert.IsTrue(formatedCommandAsText.Contains("HIREDATE = '2019-05-03'"));
+
+                Assert.IsTrue(formatedCommandAsVariables.Contains("DECLARE @Id AS INT = 123"));
+                Assert.IsTrue(formatedCommandAsVariables.Contains("DECLARE @Name AS VARCHAR"));
+                Assert.IsTrue(formatedCommandAsVariables.Contains("DECLARE @HireDate AS DATETIME = '2019-05-03'"));
+            }
         }
     }
 }
