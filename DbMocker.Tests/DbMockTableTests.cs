@@ -15,7 +15,7 @@ namespace DbMocker.Tests
         {
             var conn = new MockDbConnection();
 
-            var table = MockTable.Empty()
+            MockTable table = MockTable.Empty()
                                  .AddColumns("Col1")
                                  .AddRow(11);
 
@@ -23,8 +23,8 @@ namespace DbMocker.Tests
                 .WhenAny()
                 .ReturnsTable(table);
 
-            var cmd = conn.CreateCommand();
-            var result = cmd.ExecuteScalar();
+            DbCommand cmd = conn.CreateCommand();
+            object result = cmd.ExecuteScalar();
 
             Assert.AreEqual(11, result);
         }
@@ -34,7 +34,7 @@ namespace DbMocker.Tests
         {
             var conn = new MockDbConnection();
 
-            var table = MockTable.Empty()
+            MockTable table = MockTable.Empty()
                                  .AddColumns(("Col1", typeof(int)))
                                  .AddRow(11);
 
@@ -42,8 +42,8 @@ namespace DbMocker.Tests
                 .WhenAny()
                 .ReturnsTable(table);
 
-            var cmd = conn.CreateCommand();
-            var result = cmd.ExecuteScalar();
+            DbCommand cmd = conn.CreateCommand();
+            object result = cmd.ExecuteScalar();
 
             Assert.AreEqual(11, result);
         }
@@ -53,15 +53,41 @@ namespace DbMocker.Tests
         {
             var conn = new MockDbConnection();
 
-            var table = MockTable.WithColumns("Col1", "Col2")
+            MockTable table = MockTable.WithColumns("Col1", "Col2")
                                  .AddRow(11, 12)
                                  .AddRow(13, 14);
             conn.Mocks
                 .WhenAny()
                 .ReturnsTable(table);
 
-            var cmd = conn.CreateCommand();
-            var result = cmd.ExecuteReader();
+            DbCommand cmd = conn.CreateCommand();
+            DbDataReader result = cmd.ExecuteReader();
+
+            result.Read();
+
+            Assert.AreEqual(11, result.GetInt32(0));
+            Assert.AreEqual(12, result.GetInt32(1));
+
+            result.Read();
+
+            Assert.AreEqual(13, result.GetInt32(0));
+            Assert.AreEqual(14, result.GetInt32(1));
+        }
+
+        [TestMethod]
+        public void Mock_ReturnsSimple_MockRow_Test()
+        {
+            var conn = new MockDbConnection();
+
+            MockTable table = MockTable.WithColumns("Col1", "Col2")
+                                       .AddRow(11, 12)
+                                       .AddRow(13, 14);
+            conn.Mocks
+                .WhenAny()
+                .ReturnsRow(table);
+
+            DbCommand cmd = conn.CreateCommand();
+            DbDataReader result = cmd.ExecuteReader();
 
             result.Read();
 
@@ -79,15 +105,15 @@ namespace DbMocker.Tests
         {
             var conn = new MockDbConnection();
 
-            var table = MockTable.WithColumns("Col1", "Col2")
+            MockTable table = MockTable.WithColumns("Col1", "Col2")
                                  .AddRow(null, 12)
                                  .AddRow(13, 14);
             conn.Mocks
                 .WhenAny()
                 .ReturnsTable(table);
 
-            var cmd = conn.CreateCommand();
-            var result = cmd.ExecuteReader();
+            DbCommand cmd = conn.CreateCommand();
+            DbDataReader result = cmd.ExecuteReader();
 
             result.Read();
 
@@ -105,7 +131,7 @@ namespace DbMocker.Tests
         {
             var conn = new MockDbConnection();
 
-            var table = MockTable.WithColumns(("Col1", typeof(int?)), 
+            MockTable table = MockTable.WithColumns(("Col1", typeof(int?)),
                                               ("Col2", typeof(int)))
                                  .AddRow(null, 12)
                                  .AddRow(13, 14);
@@ -113,8 +139,8 @@ namespace DbMocker.Tests
                 .WhenAny()
                 .ReturnsTable(table);
 
-            var cmd = conn.CreateCommand();
-            var result = cmd.ExecuteReader();
+            DbCommand cmd = conn.CreateCommand();
+            DbDataReader result = cmd.ExecuteReader();
 
             result.Read();
 
@@ -134,7 +160,7 @@ namespace DbMocker.Tests
                 .WhenAny()
                 .ReturnsScalar<object>(DBNull.Value);
 
-            var result = conn.CreateCommand().ExecuteScalar();
+            object result = conn.CreateCommand().ExecuteScalar();
 
             Assert.AreEqual(DBNull.Value, result);
         }
@@ -148,7 +174,7 @@ namespace DbMocker.Tests
                 .WhenAny()
                 .ReturnsScalar<object>(null);
 
-            var result = conn.CreateCommand().ExecuteScalar();
+            object result = conn.CreateCommand().ExecuteScalar();
 
             Assert.AreEqual(DBNull.Value, result);
         }
@@ -160,9 +186,9 @@ namespace DbMocker.Tests
 
             conn.Mocks
                 .WhenAny()
-                .ReturnsRow(new { id = 1, Name = DBNull.Value } );
+                .ReturnsRow(new { id = 1, Name = DBNull.Value });
 
-            var result = conn.CreateCommand().ExecuteReader();
+            DbDataReader result = conn.CreateCommand().ExecuteReader();
 
             result.Read();
 
@@ -179,7 +205,7 @@ namespace DbMocker.Tests
                 .WhenAny()
                 .ReturnsRow(new { id = 1, Name = (string)null });
 
-            var result = conn.CreateCommand().ExecuteReader();
+            DbDataReader result = conn.CreateCommand().ExecuteReader();
 
             result.Read();
 
@@ -198,8 +224,8 @@ namespace DbMocker.Tests
                 .WhenAny()
                 .ReturnsTable(table);
 
-            var cmd = conn.CreateCommand();
-            var result = cmd.ExecuteScalar();
+            DbCommand cmd = conn.CreateCommand();
+            object result = cmd.ExecuteScalar();
 
             Assert.AreEqual(11, result);
         }
@@ -214,8 +240,8 @@ namespace DbMocker.Tests
                 .WhenAny()
                 .ReturnsTable(table);
 
-            var cmd = conn.CreateCommand();
-            var result = cmd.ExecuteScalar();
+            DbCommand cmd = conn.CreateCommand();
+            object result = cmd.ExecuteScalar();
 
             Assert.AreEqual(11, result);
         }
@@ -256,16 +282,16 @@ namespace DbMocker.Tests
                 .WhenTag("NotFoundTag")
                 .ReturnsScalar(99);
 
-            var cmd = conn.CreateCommand();
+            DbCommand cmd = conn.CreateCommand();
             cmd.CommandText = "SELECT * FROM EMP";
 
-            var myParam = cmd.CreateParameter();
+            DbParameter myParam = cmd.CreateParameter();
             myParam.ParameterName = "MyParam";
             cmd.Parameters.Add(myParam);
 
             try
             {
-                var result = cmd.ExecuteScalar();
+                object result = cmd.ExecuteScalar();
             }
             catch (MockException ex)
             {

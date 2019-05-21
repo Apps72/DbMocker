@@ -1,7 +1,6 @@
 ﻿using Apps72.Dev.Data.DbMocker.Helpers;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
 
 namespace Apps72.Dev.Data.DbMocker
@@ -56,15 +55,28 @@ namespace Apps72.Dev.Data.DbMocker
         }
 
         /// <summary>
+        /// Sets <seealso cref="MockTable"/> with sample data, when the condition occured.
+        /// </summary>
+        /// <param name="returns"><seealso cref="MockTable"/> with sample data</param>
+        public void ReturnsRow(MockTable returns)
+        {
+            ReturnsFunction = (cmd) => returns;
+        }
+
+        /// <summary>
         /// Sets the expression to return the value, when the condition occured.
         /// </summary>
         /// <param name="returns">Value to return</param>
         public void ReturnsScalar<T>(Func<MockCommand, T> returns)
         {
             if (returns == null)
+            {
                 ReturnsFunction = (cmd) => ConvertToMockTable(returns);
+            }
             else
+            {
                 ReturnsFunction = (cmd) => ConvertToMockTable(returns.Invoke(cmd));
+            }
         }
 
         /// <summary>
@@ -92,12 +104,12 @@ namespace Apps72.Dev.Data.DbMocker
             }
             else
             {
-                var type = typeof(T);
-                var properties = type.GetProperties(BindingFlags.Public | BindingFlags.Instance);
+                Type type = typeof(T);
+                PropertyInfo[] properties = type.GetProperties(BindingFlags.Public | BindingFlags.Instance);
                 var columns = new List<string>();
                 var values = new List<object>();
 
-                foreach (var property in properties)
+                foreach (PropertyInfo property in properties)
                 {
                     columns.Add(property.Name);
                     values.Add(GetValueOrDbNull(property.GetValue(returns)));
