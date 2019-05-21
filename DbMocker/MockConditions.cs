@@ -12,7 +12,7 @@ namespace Apps72.Dev.Data.DbMocker
         /// <summary />
         internal MockConditions(MockDbConnection connection)
         {
-            
+
         }
 
         /// <summary />
@@ -25,19 +25,7 @@ namespace Apps72.Dev.Data.DbMocker
         /// <returns></returns>
         public MockReturns When(Func<MockCommand, bool> condition)
         {
-            if (condition == null) condition = (cmd => true);
-
-            var mock = new MockReturns()
-            {
-                Condition = (cmd) => {
-                    if (MustValidateSqlServerCommandText)
-                        return condition.Invoke(cmd) && cmd.HasValidSqlServerCommandText();
-                    else
-                        return condition.Invoke(cmd);
-                                     }
-            };
-            Conditions.Add(mock);
-            return mock;
+            return WhenPrivate($"When([Expression])", condition);
         }
 
         /// <summary>
@@ -47,7 +35,9 @@ namespace Apps72.Dev.Data.DbMocker
         /// <returns></returns>
         public MockReturns WhenTag(string tagName)
         {
-            return When((cmd) =>
+            return WhenPrivate(
+                description: $"WhenTag({tagName})",
+                condition: (cmd) =>
                 {
                     string toSearch = $"-- {tagName}{NEW_LINE}";
                     return cmd.CommandText.StartsWith(toSearch) ||
@@ -61,7 +51,7 @@ namespace Apps72.Dev.Data.DbMocker
         /// <returns></returns>
         public MockReturns WhenAny()
         {
-            return When(null);
+            return WhenPrivate("WhenAny()", null);
         }
 
         /// <summary>
@@ -87,7 +77,7 @@ namespace Apps72.Dev.Data.DbMocker
         /// <summary />
         internal MockTable GetFirstMockTableFound(MockCommand command)
         {
-            foreach (var item in this.Conditions)
+            foreach (MockReturns item in Conditions)
             {
                 if (item.Condition.Invoke(command) == true)
                 {
@@ -101,5 +91,38 @@ namespace Apps72.Dev.Data.DbMocker
                 Parameters = command.Parameters
             };
         }
+
+        /// <summary>
+        /// Add a condition to return mock data.
+        /// </summary>
+        /// <param name="description">Label to identify the condition</param>
+        /// <param name="condition">Function to execute</param>
+        /// <returns></returns>
+        private MockReturns WhenPrivate(string description, Func<MockCommand, bool> condition)
+        {
+            if (condition == null)
+            {
+                condition = (cmd => true);
+            }
+
+            var mock = new MockReturns()
+            {
+                Description = description,
+                Condition = (cmd) =>
+                {
+                    if (MustValidateSqlServerCommandText)
+                    {
+                        return condition.Invoke(cmd) && cmd.HasValidSqlServerCommandText();
+                    }
+                    else
+                    {
+                        return condition.Invoke(cmd);
+                    }
+                }
+            };
+            Conditions.Add(mock);
+            return mock;
+        }
+
     }
 }

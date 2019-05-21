@@ -6,8 +6,12 @@ using System.Reflection;
 namespace Apps72.Dev.Data.DbMocker
 {
     /// <summary />
+    [System.Diagnostics.DebuggerDisplay("{Description}")]
     public class MockReturns
     {
+        /// <summary />
+        internal string Description { get; set; }
+
         /// <summary />
         internal Func<MockCommand, MockTable> ReturnsFunction { get; set; }
 
