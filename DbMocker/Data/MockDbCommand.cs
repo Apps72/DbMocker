@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Data;
 using System.Data.Common;
+using System.Linq;
 
 namespace Apps72.Dev.Data.DbMocker.Data
 {
@@ -33,7 +34,8 @@ namespace Apps72.Dev.Data.DbMocker.Data
         public override object ExecuteScalar()
         {
             return _connection.Mocks
-                              .GetFirstMockTableFound(new MockCommand(this))
+                              .GetFirstMockTablesFound(new MockCommand(this))
+                              .First()
                               .GetFirstColRowOrNull();
         }
 
@@ -41,7 +43,7 @@ namespace Apps72.Dev.Data.DbMocker.Data
         protected override DbDataReader ExecuteDbDataReader(CommandBehavior behavior)
         {
             var result = _connection.Mocks
-                                    .GetFirstMockTableFound(new MockCommand(this));
+                                    .GetFirstMockTablesFound(new MockCommand(this));
 
             return new MockDbDataReader(result);
         }

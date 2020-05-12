@@ -6,14 +6,16 @@ namespace Apps72.Dev.Data.DbMocker.Data
 {
     public class MockDbDataReader : DbDataReader
     {
+        private MockTable[] tables;
+        private int _currentTableIndex = -1;
         private MockColumn[] _columns;
         private object[,] _rows;
         private int _currentRowIndex = -1;
 
-        internal MockDbDataReader(MockTable table)
+        internal MockDbDataReader(MockTable[] tables)
         {
-            _columns = table.Columns ?? Array.Empty<MockColumn>();
-            _rows = table.Rows ?? new object[,] { };
+            this.tables = tables;
+            NextResult();
         }
 
         #region LEGACY METHODS
@@ -161,7 +163,16 @@ namespace Apps72.Dev.Data.DbMocker.Data
 
         public override bool NextResult()
         {
-            return false;       // TODO when using datasets
+            _currentTableIndex++;
+
+            if (_currentTableIndex >= tables.Length)
+                return false;
+
+            _columns = tables[_currentTableIndex].Columns ?? Array.Empty<MockColumn>();
+            _rows = tables[_currentTableIndex].Rows ?? new object[,] { };
+            _currentRowIndex = -1;
+
+            return true;
         }
 
         public override bool Read()
