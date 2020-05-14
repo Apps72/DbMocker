@@ -75,7 +75,7 @@ namespace Apps72.Dev.Data.DbMocker
         }
 
         /// <summary />
-        internal MockTable GetFirstMockTableFound(MockCommand command)
+        internal MockTable[] GetFirstMockTablesFound(MockCommand command)
         {
             foreach (MockReturns item in Conditions)
             {

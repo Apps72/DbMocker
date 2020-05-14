@@ -13,10 +13,30 @@ namespace Apps72.Dev.Data.DbMocker
         internal string Description { get; set; }
 
         /// <summary />
-        internal Func<MockCommand, MockTable> ReturnsFunction { get; set; }
+        internal Func<MockCommand, MockTable[]> ReturnsFunction { get; set; }
 
         /// <summary />
         internal Func<MockCommand, bool> Condition { get; set; }
+
+        /// <summary>
+        /// Sets the expression to return a multiple result set, presented by an array of
+        /// <seealso cref="MockTable"/> with sample data, when the condition occured.
+        /// </summary>
+        /// <param name="returns">Method or Lambda expression to return a <seealso cref="MockTable"/></param>
+        public void ReturnsDataset(params MockTable[] returns)
+        {
+            ReturnsFunction = (cmd) => returns;
+        }
+
+        /// <summary>
+        /// Sets the expression to return a multiple result set, presented by an array of
+        /// <seealso cref="MockTable"/> with sample data, when the condition occured.
+        /// </summary>
+        /// <param name="returns">Method or Lambda expression to return a <seealso cref="MockTable"/></param>
+        public void ReturnsDataset(Func<MockCommand, MockTable[]> returns)
+        {
+            ReturnsFunction = returns;
+        }
 
         /// <summary>
         /// Sets the expression to return a <seealso cref="MockTable"/> with sample data, when the condition occured.
@@ -24,7 +44,7 @@ namespace Apps72.Dev.Data.DbMocker
         /// <param name="returns">Method or Lambda expression to return a <seealso cref="MockTable"/></param>
         public void ReturnsTable(Func<MockCommand, MockTable> returns)
         {
-            ReturnsFunction = returns;
+            ReturnsFunction = (cmd) => new[] { returns.Invoke(cmd) };
         }
 
         /// <summary>
@@ -33,7 +53,7 @@ namespace Apps72.Dev.Data.DbMocker
         /// <param name="returns"><seealso cref="MockTable"/> with sample data</param>
         public void ReturnsTable(MockTable returns)
         {
-            ReturnsFunction = (cmd) => returns;
+            ReturnsFunction = (cmd) => new[] { returns };
         }
 
         /// <summary>
@@ -44,7 +64,7 @@ namespace Apps72.Dev.Data.DbMocker
         /// <param name="returns">Sample data</param>
         public void ReturnsRow<T>(Func<MockCommand, T> returns)
         {
-            ReturnsFunction = (cmd) => ConvertToMockTable(returns.Invoke(cmd));
+            ReturnsFunction = (cmd) => ConvertToMockTables(returns.Invoke(cmd));
         }
 
         /// <summary>
@@ -55,7 +75,7 @@ namespace Apps72.Dev.Data.DbMocker
         /// <param name="returns">Sample data</param>
         public void ReturnsRow<T>(T returns)
         {
-            ReturnsFunction = (cmd) => ConvertToMockTable(returns);
+            ReturnsFunction = (cmd) => ConvertToMockTables(returns);
         }
 
         /// <summary>
@@ -64,7 +84,7 @@ namespace Apps72.Dev.Data.DbMocker
         /// <param name="returns"><seealso cref="MockTable"/> with sample data</param>
         public void ReturnsRow(MockTable returns)
         {
-            ReturnsFunction = (cmd) => returns;
+            ReturnsFunction = (cmd) => new[] { returns };
         }
 
         /// <summary>
@@ -75,11 +95,11 @@ namespace Apps72.Dev.Data.DbMocker
         {
             if (returns == null)
             {
-                ReturnsFunction = (cmd) => ConvertToMockTable(returns);
+                ReturnsFunction = (cmd) => ConvertToMockTables(returns);
             }
             else
             {
-                ReturnsFunction = (cmd) => ConvertToMockTable(returns.Invoke(cmd));
+                ReturnsFunction = (cmd) => ConvertToMockTables(returns.Invoke(cmd));
             }
         }
 
@@ -89,7 +109,13 @@ namespace Apps72.Dev.Data.DbMocker
         /// <param name="returns">Value to return</param>
         public void ReturnsScalar<T>(T returns)
         {
-            ReturnsFunction = (cmd) => ConvertToMockTable(returns);
+            ReturnsFunction = (cmd) => ConvertToMockTables(returns);
+        }
+
+        /// <summary />
+        private MockTable[] ConvertToMockTables<T>(T returns)
+        {
+            return new[] { ConvertToMockTable(returns) };
         }
 
         /// <summary />
