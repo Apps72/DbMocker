@@ -4,7 +4,7 @@
     <TargetFramework>netstandard2.0</TargetFramework>
     <AssemblyName>Apps72.Dev.Data.DbMocker</AssemblyName>
     <RootNamespace>Apps72.Dev.Data.DbMocker</RootNamespace>
-    <Version>1.7.0</Version>
+    <Version>1.7.0-Preview1</Version>
     <PackageId>DbMocker</PackageId>
 	<PackageLicenseExpression>MIT</PackageLicenseExpression>
     <Authors>Denis Voituron</Authors>
