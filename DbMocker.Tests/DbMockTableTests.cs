@@ -2,6 +2,7 @@ using Apps72.Dev.Data.DbMocker;
 using Apps72.Dev.Data.DbMocker.Helpers;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
+using System.Data;
 using System.Data.Common;
 using System.Linq;
 
@@ -72,6 +73,31 @@ namespace DbMocker.Tests
 
             Assert.AreEqual(13, result.GetInt32(0));
             Assert.AreEqual(14, result.GetInt32(1));
+        }
+
+        [TestMethod]
+        public void Mock_Returns_Scalar_TVP()
+        {
+            var conn = new MockDbConnection();
+
+            conn.Mocks
+                .When(c => c.Parameters.First().DbType == DbType.Object)
+                .ReturnsScalar(c => 14);
+
+            DbCommand cmd = conn.CreateCommand();
+            DataTable paramTable = new DataTable("MyDataType");
+            paramTable.Columns.Add("num", typeof(int));
+            paramTable.Columns.Add("str", typeof(string));
+            paramTable.Rows.Add(1, "qwerty");
+            paramTable.Rows.Add(2, "fgsfds");
+
+            var parameter = cmd.CreateParameter();
+            parameter.ParameterName = "@tvp1";
+            parameter.Value = paramTable;
+            parameter.DbType = DbType.Object;
+            cmd.Parameters.Add(parameter);
+
+            Assert.AreEqual(cmd.ExecuteScalar(), 14);
         }
 
         [TestMethod]

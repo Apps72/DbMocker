@@ -63,6 +63,7 @@ namespace Apps72.Dev.Data.DbMocker.Helpers
             list.Add(new Type2DbType(typeof(Object), DbType.Object));
             list.Add(new Type2DbType(typeof(Byte[]), DbType.Binary));
             list.Add(new Type2DbType(typeof(Object), DbType.Object));
+            list.Add(new Type2DbType(typeof(DataTable), DbType.Object));
 
             return list;
         }
