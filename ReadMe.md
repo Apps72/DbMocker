@@ -226,22 +226,21 @@ var conn = new MockDbConnection()
 
 ## Releases
 
-### Version 1.3
-
-- Add `ReturnsRow(T)` and `ReturnsRow(Func<MockCommand, T>)` methods.
-
-### Version 1.4
-- Add `MockTable.FromCsv(string)` method.
-
-### Version 1.5
-- Add a `MockColumn` class to manage the column type. See example using "typed columns" above.
-- Breaking change: to allow typed MockColumn, the property `MockTable.Columns` is now of type MockColumn[] (previously string[]).
+### Version 1.7
+- Add `ReturnsDataset` methods to simulate multiple tables (Thanks [stop-cran](https://github.com/stop-cran)).
+- Update the reference to the Nuget **Microsoft.SqlServer.Management.SqlParser** to validate syntaxes of SQL queries.
 
 ### Version 1.6
 - Add detailed SQL Query in MockException properties (#6).
 - Add a new WhenTag method (#7).
 - Add a method to validate the syntax of SQL queries without connection to SQL Server (only for SQL Server syntax) (#8).
 
-## Road map
+### Version 1.5
+- Add a `MockColumn` class to manage the column type. See example using "typed columns" above.
+- Breaking change: to allow typed MockColumn, the property `MockTable.Columns` is now of type MockColumn[] (previously string[]).
 
-- DataSets are not yet implemented.
+### Version 1.4
+- Add `MockTable.FromCsv(string)` method.
+
+### Version 1.3
+- Add `ReturnsRow(T)` and `ReturnsRow(Func<MockCommand, T>)` methods.

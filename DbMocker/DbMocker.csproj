@@ -4,7 +4,7 @@
     <TargetFramework>netstandard2.0</TargetFramework>
     <AssemblyName>Apps72.Dev.Data.DbMocker</AssemblyName>
     <RootNamespace>Apps72.Dev.Data.DbMocker</RootNamespace>
-    <Version>1.6.0</Version>
+    <Version>1.7.0</Version>
     <PackageId>DbMocker</PackageId>
 	<PackageLicenseExpression>MIT</PackageLicenseExpression>
     <Authors>Denis Voituron</Authors>
@@ -17,7 +17,7 @@ including EntityFramework, Dapper or ADO.NET; And for all database servers (SQL 
 ```
 var conn = new MockDbConnection();
 conn.Mocks
-    .When(cmd => cmd.CommandText.Contains("SELECT COUNT(*) FROM EMP"))
+    .When(cmd =&gt; cmd.CommandText.Contains("SELECT COUNT(*) FROM EMP"))
     .ReturnsScalar(14);
 ```
 </Description>
@@ -25,20 +25,22 @@ conn.Mocks
     <PackageTags>DbMocker, Mocker, SQLServer, Oracle, Sqlite, EntityFramework, EF, Dapper, UnitTest</PackageTags>
     <PackageReleaseNotes>https://github.com/Apps72/DbMocker</PackageReleaseNotes>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <AssemblyVersion>1.6.0.0</AssemblyVersion>
+    <AssemblyVersion>1.7.0.0</AssemblyVersion>
     <PackageProjectUrl>https://github.com/Apps72/DbMocker</PackageProjectUrl>
     <RepositoryUrl>https://github.com/Apps72/DbMocker</RepositoryUrl>
+    <FileVersion>1.7.0.0</FileVersion>
   </PropertyGroup>
 
   <ItemGroup>
-    <Reference Include="Microsoft.SqlServer.SqlParser">
-      <HintPath>..\Library\Microsoft.SqlServer.SqlParser.dll</HintPath>	  
-    </Reference>
 	<None Include="..\Library\Microsoft.SqlServer.SqlParser.dll">
         <PackagePath>lib\netstandard2.0</PackagePath>
         <Pack>true</Pack>
         <Visible>false</Visible>
     </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.SqlServer.Management.SqlParser" Version="150.37051.0" />
   </ItemGroup>
 
 </Project>
