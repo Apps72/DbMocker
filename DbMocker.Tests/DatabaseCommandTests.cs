@@ -202,9 +202,9 @@ namespace DbMocker.Tests
                     Col3 = 0
                 });
 
-                Assert.AreEqual(null, result.ElementAt(0).Col1);  
-                Assert.AreEqual(null, result.ElementAt(1).Col1);   
-                Assert.AreEqual(4, result.ElementAt(2).Col1);   
+                Assert.AreEqual(null, result.ElementAt(0).Col1);
+                Assert.AreEqual(null, result.ElementAt(1).Col1);
+                Assert.AreEqual(4, result.ElementAt(2).Col1);
             }
 
         }
@@ -291,5 +291,70 @@ namespace DbMocker.Tests
                 Assert.IsTrue(formatedCommandAsVariables.Contains("DECLARE @HireDate AS DATETIME = '2019-05-03'"));
             }
         }
+
+        [TestMethod]
+        public void Mock_ExecuteDataset_Test()
+        {
+            var conn = new MockDbConnection();
+
+            MockTable table1 = MockTable.WithColumns("Col1", "Col2")
+                                        .AddRow(11, 12);
+
+            MockTable table2 = MockTable.WithColumns("Col3", "Col4")
+                                        .AddRow("MyString", 3.4);
+
+            conn.Mocks
+                .When(null)
+                .ReturnsDataset(table1, table2);
+
+            using (var cmd = new DatabaseCommand(conn))
+            {
+                cmd.CommandText.AppendLine("SELECT ...");
+                var result = cmd.ExecuteDataSet(new { Col1 = 0, Col2 = 0 },
+                                                new { Col3 = "", Col4 = 0.0 });
+
+                Assert.AreEqual(1, result.Item1.Count());          // 1 row
+                Assert.AreEqual(11, result.Item1.First().Col1);
+                Assert.AreEqual(12, result.Item1.First().Col2);
+
+                Assert.AreEqual(1, result.Item2.Count());          // 1 row
+                Assert.AreEqual("MyString", result.Item2.First().Col3);
+                Assert.AreEqual(3.4, result.Item2.First().Col4);
+            }
+
+        }
+
+        [TestMethod]
+        public void Mock_ExecuteDataset_WithFunction_Test()
+        {
+            var conn = new MockDbConnection();
+
+            MockTable table1 = MockTable.WithColumns("Col1", "Col2")
+                                        .AddRow(11, 12);
+
+            MockTable table2 = MockTable.WithColumns("Col3", "Col4")
+                                        .AddRow("MyString", 3.4);
+
+            conn.Mocks
+                .When(null)
+                .ReturnsDataset(cmd => new[] { table1, table2 });
+
+            using (var cmd = new DatabaseCommand(conn))
+            {
+                cmd.CommandText.AppendLine("SELECT ...");
+                var result = cmd.ExecuteDataSet(new { Col1 = 0, Col2 = 0 },
+                                                new { Col3 = "", Col4 = 0.0 });
+
+                Assert.AreEqual(1, result.Item1.Count());          // 1 row
+                Assert.AreEqual(11, result.Item1.First().Col1);
+                Assert.AreEqual(12, result.Item1.First().Col2);
+
+                Assert.AreEqual(1, result.Item2.Count());          // 1 row
+                Assert.AreEqual("MyString", result.Item2.First().Col3);
+                Assert.AreEqual(3.4, result.Item2.First().Col4);
+            }
+
+        }
+
     }
 }

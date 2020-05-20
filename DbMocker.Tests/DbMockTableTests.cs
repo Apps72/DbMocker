@@ -75,35 +75,6 @@ namespace DbMocker.Tests
         }
 
         [TestMethod]
-        public void Mock_ReturnsMultiple_MockTable_Test()
-        {
-            var conn = new MockDbConnection();
-
-            MockTable table1 = MockTable.WithColumns("Col1", "Col2")
-                                 .AddRow(11, 12);
-            MockTable table2 = MockTable.WithColumns("Col3", "Col4")
-                     .AddRow("aa", 3.4);
-
-            conn.Mocks
-                .WhenAny()
-                .ReturnsDataset(table1, table2);
-
-            DbCommand cmd = conn.CreateCommand();
-            DbDataReader result = cmd.ExecuteReader();
-
-            Assert.IsTrue(result.Read());
-
-            Assert.AreEqual(11, result.GetInt32(0));
-            Assert.AreEqual(12, result.GetInt32(1));
-
-            Assert.IsTrue(result.NextResult());
-            Assert.IsTrue(result.Read());
-
-            Assert.AreEqual("aa", result.GetString(0));
-            Assert.AreEqual(3.4, result.GetDouble(1));
-        }
-
-        [TestMethod]
         public void Mock_ReturnsSimple_MockRow_Test()
         {
             var conn = new MockDbConnection();
@@ -161,9 +132,9 @@ namespace DbMocker.Tests
             var conn = new MockDbConnection();
 
             MockTable table = MockTable.WithColumns(("Col1", typeof(int?)),
-                                              ("Col2", typeof(int)))
-                                 .AddRow(null, 12)
-                                 .AddRow(13, 14);
+                                                    ("Col2", typeof(int)))
+                                       .AddRow(null, 12)
+                                       .AddRow(13, 14);
             conn.Mocks
                 .WhenAny()
                 .ReturnsTable(table);

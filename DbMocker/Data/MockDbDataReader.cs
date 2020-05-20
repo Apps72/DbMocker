@@ -26,9 +26,9 @@ namespace Apps72.Dev.Data.DbMocker.Data
 
         public override int Depth => 0;
 
-        public override int FieldCount => _columns.Length;
+        public override int FieldCount => _columns?.Length ?? 0;
 
-        public override bool HasRows => _rows.Length > 1;
+        public override bool HasRows => _rows?.Length > 1;
 
         public override bool IsClosed => false;
 
@@ -139,7 +139,7 @@ namespace Apps72.Dev.Data.DbMocker.Data
 
         public override object GetValue(int ordinal)
         {
-            return _rows[_currentRowIndex, ordinal];
+            return _rows?[_currentRowIndex, ordinal];
         }
 
         public override int GetValues(object[] values)
@@ -148,7 +148,7 @@ namespace Apps72.Dev.Data.DbMocker.Data
             {
                 for (int i = 0; i < values.Length; i++)
                 {
-                    values[i] = _rows[_currentRowIndex, i];
+                    values[i] = _rows?[_currentRowIndex, i];
                 }
                 return values.Length;
             }
@@ -178,7 +178,7 @@ namespace Apps72.Dev.Data.DbMocker.Data
         public override bool Read()
         {
             _currentRowIndex++;
-            return _rows.GetLength(0) > _currentRowIndex;
+            return _rows?.GetLength(0) > _currentRowIndex;
         }
 
         #endregion
