@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Data;
 using System.Data.Common;
+using System.Linq;
 
 namespace Apps72.Dev.Data.DbMocker.Helpers
 {
@@ -13,7 +13,7 @@ namespace Apps72.Dev.Data.DbMocker.Helpers
     internal static class DbTypeMap
     {
         private static readonly List<Type2DbType> _dbTypeList = FillDbTypeList();
-        
+
         /// <summary>
         /// Returns the first DbType for this CLR Type.
         /// </summary>
@@ -22,9 +22,10 @@ namespace Apps72.Dev.Data.DbMocker.Helpers
         public static DbType FirstDbType(Type type)
         {
             if (type == null) return DbType.Object;
-            return _dbTypeList.First(i => i.Type == type).DbType;
+            var dbType = _dbTypeList.FirstOrDefault(i => i.Type == type);
+            return dbType != null ? dbType.DbType : DbType.Object;
         }
-  
+
         static List<Type2DbType> FillDbTypeList()
         {
             var list = new List<Type2DbType>();

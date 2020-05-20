@@ -76,7 +76,7 @@ namespace Apps72.Dev.Data.DbMocker.Data
             {
                 _value = value;
                 if (_hasDbTypeIsDefined == false)
-                    this.DbType = Helpers.DbTypeMap.FirstDbType(value.GetType());
+                    this.DbType = Helpers.DbTypeMap.FirstDbType(value?.GetType());
             }
         }
         /// <summary />

@@ -283,6 +283,51 @@ namespace DbMocker.Tests
             Assert.AreEqual(14, result);
         }
 
+
+        [TestMethod]
+        public void Mock_ReturnsScalarValueFromNullParameter_Test()
+        {
+            var conn = new MockDbConnection();
+
+            conn.Mocks
+                .WhenAny()
+                .ReturnsScalar(99);
+
+            var cmd = conn.CreateCommand();
+
+            // Create a Null Parameter
+            var param = cmd.CreateParameter();
+            param.ParameterName = "@Myparam";
+            param.Value = null;
+            cmd.Parameters.Add(param);
+
+            var result = cmd.ExecuteScalar();
+
+            Assert.AreEqual(99, result);
+        }
+
+        [TestMethod]
+        public void Mock_ReturnsScalarValueFromDBNullParameter_Test()
+        {
+            var conn = new MockDbConnection();
+
+            conn.Mocks
+                .WhenAny()
+                .ReturnsScalar(99);
+
+            var cmd = conn.CreateCommand();
+
+            // Create a DBNull Parameter
+            var param = cmd.CreateParameter();
+            param.ParameterName = "@Myparam";
+            param.Value = DBNull.Value;
+            cmd.Parameters.Add(param);
+
+            var result = cmd.ExecuteScalar();
+
+            Assert.AreEqual(99, result);
+        }
+
         [TestMethod]
         public void Mock_SecondMockFound_Test()
         {
