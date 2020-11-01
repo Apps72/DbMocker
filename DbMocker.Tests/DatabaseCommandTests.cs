@@ -141,6 +141,51 @@ namespace DbMocker.Tests
         }
 
         [TestMethod]
+        public void Mock_IncorrectParameterDirection_Test()
+        {
+            var conn = new MockDbConnection();
+
+            conn.Mocks
+                .When(c => c.CommandText.Contains("EXEC PROC")).SetValueForDBParametr("@ID", 666)
+                .ReturnsScalar(0);
+
+            using (var cmd = new DatabaseCommand(conn))
+            {
+                cmd.CommandText.AppendLine("EXEC PROC @id = @ID");
+                cmd.AddParameter("@ID", 1);
+                
+                var outParam = cmd.Parameters["@ID"];
+
+                Assert.ThrowsException<MockException>(() => cmd.ExecuteNonQuery());
+            }
+        }
+
+        [TestMethod]
+        public void Mock_ExecuteNonQueryAndReadReturnValue_Test()
+        {
+            var conn = new MockDbConnection();
+
+            conn.Mocks
+                .When(c => c.CommandText.Contains("EXEC PROC")).SetValueForDBParametr("@OUT", "outvalue")
+                .ReturnsScalar(777);
+
+            using (var cmd = new DatabaseCommand(conn))
+            {
+                cmd.CommandText.AppendLine("EXEC PROC @id = @ID, @out=@OUT");
+                cmd.AddParameter("@ID", 1);
+
+                cmd.AddParameter("@OUT", null);
+                var outParam = cmd.Parameters["@OUT"];
+                outParam.DbType = System.Data.DbType.String;
+                outParam.Direction = System.Data.ParameterDirection.Output;
+
+                var result = cmd.ExecuteNonQuery();
+
+                Assert.AreEqual(outParam.Value, "outvalue");
+            }
+        }
+
+        [TestMethod]
         public void Mock_ExecuteTable_Test()
         {
             var conn = new MockDbConnection();
