@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 
 namespace Apps72.Dev.Data.DbMocker.Helpers
 {
@@ -33,6 +34,93 @@ namespace Apps72.Dev.Data.DbMocker.Helpers
         }
 
         /// <summary>
+        /// Convert the string to a equivalent datatype. Or null if not found.
+        /// </summary>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        public static Type NameToType(this string value)
+        {
+            Type result = Type.GetType(value, throwOnError: false, ignoreCase: true);
+
+            if (result != null)
+            {
+                return result;
+            }
+            else
+            {
+                switch (value.Trim().ToLower())
+                {
+                    case "datetime":
+                        return typeof(DateTime);
+
+                    case "decimal":
+                        return typeof(decimal);
+
+                    case "double":
+                        return typeof(double);
+
+                    case "single":
+                    case "float":
+                        return typeof(float);
+
+                    case "string":
+                        return typeof(string);
+
+                    case "char":
+                        return typeof(char);
+
+                    case "boolean":
+                    case "bool":
+                        return typeof(bool);
+
+                    case "byte":
+                        return typeof(byte);
+
+                    case "sbyte":
+                        return typeof(sbyte);
+
+                    case "int16":
+                    case "short":
+                        return typeof(short);
+
+                    case "uint16":
+                    case "ushort":
+                        return typeof(ushort);
+
+                    case "int32":
+                    case "int":
+                        return typeof(int);
+
+                    case "uint32":
+                    case "uint":
+                        return typeof(uint);
+
+                    case "int64":
+                    case "long":
+                        return typeof(long);
+
+                    case "uint64":
+                    case "ulong":
+                        return typeof(ulong);
+
+                    default:
+                        return null;
+                }
+            }
+
+        }
+
+        /// <summary>
+        /// Convert the string to a equivalent datatype. Or null if not found.
+        /// </summary>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        public static object ConvertToType<T>(this string value)
+        {           
+            return (T)Convert.ChangeType(value, typeof(T));
+        }
+
+        /// <summary>
         /// Returns the best data type infered from the value text.
         /// </summary>
         /// <param name="text"></param>
@@ -47,6 +135,16 @@ namespace Apps72.Dev.Data.DbMocker.Helpers
             if (Decimal.TryParse(text, out Decimal _)) return typeof(Decimal);
             if (Char.TryParse(text, out Char _)) return typeof(Char);
             return typeof(string);
+        }
+
+        /// <summary>
+        /// Keep Only letters, to convert " (int) " to "int".
+        /// </summary>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        public static string KeepOnlyLetters(this string value)
+        {
+            return new String(value.Where(Char.IsLetter).ToArray()).Trim();
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Apps72.Dev.Data.DbMocker.Helpers;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
@@ -8,13 +9,13 @@ using System.Reflection;
 namespace Apps72.Dev.Data.DbMocker
 {
     /// <summary />
-    public class MockResource
+    internal class MockTableImportFixed
     {
         /// <summary>
         /// Convert the fixed fields string to a MockResource, with a MockTable.
         /// </summary>
         /// <param name="content"></param>
-        public MockResource(string content)
+        public MockTableImportFixed(string content)
         {
             // All lines (without commented rows)
             this.Lines = content.Split(new char[] { '\n', '\r' })
@@ -34,10 +35,10 @@ namespace Apps72.Dev.Data.DbMocker
 
             // Combine to Fields
             this.Fields = positions.Select(i => new Field()
-            { 
+            {
                 Position = i,
                 Name = fieldsNames.ContainsKey(i) ? fieldsNames[i] : null,
-                DataType = dataTypes.ContainsKey(i) ? dataTypes[i] : null
+                DataType = dataTypes.ContainsKey(i) ? dataTypes[i].KeepOnlyLetters().NameToType() : null
             });
 
             // Rows
@@ -47,7 +48,7 @@ namespace Apps72.Dev.Data.DbMocker
                 var newRow = SplitAtPositions(this.Lines.ElementAt(i), positions).Select(item => item.Value);
                 rows.Add(newRow.ToArray());
             }
-            this.Rows = rows;
+            this.Rows = GetRowsConverted(rows);
         }
 
         /// <summary>
@@ -55,10 +56,10 @@ namespace Apps72.Dev.Data.DbMocker
         /// </summary>
         /// <param name="assembly"></param>
         /// <param name="resourceName"></param>
-        public MockResource(Assembly assembly, string resourceName)
+        public MockTableImportFixed(Assembly assembly, string resourceName)
             : this(ReadResourceFile(assembly, resourceName))
         {
-            
+
         }
 
         /// <summary>
@@ -69,12 +70,61 @@ namespace Apps72.Dev.Data.DbMocker
         /// <summary>
         /// Gets all lines splitted, included in the resource file.
         /// </summary>
-        public IEnumerable<string[]> Rows { get; }
+        public IEnumerable<object[]> Rows { get; }
 
         /// <summary>
         /// Gets fields description
         /// </summary>
         public IEnumerable<Field> Fields { get; }
+
+        /// <summary />
+        public MockTable GetMockTable()
+        {
+            var columns = this.Fields.Select(i => (i.Name, i.DataType)).ToArray();
+
+            var table = new MockTable().AddColumns(columns);
+
+            foreach (var row in this.Rows)
+            {
+                table.AddRow(row);
+            }
+
+            return table;
+        }
+
+
+        /// <summary />
+        private IEnumerable<object[]> GetRowsConverted(IEnumerable<string[]> rows)
+        {
+            int fieldsCount = Fields.Count();
+            Type[] fieldsType = Fields.Select(i => i.DataType).ToArray();
+
+            foreach (var row in rows)
+            {
+                var rowConverted = new object[fieldsCount];
+                for (int i = 0; i < fieldsCount; i++)
+                {
+                    // If not a string => String.Empty = NULL
+                    if (fieldsType[i] != typeof(string) && String.IsNullOrEmpty(row[i]))
+                    {
+                        row[i] = "NULL";
+                    }
+
+                    if (fieldsType[i] != null && String.Compare(row[i], "NULL", ignoreCase: true) != 0)
+                    {
+                        // Convert
+                        rowConverted[i] = Convert.ChangeType(row[i], fieldsType[i]);
+
+                        // Guillemets
+                        if (fieldsType[i] == typeof(string) && row[i].Length >= 2 && row[i][0] == '"' && row[i][row[i].Length -1] == '"')
+                        {
+                            rowConverted[i] = row[i].Substring(1, row[i].Length - 2);
+                        }
+                    }
+                }
+                yield return rowConverted;
+            }
+        }
 
         /// <summary>
         /// Split specified text line to data using fixed positions.
@@ -168,7 +218,7 @@ namespace Apps72.Dev.Data.DbMocker
             /// <summary />
             public int Position { get; internal set; }
             /// <summary />
-            public string DataType { get; internal set; }
+            public Type DataType { get; internal set; }
         }
     }
 }
