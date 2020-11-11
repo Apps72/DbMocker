@@ -1,10 +1,20 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netcoreapp2.1</TargetFramework>
 
     <IsPackable>false</IsPackable>
   </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="Samples\SampleTable1.txt" />
+    <None Remove="Samples\SampleTable2.txt" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Samples\SampleTable1.txt" />
+    <EmbeddedResource Include="Samples\SampleTable2.txt" />
+  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Apps72.Dev.Data.Core" Version="3.0.3" />

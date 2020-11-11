@@ -1,13 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
 
 namespace Apps72.Dev.Data.DbMocker
 {
     /// <summary />
     public class MockConditions
     {
-        private static readonly string NEW_LINE = Environment.NewLine;
         internal bool MustValidateSqlServerCommandText = false;
+        private static readonly string NEW_LINE = Environment.NewLine;
+        private List<MockReturns> _conditions = new List<MockReturns>();
 
         /// <summary />
         internal MockConditions(MockDbConnection connection)
@@ -15,8 +18,10 @@ namespace Apps72.Dev.Data.DbMocker
 
         }
 
-        /// <summary />
-        internal List<MockReturns> Conditions = new List<MockReturns>();
+        /// <summary>
+        /// Gets all conditions recorded.
+        /// </summary>
+        public IEnumerable<MockReturns> Conditions => _conditions;
 
         /// <summary>
         /// Add a condition to return mock data.
@@ -43,6 +48,39 @@ namespace Apps72.Dev.Data.DbMocker
                     return cmd.CommandText.StartsWith(toSearch) ||
                            cmd.CommandText.Contains($"{NEW_LINE}{toSearch}");
                 });
+        }
+
+        /// <summary>
+        /// Load all Embedded resource "[TagName].txt" with Fixed format.
+        /// And add it as <see cref="WhenTag(string)"/> method.
+        /// </summary>
+        /// <param name="assembly"></param>
+        /// <param name="tagNames"></param>
+        public void LoadTagsFromResources(params string[] tagNames)
+        {
+            this.LoadTagsFromResources(Assembly.GetCallingAssembly(), tagNames);
+        }
+
+        /// <summary>
+        /// Load all Embedded resource "[TagName].txt" with Fixed format.
+        /// And add it as <see cref="WhenTag(string)"/> method.
+        /// </summary>
+        /// <param name="assembly"></param>
+        /// <param name="tagNames"></param>
+        public void LoadTagsFromResources(Assembly assembly, params string[] tagNames)
+        {
+            string[] allResources = assembly.GetManifestResourceNames();
+
+            foreach (var tag in tagNames)
+            {
+                string resourceName = allResources.FirstOrDefault(i => i.EndsWith($"{tag}.txt", StringComparison.OrdinalIgnoreCase));
+                if (!string.IsNullOrEmpty(resourceName))
+                {
+                    var table = MockTable.FromFixed(assembly, resourceName);
+                    this.WhenTag(tag)
+                        .ReturnsTable(table);
+                }
+            }
         }
 
         /// <summary>
@@ -77,7 +115,7 @@ namespace Apps72.Dev.Data.DbMocker
         /// <summary />
         internal MockTable[] GetFirstMockTablesFound(MockCommand command)
         {
-            foreach (MockReturns item in Conditions)
+            foreach (MockReturns item in _conditions)
             {
                 if (item.Condition.Invoke(command) == true)
                 {
@@ -120,7 +158,7 @@ namespace Apps72.Dev.Data.DbMocker
                     }
                 }
             };
-            Conditions.Add(mock);
+            _conditions.Add(mock);
             return mock;
         }
 

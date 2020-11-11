@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 
 namespace Apps72.Dev.Data.DbMocker
 {
@@ -63,6 +64,18 @@ namespace Apps72.Dev.Data.DbMocker
         public static MockTable FromCsv(string content)
         {
             return FromCsv(content, "\t");
+        }
+
+        /// <summary />
+        public static MockTable FromFixed(string content)
+        {
+            return new MockTableImportFixed(content).GetMockTable();
+        }
+
+        /// <summary />
+        public static MockTable FromFixed(Assembly assembly, string resourceName)
+        {
+            return new MockTableImportFixed(assembly, resourceName).GetMockTable();
         }
 
         /// <summary />

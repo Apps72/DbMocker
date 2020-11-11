@@ -1,0 +1,5 @@
+﻿Id        Name          Age
+(int)     (string)      (int?)
+
+1         Denis         21
+2         Anne          NULL

@@ -226,6 +226,10 @@ var conn = new MockDbConnection()
 
 ## Releases
 
+### Version 1.8
+- Add `Mocks.LoadTagsFromResources` to include MockTable samples described in Embedded resource text files. 
+
+
 ### Version 1.7
 - Add `ReturnsDataset` methods to simulate multiple tables (Thanks [stop-cran](https://github.com/stop-cran)).
 - Update the reference to the Nuget **Microsoft.SqlServer.Management.SqlParser** to validate syntaxes of SQL queries.
