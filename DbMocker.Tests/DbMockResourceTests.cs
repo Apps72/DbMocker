@@ -1,6 +1,7 @@
 ﻿using Apps72.Dev.Data.DbMocker;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
+using System.Linq;
 using System.Reflection;
 
 namespace DbMocker.Tests
@@ -131,6 +132,41 @@ namespace DbMocker.Tests
             Assert.AreEqual(1, table.Rows[0, 0]);
             Assert.AreEqual("Denis", table.Rows[0, 1]);
             Assert.AreEqual(21, table.Rows[0, 2]);
+        }
+
+        [TestMethod]
+        public void MockTable_Tags_FromAssemblyResources_Test()
+        {
+            var conn = new MockDbConnection();
+            conn.Mocks.LoadTagsFromResources(Assembly.GetExecutingAssembly(),
+                                             "SampleTable1", "SAMPLETABLE2");
+
+            Assert.AreEqual(2, conn.Mocks.Conditions.Count());
+
+            // SampleTable1
+            var cmd1 = conn.CreateCommand();
+            cmd1.CommandText = @"-- SampleTable1
+                                SELECT ... ";
+            var result1 = cmd1.ExecuteScalar();
+
+            Assert.AreEqual(1, result1);
+
+            // SampleTable2
+            var cmd2 = conn.CreateCommand();
+            cmd2.CommandText = @"-- SAMPLETABLE2
+                                SELECT ... ";
+            var result2 = cmd2.ExecuteScalar();
+
+            Assert.AreEqual(123, result2);
+        }
+
+        [TestMethod]
+        public void MockTable_Tags_FromCurrentResources_Test()
+        {
+            var conn = new MockDbConnection();
+            conn.Mocks.LoadTagsFromResources("SampleTable1", "SAMPLETABLE2");
+
+            Assert.AreEqual(2, conn.Mocks.Conditions.Count());
         }
     }
 }

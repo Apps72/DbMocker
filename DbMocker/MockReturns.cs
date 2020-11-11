@@ -9,8 +9,10 @@ namespace Apps72.Dev.Data.DbMocker
     [System.Diagnostics.DebuggerDisplay("{Description}")]
     public class MockReturns
     {
-        /// <summary />
-        internal string Description { get; set; }
+        /// <summary>
+        /// Gets the Description of this condition.
+        /// </summary>
+        public string Description { get; internal set; }
 
         /// <summary />
         internal Func<MockCommand, MockTable[]> ReturnsFunction { get; set; }

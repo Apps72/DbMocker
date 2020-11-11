@@ -51,6 +51,9 @@ namespace Apps72.Dev.Data.DbMocker.Helpers
                 switch (value.Trim().ToLower())
                 {
                     case "datetime":
+                    case "smalldatetime":
+                    case "date":
+                    case "time":
                         return typeof(DateTime);
 
                     case "decimal":
@@ -64,9 +67,12 @@ namespace Apps72.Dev.Data.DbMocker.Helpers
                         return typeof(float);
 
                     case "string":
+                    case "varchar":
+                    case "nvarchar":
                         return typeof(string);
 
                     case "char":
+                    case "nchar":
                         return typeof(char);
 
                     case "boolean":
@@ -116,7 +122,7 @@ namespace Apps72.Dev.Data.DbMocker.Helpers
         /// <param name="value"></param>
         /// <returns></returns>
         public static object ConvertToType<T>(this string value)
-        {           
+        {
             return (T)Convert.ChangeType(value, typeof(T));
         }
 
