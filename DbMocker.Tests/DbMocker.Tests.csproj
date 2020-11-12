@@ -9,9 +9,11 @@
   <ItemGroup>
     <None Remove="Samples\SampleTable1.txt" />
     <None Remove="Samples\SampleTable2.txt" />
+    <None Remove="Samples\XX-SampleTable1.txt" />
   </ItemGroup>
 
   <ItemGroup>
+    <EmbeddedResource Include="Samples\XX-SampleTable1.txt" />
     <EmbeddedResource Include="Samples\SampleTable1.txt" />
     <EmbeddedResource Include="Samples\SampleTable2.txt" />
   </ItemGroup>

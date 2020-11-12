@@ -168,5 +168,20 @@ namespace DbMocker.Tests
 
             Assert.AreEqual(2, conn.Mocks.Conditions.Count());
         }
+
+        [TestMethod]
+        public void MockTable_Tags_SplitTags_Test()
+        {
+            var conn = new MockDbConnection();
+            conn.Mocks.LoadTagsFromResources("XX-SampleTable1");
+
+            // SampleTable1
+            var cmd1 = conn.CreateCommand();
+            cmd1.CommandText = @"-- SampleTable1
+                                SELECT ... ";
+            var result1 = cmd1.ExecuteScalar();
+
+            Assert.AreEqual(10, result1);
+        }
     }
 }

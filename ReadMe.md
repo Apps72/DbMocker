@@ -226,9 +226,12 @@ var conn = new MockDbConnection()
 
 ## Releases
 
+### Version 1.9
+- Add `MockResourceOptions.TagSeparator` (default is '-') to allow to include multiple MockTable resource samples. 
+  "01-MyTag.txt" and "02-MyTag.txt" are two resource using the same SQL tag (MyTag).
+
 ### Version 1.8
 - Add `Mocks.LoadTagsFromResources` to include MockTable samples described in Embedded resource text files. 
-
 
 ### Version 1.7
 - Add `ReturnsDataset` methods to simulate multiple tables (Thanks [stop-cran](https://github.com/stop-cran)).

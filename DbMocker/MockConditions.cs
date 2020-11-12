@@ -55,10 +55,10 @@ namespace Apps72.Dev.Data.DbMocker
         /// And add it as <see cref="WhenTag(string)"/> method.
         /// </summary>
         /// <param name="assembly"></param>
-        /// <param name="tagNames"></param>
-        public void LoadTagsFromResources(params string[] tagNames)
+        /// <param name="fileNames"></param>
+        public void LoadTagsFromResources(params string[] fileNames)
         {
-            this.LoadTagsFromResources(Assembly.GetCallingAssembly(), tagNames);
+            this.LoadTagsFromResources(Assembly.GetCallingAssembly(), fileNames);
         }
 
         /// <summary>
@@ -66,19 +66,23 @@ namespace Apps72.Dev.Data.DbMocker
         /// And add it as <see cref="WhenTag(string)"/> method.
         /// </summary>
         /// <param name="assembly"></param>
-        /// <param name="tagNames"></param>
-        public void LoadTagsFromResources(Assembly assembly, params string[] tagNames)
+        /// <param name="fileNames"></param>
+        public void LoadTagsFromResources(Assembly assembly, params string[] fileNames)
         {
             string[] allResources = assembly.GetManifestResourceNames();
 
-            foreach (var tag in tagNames)
+            foreach (var filename in fileNames)
             {
-                string resourceName = allResources.FirstOrDefault(i => i.EndsWith($"{tag}.txt", StringComparison.OrdinalIgnoreCase));
+                string resourceName = allResources.FirstOrDefault(i => i.EndsWith($".{filename}.{MockResourceOptions.Extension}", StringComparison.OrdinalIgnoreCase));
+
                 if (!string.IsNullOrEmpty(resourceName))
                 {
-                    var table = MockTable.FromFixed(assembly, resourceName);
-                    this.WhenTag(tag)
-                        .ReturnsTable(table);
+                    // Split the filename to "[Identifier]-[TagName]"
+                    string[] resourceNameParts = filename.Split(new[] { MockResourceOptions.TagSeparator }, StringSplitOptions.RemoveEmptyEntries);
+                    string tagName = resourceNameParts.Length == 2 ? resourceNameParts[1] : filename;
+
+                    this.WhenTag(tagName)
+                        .ReturnsTable(MockTable.FromFixed(assembly, resourceName));
                 }
             }
         }
