@@ -1,5 +1,5 @@
-﻿Id        Name          Age
-(int)     (string)      (int?)
+﻿Id        Name          Age        Male
+(int)     (string)      (int?)     (bool)
 
-1         Denis         21
-2         Anne          NULL
+1         Denis         21         true
+2         Anne          NULL       false

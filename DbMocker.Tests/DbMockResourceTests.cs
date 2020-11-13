@@ -123,15 +123,17 @@ namespace DbMocker.Tests
         {
             var table = MockTable.FromFixed(Assembly.GetExecutingAssembly(), "DbMocker.Tests.Samples.SampleTable1.txt");
 
-            Assert.AreEqual(3, table.Columns.Length);
+            Assert.AreEqual(4, table.Columns.Length);
 
             Assert.AreEqual("Id", table.Columns[0].Name);
             Assert.AreEqual("Name", table.Columns[1].Name);
             Assert.AreEqual("Age", table.Columns[2].Name);
+            Assert.AreEqual("Male", table.Columns[3].Name);
 
             Assert.AreEqual(1, table.Rows[0, 0]);
             Assert.AreEqual("Denis", table.Rows[0, 1]);
             Assert.AreEqual(21, table.Rows[0, 2]);
+            Assert.AreEqual(true, table.Rows[0, 3]);
         }
 
         [TestMethod]
