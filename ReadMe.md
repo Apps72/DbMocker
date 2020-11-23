@@ -43,6 +43,8 @@ public void UnitTest1()
 }
 ```
 
+See [https://apps72.com](https://apps72.com) for more information.
+
 Tip: To easily detect SQL queries to intercept, we advise you to add a comment that identifies the SQL query 
 and use it in DBMocker.
 
