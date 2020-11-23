@@ -42,6 +42,97 @@ namespace DbMocker.Tests
         }
 
         [TestMethod]
+        public void MockTable_Int32_Test()
+        {
+            string content = "Col1       \n" +
+                             "(int)      \n" +
+                             "123          ";
+
+            var table = MockTable.FromFixed(content);
+
+            Assert.AreEqual(typeof(int), table.Columns[0].Type);
+            Assert.AreEqual(123, table.Rows[0, 0]);
+        }
+
+        [TestMethod]
+        public void MockTable_Decimal_Test()
+        {
+            string content = "Col1       \n" +
+                             "(decimal)  \n" +
+                             "123.45       ";
+
+            var table = MockTable.FromFixed(content);
+
+            Assert.AreEqual(typeof(decimal), table.Columns[0].Type);
+            Assert.AreEqual((decimal)123.45, table.Rows[0, 0]);
+        }
+
+        [TestMethod]
+        public void MockTable_TimeSpan_Test()
+        {
+            string content = "Col1       \n" +
+                             "(timespan) \n" +
+                             "01:02:03.123     ";
+
+            var table = MockTable.FromFixed(content);
+
+            Assert.AreEqual(typeof(TimeSpan), table.Columns[0].Type);
+            Assert.AreEqual(new TimeSpan(0,1,2,3,123), table.Rows[0,0]);
+        }
+
+        [TestMethod]
+        public void MockTable_DateTime_Test()
+        {
+            string content = "Col1       \n" +
+                             "(date)     \n" +
+                             "2020-01-15   ";
+
+            var table = MockTable.FromFixed(content);
+
+            Assert.AreEqual(typeof(DateTime), table.Columns[0].Type);
+            Assert.AreEqual(new DateTime(2020, 01, 15), table.Rows[0, 0]);
+        }
+
+        [TestMethod]
+        public void MockTable_Boolean_Test()
+        {
+            string content = "Col1       \n" +
+                             "(bool)     \n" +
+                             "true         ";
+
+            var table = MockTable.FromFixed(content);
+
+            Assert.AreEqual(typeof(Boolean), table.Columns[0].Type);
+            Assert.AreEqual(true, table.Rows[0, 0]);
+        }
+
+        [TestMethod]
+        public void MockTable_String_Test()
+        {
+            string content = "Col1       \n" +
+                             "(string)   \n" +
+                             "ABC          ";
+
+            var table = MockTable.FromFixed(content);
+
+            Assert.AreEqual(typeof(String), table.Columns[0].Type);
+            Assert.AreEqual("ABC", table.Rows[0, 0]);
+        }
+
+        [TestMethod]
+        public void MockTable_StringGuillemets_Test()
+        {
+            string content = "Col1         \n" +
+                             "(string)     \n" +
+                             "\"ABC DEF\"    ";
+
+            var table = MockTable.FromFixed(content);
+
+            Assert.AreEqual(typeof(String), table.Columns[0].Type);
+            Assert.AreEqual("ABC DEF", table.Rows[0, 0]);
+        }
+
+        [TestMethod]
         public void MockTable_FixedColumns_MissingColumn_Test()
         {
             string content = "Col1           \n" +

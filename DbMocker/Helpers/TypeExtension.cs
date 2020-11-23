@@ -137,7 +137,7 @@ namespace Apps72.Dev.Data.DbMocker.Helpers
         public static Type BestType(this string text)
         {
             if (DateTime.TryParse(text, out DateTime _)) return typeof(DateTime);
-            if (Boolean.TryParse(text, out Boolean _)) return typeof(DateTime);
+            if (Boolean.TryParse(text, out Boolean _)) return typeof(Boolean);
             if (Int32.TryParse(text, out Int32 _)) return typeof(Int32);
             if (Int64.TryParse(text, out Int64 _)) return typeof(Int64);
             if (Double.TryParse(text, out Double _)) return typeof(Double);
