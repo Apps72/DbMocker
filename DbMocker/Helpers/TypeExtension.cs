@@ -53,8 +53,11 @@ namespace Apps72.Dev.Data.DbMocker.Helpers
                     case "datetime":
                     case "smalldatetime":
                     case "date":
-                    case "time":
                         return typeof(DateTime);
+
+                    case "time":
+                    case "timespan":
+                        return typeof(TimeSpan);
 
                     case "decimal":
                         return typeof(decimal);
