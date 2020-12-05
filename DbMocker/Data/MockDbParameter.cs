@@ -10,6 +10,7 @@ namespace Apps72.Dev.Data.DbMocker.Data
         private bool _hasDbTypeIsDefined = false;       // True when the DbType property is already setted and defined.
         private object _value = null;
         private DbType _dbType = DbType.AnsiString;
+        private DbParameter _parameter;
 
         /// <summary />
         public MockDbParameter()
@@ -21,6 +22,7 @@ namespace Apps72.Dev.Data.DbMocker.Data
         {
             if (parameter != null)
             {
+                _parameter = parameter;
                 this.DbType = parameter.DbType;
                 this.Direction = parameter.Direction;
                 this.IsNullable = parameter.IsNullable;
@@ -37,6 +39,7 @@ namespace Apps72.Dev.Data.DbMocker.Data
 
         /// <summary />
         internal MockDbParameter(DbCommand command) { }
+
         /// <summary />
         public override DbType DbType
         {
@@ -75,6 +78,11 @@ namespace Apps72.Dev.Data.DbMocker.Data
             set
             {
                 _value = value;
+
+                //set value for out parameter (dynamicParameter dapper)
+                //if (_parameter != null)
+                //    _parameter.Value = value; 
+                
                 if (_hasDbTypeIsDefined == false)
                     this.DbType = Helpers.DbTypeMap.FirstDbType(value?.GetType());
             }
