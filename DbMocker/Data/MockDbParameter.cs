@@ -80,8 +80,8 @@ namespace Apps72.Dev.Data.DbMocker.Data
                 _value = value;
 
                 //set value for out parameter (dynamicParameter dapper)
-                //if (_parameter != null)
-                //    _parameter.Value = value; 
+                if (_parameter != null)
+                    _parameter.Value = value; 
                 
                 if (_hasDbTypeIsDefined == false)
                     this.DbType = Helpers.DbTypeMap.FirstDbType(value?.GetType());
