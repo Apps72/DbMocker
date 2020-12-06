@@ -146,7 +146,7 @@ namespace DbMocker.Tests
             var conn = new MockDbConnection();
 
             conn.Mocks
-                .When(c => c.CommandText.Contains("EXEC PROC")).SetValueForDBParametr("@ID", 666)
+                .When(c => c.CommandText.Contains("EXEC PROC")).SetValueForDBParameter("@ID", 666)
                 .ReturnsScalar(0);
 
             using (var cmd = new DatabaseCommand(conn))
@@ -161,12 +161,12 @@ namespace DbMocker.Tests
         }
 
         [TestMethod]
-        public void Mock_ExecuteNonQueryAndReadReturnValue_Test()
+        public void Mock_ReadReturnValue_Test()
         {
             var conn = new MockDbConnection();
 
             conn.Mocks
-                .When(c => c.CommandText.Contains("EXEC PROC")).SetValueForDBParametr("@OUT", "outvalue")
+                .When(c => c.CommandText.Contains("EXEC PROC")).SetValueForDBParameter("@OUT", "outvalue")
                 .ReturnsScalar(777);
 
             using (var cmd = new DatabaseCommand(conn))

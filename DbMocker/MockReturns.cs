@@ -15,7 +15,7 @@ namespace Apps72.Dev.Data.DbMocker
         internal string Description { get; set; }
 
         /// <summary />
-        private List<Action<MockCommand>> _modifyParametr = new List<Action<MockCommand>>();
+        private List<Action<MockCommand>> _modifyParameter = new List<Action<MockCommand>>();
 
         private Func<MockCommand, MockTable[]> _returnsFunction;
 
@@ -26,7 +26,7 @@ namespace Apps72.Dev.Data.DbMocker
             {
                 return (command) =>
                 {
-                    foreach (var mody in _modifyParametr)
+                    foreach (var mody in _modifyParameter)
                     {
                         mody(command);
                     }
@@ -113,23 +113,23 @@ namespace Apps72.Dev.Data.DbMocker
         }
 
         /// <summary>
-        /// Set output value for dbParametr, when the condition occured.
+        /// Set output value for dbParameter, when the condition occured.
         /// </summary>
         /// <param name="returns">Value to return</param>
-        public MockReturns SetValueForDBParametr(string parametrName, object value, ParameterDirection direction = ParameterDirection.Output)
+        public MockReturns SetValueForDBParameter(string parameterName, object value, ParameterDirection direction = ParameterDirection.Output)
         {
-            _modifyParametr.Add((command) => 
+            _modifyParameter.Add((command) => 
             { 
-                var parameter = command.Parameters.FirstOrDefault(a => a.ParameterName == parametrName);
+                var parameter = command.Parameters.FirstOrDefault(a => a.ParameterName == parameterName);
 
                 if (parameter == null)
                 {
-                    throw new MockException($"parametrName '{parametrName}' doesn't found");
+                    throw new MockException($"parameterName '{parameterName}' doesn't find");
                 }
 
                 if (parameter.Direction != direction)
                 {
-                    throw new MockException($"Actual direction parametr '{parameter.Direction.ToString()}' doesn't equels expected value '{direction}'");
+                    throw new MockException($"Actual direction parameter '{parameter.Direction}' doesn't equels expected value '{direction}'");
                 }
 
                 parameter.Value = value;

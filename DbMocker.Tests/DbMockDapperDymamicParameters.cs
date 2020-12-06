@@ -15,9 +15,8 @@ namespace DbMocker.Tests
             var conn = new MockDbConnection();
 
             conn.Mocks
-                .When(c => { 
-                    return c.Parameters.Any(a => a.ParameterName == "outPar1"); 
-                }).SetValueForDBParametr("outPar1", actualOutValue)
+                .When(c => c.Parameters.Any(a => a.ParameterName == "outPar1"))
+                .SetValueForDBParameter("outPar1", actualOutValue)
                 .ReturnsScalar(1);
             DynamicParameters parameters = new DynamicParameters();
             parameters.Add("@par1", 123);
