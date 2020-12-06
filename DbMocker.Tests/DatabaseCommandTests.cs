@@ -175,6 +175,29 @@ namespace DbMocker.Tests
         }
 
         [TestMethod]
+        public void Mock_ParameterOutput_Test()
+        {
+            var conn = new MockDbConnection();
+
+            conn.Mocks
+                .When(c => c.CommandText.Contains("EXEC PROC"))
+                .SetParameterValue("@OUT", "OutValue")
+                .ReturnsScalar(777);
+
+            var cmd = conn.CreateCommand();
+            cmd.CommandText = "EXEC PROC @out1 = @OUT";
+
+            var outParam = cmd.CreateParameter();
+            outParam.ParameterName = "@OUT";
+            outParam.Direction = System.Data.ParameterDirection.Output;
+            cmd.Parameters.Add(outParam);
+
+            var result = cmd.ExecuteScalar();
+
+            Assert.AreEqual("OutValue", outParam.Value);
+        }
+
+        [TestMethod]
         public void Mock_ExecuteTable_WithNullInFirstRow_Test()
         {
             var conn = new MockDbConnection();
