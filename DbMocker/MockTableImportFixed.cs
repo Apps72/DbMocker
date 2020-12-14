@@ -114,7 +114,7 @@ namespace Apps72.Dev.Data.DbMocker
                     {
                         // Convert
                         var converter = System.ComponentModel.TypeDescriptor.GetConverter(fieldsType[i]);
-                        rowConverted[i] = Convert.ChangeType(converter.ConvertFrom(row[i]), fieldsType[i]);
+                        rowConverted[i] = Convert.ChangeType(converter.ConvertFromInvariantString(row[i]), fieldsType[i]);
 
                         // Guillemets
                         if (fieldsType[i] == typeof(string) && row[i].Length >= 2 && row[i][0] == '"' && row[i][row[i].Length -1] == '"')
