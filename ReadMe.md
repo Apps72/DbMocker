@@ -228,6 +228,12 @@ var conn = new MockDbConnection()
 
 ## Releases
 
+### Version 1.12
+- Fix the fixed format (resource files) to convert values using Invariant Culture.  
+
+### Version 1.10 and 11
+- Minor fixes to deploy nuget.
+
 ### Version 1.9
 - Add `MockResourceOptions.TagSeparator` (default is '-') to allow to include multiple MockTable resource samples. 
   "01-MyTag.txt" and "02-MyTag.txt" are two resource using the same SQL tag (MyTag).

@@ -4,7 +4,7 @@
     <TargetFramework>netstandard2.0</TargetFramework>
     <AssemblyName>Apps72.Dev.Data.DbMocker</AssemblyName>
     <RootNamespace>Apps72.Dev.Data.DbMocker</RootNamespace>
-    <Version>1.11.0</Version>
+    <Version>1.12.0</Version>
     <PackageId>DbMocker</PackageId>
 	<PackageLicenseExpression>MIT</PackageLicenseExpression>
     <Authors>Denis Voituron</Authors>
@@ -25,10 +25,10 @@ conn.Mocks
     <PackageTags>DbMocker, Mocker, SQLServer, Oracle, Sqlite, EntityFramework, EF, Dapper, UnitTest</PackageTags>
     <PackageReleaseNotes>https://github.com/Apps72/DbMocker</PackageReleaseNotes>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <AssemblyVersion>1.11.0.0</AssemblyVersion>
+    <AssemblyVersion>1.12.0.0</AssemblyVersion>
     <PackageProjectUrl>https://github.com/Apps72/DbMocker</PackageProjectUrl>
     <RepositoryUrl>https://github.com/Apps72/DbMocker</RepositoryUrl>
-    <FileVersion>1.11.0.0</FileVersion>
+    <FileVersion>1.12.0.0</FileVersion>
   </PropertyGroup>
 
   <ItemGroup>
