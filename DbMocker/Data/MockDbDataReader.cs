@@ -28,7 +28,7 @@ namespace Apps72.Dev.Data.DbMocker.Data
 
         public override int FieldCount => _columns?.Length ?? 0;
 
-        public override bool HasRows => _rows?.Length > 1;
+        public override bool HasRows => _rows?.Length >= 1;
 
         public override bool IsClosed => false;
 

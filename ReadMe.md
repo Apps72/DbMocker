@@ -228,6 +228,12 @@ var conn = new MockDbConnection()
 
 ## Releases
 
+## Version 1.13
+- Set output value for DbParameter, using `MockResturns.SetParameterValue` method.
+  Thanks [unby](https://github.com/unby).
+- Fix `MockDbDataReader.HasRows` to return true when at least a row is existing.
+  Thanks [htw8441](https://github.com/htw8441).
+
 ### Version 1.12
 - Fix the fixed format (resource files) to convert values using Invariant Culture.  
 
