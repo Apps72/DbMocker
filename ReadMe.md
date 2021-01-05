@@ -6,7 +6,7 @@ This .NET library simplifies data mocking for UnitTests, to avoid a connection t
 DbMocker use the standard Microsoft .NET DbConnection object. So, you can mock any toolkit, 
 including EntityFramework, Dapper or ADO.NET; And for all database servers (SQL Server, Oracle, SQLite).
 
-First, add the (DbMocker NuGet packages)[https://www.nuget.org/packages/DbMocker].
+First, add the [DbMocker NuGet packages](https://www.nuget.org/packages/DbMocker).
 Next, instanciate a `MockDbConnection` and mock you SQL requests using a condition and return a DataTable.
 
 Please, contact me if you want other features or to solve bugs.
@@ -205,7 +205,7 @@ conn.Mocks
 
 Call the method `Mocks.HasValidSqlServerCommandText()` 
 to check if your string **CommandText** respect the SQL Server syntax...
-without connection to SQL Server (but using the (Microsoft.SqlServer.SqlParser)[https://www.nuget.org/packages/Microsoft.SqlServer.SqlParser] package).
+without connection to SQL Server (but using the [Microsoft.SqlServer.SqlParser](https://www.nuget.org/packages/Microsoft.SqlServer.SqlParser) package).
 
 ```CSharp
 conn.Mocks
