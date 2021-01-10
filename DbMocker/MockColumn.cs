@@ -5,7 +5,7 @@ using System.Linq;
 namespace Apps72.Dev.Data.DbMocker
 {
     /// <summary />
-    [DebuggerDisplay("Name")]
+    [DebuggerDisplay("{" + nameof(Name) + "}")]
     public class MockColumn
     {
         /// <summary />
