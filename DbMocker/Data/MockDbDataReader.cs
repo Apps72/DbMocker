@@ -63,7 +63,7 @@ namespace Apps72.Dev.Data.DbMocker.Data
         {
             return _columns[ordinal].Type.Name;
         }
-
+        
         public override DateTime GetDateTime(int ordinal)
         {
             return (DateTime)GetValue(ordinal);
@@ -166,7 +166,8 @@ namespace Apps72.Dev.Data.DbMocker.Data
 
         public override bool IsDBNull(int ordinal)
         {
-            return GetValue(ordinal) == DBNull.Value;
+            return GetValue(ordinal) == DBNull.Value || 
+                  GetValue(ordinal) == null;
         }
 
         public override bool NextResult()

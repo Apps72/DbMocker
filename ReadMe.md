@@ -228,6 +228,9 @@ var conn = new MockDbConnection()
 
 ## Releases
 
+## Version 1.15
+- Fix `MockDbDataReader.IsDBNull` when the value is null.
+
 ## Version 1.14
 - Add 'Guid' type in `MockTable.FromFixed` and resource sample files.
 - Add a custom message when a sample conversion fails. Ex: `Invalid conversion of "2020-01-32" to "DateTime", for column "Col1"`.
