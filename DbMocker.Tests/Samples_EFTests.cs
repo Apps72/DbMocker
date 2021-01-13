@@ -50,9 +50,9 @@ namespace DbMocker.Tests
 
             conn.Mocks
                 .WhenTag("ALL_EMPLOYEES")
-                .ReturnsTable(new MockTable().AddColumns("Id", "Name")
-                                             .AddRow(1, "Scott")
-                                             .AddRow(2, "Bill"));
+                .ReturnsTable(new MockTable().AddColumns("Id", "Code", "Name")
+                                             .AddRow(1, "802f2ae2-fd99-4f67-b01a-ccc5a72b4f72", "Scott")
+                                             .AddRow(2, "649d095b-0dda-4cb6-a8c9-aafc56bab78f", "Bill"));
 
             using (var context = new CompanyContext(conn))
             {
@@ -88,7 +88,8 @@ namespace DbMocker.Tests
     public class Employee
     {
         public int Id { get; set; }
-        public string Name { get; set; }
+        public Guid Code { get; set; }
+        public string Name { get; set; }        
     }
 
     #endregion

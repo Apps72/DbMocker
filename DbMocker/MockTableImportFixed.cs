@@ -104,23 +104,30 @@ namespace Apps72.Dev.Data.DbMocker
                 var rowConverted = new object[fieldsCount];
                 for (int i = 0; i < fieldsCount; i++)
                 {
-                    // If not a string => String.Empty = NULL
-                    if (fieldsType[i] != typeof(string) && String.IsNullOrEmpty(row[i]))
+                    try
                     {
-                        row[i] = "NULL";
-                    }
-
-                    if (fieldsType[i] != null && String.Compare(row[i], "NULL", ignoreCase: true) != 0)
-                    {
-                        // Convert
-                        var converter = System.ComponentModel.TypeDescriptor.GetConverter(fieldsType[i]);
-                        rowConverted[i] = Convert.ChangeType(converter.ConvertFromInvariantString(row[i]), fieldsType[i]);
-
-                        // Guillemets
-                        if (fieldsType[i] == typeof(string) && row[i].Length >= 2 && row[i][0] == '"' && row[i][row[i].Length -1] == '"')
+                        // If not a string => String.Empty = NULL
+                        if (fieldsType[i] != typeof(string) && String.IsNullOrEmpty(row[i]))
                         {
-                            rowConverted[i] = row[i].Substring(1, row[i].Length - 2);
+                            row[i] = "NULL";
                         }
+
+                        if (fieldsType[i] != null && String.Compare(row[i], "NULL", ignoreCase: true) != 0)
+                        {
+                            // Convert
+                            var converter = System.ComponentModel.TypeDescriptor.GetConverter(fieldsType[i]);
+                            rowConverted[i] = Convert.ChangeType(converter.ConvertFromInvariantString(row[i]), fieldsType[i]);
+
+                            // Guillemets
+                            if (fieldsType[i] == typeof(string) && row[i].Length >= 2 && row[i][0] == '"' && row[i][row[i].Length - 1] == '"')
+                            {
+                                rowConverted[i] = row[i].Substring(1, row[i].Length - 2);
+                            }
+                        }
+                    }
+                    catch (Exception)
+                    {
+                        throw new InvalidCastException($"Invalid conversion of \"{row[i]}\" to \"{fieldsType[i].Name}\", for column \"{Fields.ElementAt(i).Name}\".");
                     }
                 }
                 yield return rowConverted;
@@ -206,7 +213,7 @@ namespace Apps72.Dev.Data.DbMocker
             using (Stream stream = assembly.GetManifestResourceStream(resourceName))
             using (StreamReader reader = new StreamReader(stream))
             {
-                return reader.ReadToEnd();                
+                return reader.ReadToEnd();
             }
         }
 

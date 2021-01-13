@@ -59,6 +59,12 @@ namespace Apps72.Dev.Data.DbMocker.Helpers
                     case "timespan":
                         return typeof(TimeSpan);
 
+                    case "guid":
+                    case "id":
+                    case "uniqueidentifier":
+                    case "unique":
+                        return typeof(Guid);
+
                     case "decimal":
                         return typeof(decimal);
 

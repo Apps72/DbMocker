@@ -99,7 +99,15 @@ namespace Apps72.Dev.Data.DbMocker.Data
 
         public override Guid GetGuid(int ordinal)
         {
-            return (Guid)GetValue(ordinal);
+            object value = GetValue(ordinal);
+            if (value.GetType() == typeof(string))
+            {
+                return new Guid(Convert.ToString(value));
+            }
+            else
+            {
+                return (Guid)value;
+            }
         }
 
         public override short GetInt16(int ordinal)

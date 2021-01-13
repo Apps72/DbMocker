@@ -94,6 +94,17 @@ namespace DbMocker.Tests
         }
 
         [TestMethod]
+        [ExpectedException(typeof(InvalidCastException))]
+        public void MockTable_InvalidDate_Test()
+        {
+            string content = "Col1       \n" +
+                             "(date)     \n" +
+                             "2020-01-32   ";
+
+            var table = MockTable.FromFixed(content);
+        }
+
+        [TestMethod]
         public void MockTable_Boolean_Test()
         {
             string content = "Col1       \n" +
@@ -130,6 +141,30 @@ namespace DbMocker.Tests
 
             Assert.AreEqual(typeof(String), table.Columns[0].Type);
             Assert.AreEqual("ABC DEF", table.Rows[0, 0]);
+        }
+
+        [TestMethod]
+        public void MockTable_Guid_Test()
+        {
+            string content = "Col1                                 \n" +
+                             "(guid)                               \n" +
+                             "b5acc392-3b9d-4059-9851-3d7344db6e91   ";
+
+            var table = MockTable.FromFixed(content);
+
+            Assert.AreEqual(typeof(Guid), table.Columns[0].Type);
+            Assert.AreEqual(new Guid("b5acc392-3b9d-4059-9851-3d7344db6e91"), table.Rows[0, 0]);
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(InvalidCastException))]
+        public void MockTable_InvalidGuid_Test()
+        {
+            string content = "Col1                                 \n" +
+                             "(guid)                               \n" +
+                             "b5acc392-XXXX-XXXX-XXXX-3d7344db6e91   ";
+
+            var table = MockTable.FromFixed(content);
         }
 
         [TestMethod]
