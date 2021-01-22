@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 
@@ -15,16 +14,13 @@ namespace Apps72.Dev.Data.DbMocker
             BindingFlags propertyBindingFlags = DefaultFromTypeBindingFlags
         )
         {
-            var columns = new List<(string, Type)>();
-
             var propertyInfos = typeof(T).GetProperties(propertyBindingFlags);
 
-            foreach (var propertyInfo in propertyInfos)
-            {
-                columns.Add((propertyInfo.Name, propertyInfo.PropertyType));
-            }
+            var columns = propertyInfos
+                .Select(propertyInfo => (propertyInfo.Name, propertyInfo.PropertyType))
+                .ToArray();
 
-            var table = WithColumns(columns.ToArray());
+            var table = WithColumns(columns);
 
             if (rows != null)
             {
