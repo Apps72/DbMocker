@@ -1,11 +1,9 @@
 using Apps72.Dev.Data.DbMocker;
 using Apps72.Dev.Data.DbMocker.Helpers;
-using DbMocker.Tests.SampleTypes;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Data.Common;
 using System.Linq;
-using System.Reflection;
 
 namespace DbMocker.Tests
 {
@@ -273,146 +271,6 @@ namespace DbMocker.Tests
 
             Assert.AreEqual(new DateTime(1972, 1, 12), table.Rows[1, 2]);
             Assert.IsInstanceOfType(table.Rows[1, 2], typeof(DateTime));
-        }
-
-        [TestMethod]
-        public void Mock_MockTable_FromType_Test()
-        {
-            // Arrange
-            var sampleInstance = SimpleModel.RandomInstance();
-
-            // Act
-            var table = MockTable.FromType<SimpleModel>();
-
-            // Assert
-            Assert.IsNotNull(table);
-
-            Assert.AreEqual(5, table.Columns.Length);
-
-            Assert.AreEqual(nameof(SimpleModel.Id), table.Columns[0].Name);
-            Assert.AreEqual(nameof(SimpleModel.Name), table.Columns[1].Name);
-            Assert.AreEqual(nameof(SimpleModel.Description), table.Columns[2].Name);
-            Assert.AreEqual(nameof(SimpleModel.Value), table.Columns[3].Name);
-            Assert.AreEqual(nameof(SimpleModel.TimestampCreated), table.Columns[4].Name);
-
-            Assert.AreEqual(sampleInstance.Id.GetType(), table.Columns[0].Type);
-            Assert.AreEqual(sampleInstance.Name.GetType(), table.Columns[1].Type);
-            Assert.AreEqual(sampleInstance.Description.GetType(), table.Columns[2].Type);
-            Assert.AreEqual(sampleInstance.Value.GetType(), table.Columns[3].Type);
-            Assert.AreEqual(sampleInstance.TimestampCreated.GetType(), table.Columns[4].Type);
-        }
-
-        [TestMethod]
-        public void Mock_MockTable_FromType_with_BindingFlags_override_Test()
-        {
-            // Arrange
-            var bindingFlags = MockTable.DefaultFromTypeBindingFlags | BindingFlags.Static;
-            var sampleInstance = SimpleModel.RandomInstance();
-
-            // Act
-            var table = MockTable.FromType<SimpleModel>(propertyBindingFlags: bindingFlags);
-
-            // Assert
-            Assert.IsNotNull(table);
-
-            Assert.AreEqual(6, table.Columns.Length);
-
-            Assert.AreEqual(nameof(SimpleModel.Id), table.Columns[0].Name);
-            Assert.AreEqual(nameof(SimpleModel.Name), table.Columns[1].Name);
-            Assert.AreEqual(nameof(SimpleModel.Description), table.Columns[2].Name);
-            Assert.AreEqual(nameof(SimpleModel.Value), table.Columns[3].Name);
-            Assert.AreEqual(nameof(SimpleModel.TimestampCreated), table.Columns[4].Name);
-            Assert.AreEqual(nameof(SimpleModel.RandomValue), table.Columns[5].Name);
-
-            Assert.AreEqual(sampleInstance.Id.GetType(), table.Columns[0].Type);
-            Assert.AreEqual(sampleInstance.Name.GetType(), table.Columns[1].Type);
-            Assert.AreEqual(sampleInstance.Description.GetType(), table.Columns[2].Type);
-            Assert.AreEqual(sampleInstance.Value.GetType(), table.Columns[3].Type);
-            Assert.AreEqual(sampleInstance.TimestampCreated.GetType(), table.Columns[4].Type);
-            Assert.AreEqual(SimpleModel.RandomValue.GetType(), table.Columns[5].Type);
-        }
-
-        [TestMethod]
-        public void Mock_MockTable_FromType_with_RowData_Test()
-        {
-            // Arrange
-            var sampleInstance = SimpleModel.RandomInstance();
-
-            var rowData = Enumerable.Range(1, 5)
-                .Select(x => SimpleModel.RandomInstance())
-                .ToArray();
-
-            // Act
-            var table = MockTable.FromType<SimpleModel>(rowData);
-
-            // Assert
-            Assert.IsNotNull(table);
-
-            Assert.AreEqual(5, table.Columns.Length);
-
-            Assert.AreEqual(nameof(SimpleModel.Id), table.Columns[0].Name);
-            Assert.AreEqual(nameof(SimpleModel.Name), table.Columns[1].Name);
-            Assert.AreEqual(nameof(SimpleModel.Description), table.Columns[2].Name);
-            Assert.AreEqual(nameof(SimpleModel.Value), table.Columns[3].Name);
-            Assert.AreEqual(nameof(SimpleModel.TimestampCreated), table.Columns[4].Name);
-
-            Assert.AreEqual(sampleInstance.Id.GetType(), table.Columns[0].Type);
-            Assert.AreEqual(sampleInstance.Name.GetType(), table.Columns[1].Type);
-            Assert.AreEqual(sampleInstance.Description.GetType(), table.Columns[2].Type);
-            Assert.AreEqual(sampleInstance.Value.GetType(), table.Columns[3].Type);
-            Assert.AreEqual(sampleInstance.TimestampCreated.GetType(), table.Columns[4].Type);
-
-            for (var i = 0; i < rowData.Length; ++i)
-            {
-                Assert.AreEqual(rowData[i].Id, table.Rows[i, 0]);
-                Assert.AreEqual(rowData[i].Name, table.Rows[i, 1]);
-                Assert.AreEqual(rowData[i].Description, table.Rows[i, 2]);
-                Assert.AreEqual(rowData[i].Value, table.Rows[i, 3]);
-                Assert.AreEqual(rowData[i].TimestampCreated, table.Rows[i, 4]);
-            }
-        }
-
-        [TestMethod]
-        public void Mock_MockTable_FromType_with_BindingFlags_override_and_RowData_Test()
-        {
-            // Arrange
-            var bindingFlags = MockTable.DefaultFromTypeBindingFlags | BindingFlags.Static;
-            var sampleInstance = SimpleModel.RandomInstance();
-
-            var rowData = Enumerable.Range(1, 5)
-                .Select(x => SimpleModel.RandomInstance())
-                .ToArray();
-
-            // Act
-            var table = MockTable.FromType<SimpleModel>(rowData, bindingFlags);
-
-            // Assert
-            Assert.IsNotNull(table);
-
-            Assert.AreEqual(6, table.Columns.Length);
-
-            Assert.AreEqual(nameof(SimpleModel.Id), table.Columns[0].Name);
-            Assert.AreEqual(nameof(SimpleModel.Name), table.Columns[1].Name);
-            Assert.AreEqual(nameof(SimpleModel.Description), table.Columns[2].Name);
-            Assert.AreEqual(nameof(SimpleModel.Value), table.Columns[3].Name);
-            Assert.AreEqual(nameof(SimpleModel.TimestampCreated), table.Columns[4].Name);
-            Assert.AreEqual(nameof(SimpleModel.RandomValue), table.Columns[5].Name);
-
-            Assert.AreEqual(sampleInstance.Id.GetType(), table.Columns[0].Type);
-            Assert.AreEqual(sampleInstance.Name.GetType(), table.Columns[1].Type);
-            Assert.AreEqual(sampleInstance.Description.GetType(), table.Columns[2].Type);
-            Assert.AreEqual(sampleInstance.Value.GetType(), table.Columns[3].Type);
-            Assert.AreEqual(sampleInstance.TimestampCreated.GetType(), table.Columns[4].Type);
-            Assert.AreEqual(SimpleModel.RandomValue.GetType(), table.Columns[5].Type);
-
-            for (var i = 0; i < rowData.Length; ++i)
-            {
-                Assert.AreEqual(rowData[i].Id, table.Rows[i, 0]);
-                Assert.AreEqual(rowData[i].Name, table.Rows[i, 1]);
-                Assert.AreEqual(rowData[i].Description, table.Rows[i, 2]);
-                Assert.AreEqual(rowData[i].Value, table.Rows[i, 3]);
-                Assert.AreEqual(rowData[i].TimestampCreated, table.Rows[i, 4]);
-            }
         }
 
         [TestMethod]
