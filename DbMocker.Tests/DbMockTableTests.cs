@@ -1,11 +1,11 @@
-using System;
-using System.Data.Common;
-using System.Linq;
-using System.Reflection;
 using Apps72.Dev.Data.DbMocker;
 using Apps72.Dev.Data.DbMocker.Helpers;
 using DbMocker.Tests.SampleTypes;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System;
+using System.Data.Common;
+using System.Linq;
+using System.Reflection;
 
 namespace DbMocker.Tests
 {
