@@ -22,6 +22,36 @@ public int GetNumberOfEmployees(DbConnection connection)
     }
 }
 
+/* Create a text file "123-EMPLOYEES.txt" with this content
+   And set the build property to "Embedded resource".
+        Id        Name          Age
+        (int)     (string)      (int?)
+
+        10        Scott         21
+        20        Bill          NULL
+*/
+
+[TestMethod]
+public void UnitTest0()
+{
+    var conn = new MockDbConnection();
+
+    // The text file "123-EMPLOYEES.txt" is embedded in this project.
+    // See the Samples folder.
+    //  - 123       is an identifier (as you want)
+    //  - EMPLOYEES is the CommandText Tag 
+    //    See https://docs.microsoft.com/en-us/ef/core/querying/tags
+    conn.Mocks.LoadTagsFromResources("123-EMPLOYEES");
+
+    // Call your "classic" methods to tests
+    var data = GetEmployees(conn);
+
+    // DbMocker read the embedded file 
+    // and associated the content to the tag
+    Assert.AreEqual("Scott", data[0][1]);
+    Assert.AreEqual("Bill", data[1][1]);
+}
+
 [TestMethod]
 public void UnitTest1()
 {
@@ -45,18 +75,11 @@ public void UnitTest1()
 
 See [https://apps72.com](https://apps72.com) for more information.
 
-Tip: To easily detect SQL queries to intercept, we advise you to add a comment that identifies the SQL query 
-and use it in DBMocker.
 
-```CSharp
-    cmd.CommandText = " -- [Request to Update Employees] ...";
-    ...
-    conn.Mocks
-        .When(cmd => cmd.CommandText.Contains("[Request to Update Employees]")
-        .ReturnsScalar(14);
-```
 
-Since DBMocker 1.6, use the `WhenTag` method (see below).
+
+
+
 
 ## Conditions
 
@@ -227,6 +250,10 @@ var conn = new MockDbConnection()
 ```
 
 ## Releases
+
+## Version 1.16
+- Add `MockTable.FromType<T>` method to fill a mock table using existing .NET objects.
+  Thanks [martinsmith1968](https://github.com/martinsmith1968).
 
 ## Version 1.15
 - Fix `MockDbDataReader.IsDBNull` when the value is null.

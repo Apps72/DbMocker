@@ -10,12 +10,35 @@ namespace DbMocker.Tests
     [TestClass]
     public class Samples
     {
+        [TestMethod]
+        public void UnitTest0()
+        {
+            var conn = new MockDbConnection();
+
+            // The text file "123-EMPLOYEES.txt" is embedded in this project.
+            // See the Samples folder.
+            //  - 123       is an identifier (as you want)
+            //  - EMPLOYEES is the CommandText Tag 
+            //    See https://docs.microsoft.com/en-us/ef/core/querying/tags
+            conn.Mocks.LoadTagsFromResources("123-EMPLOYEES");
+
+            // Call your "classic" methods to tests
+            var data = GetEmployees(conn);
+
+            // DbMocker read the embedded file 
+            // and associated the content to the tag
+            Assert.AreEqual(2, data.Length);
+            Assert.AreEqual("Scott", data[0][1]);
+            Assert.AreEqual("Bill", data[1][1]);
+        }
+
         // Sample method from your DataService
         public int GetNumberOfEmployees(DbConnection connection)
         {
             using (var cmd = connection.CreateCommand())
             {
-                cmd.CommandText = "SELECT COUNT(*) FROM Employees";
+                cmd.CommandText = @"-- COUNT_EMPLOYEES
+                                    SELECT COUNT(*) FROM Employees";
                 return Convert.ToInt32(cmd.ExecuteScalar());
             }
         }
@@ -25,7 +48,8 @@ namespace DbMocker.Tests
         {
             using (var cmd = connection.CreateCommand())
             {
-                cmd.CommandText = "SELECT ID, Name FROM Employees";
+                cmd.CommandText = @"-- EMPLOYEES
+                                    SELECT ID, Name FROM Employees";
                 var reader = cmd.ExecuteReader();
 
                 var data = new List<object[]>();
@@ -53,7 +77,7 @@ namespace DbMocker.Tests
             // Don't execute the query to your SQL Server,
             // But returns this MockTable.
             conn.Mocks
-                .When(cmd => cmd.CommandText.StartsWith("SELECT COUNT(*)") &&
+                .When(cmd => cmd.CommandText.Contains("COUNT_EMPLOYEES") &&
                              cmd.Parameters.Count() == 0)
                 .ReturnsTable(MockTable.WithColumns("Count")
                                        .AddRow(14));
@@ -70,7 +94,7 @@ namespace DbMocker.Tests
             var conn = new MockDbConnection();
 
             conn.Mocks
-                .WhenAny()
+                .WhenTag("EMPLOYEES")
                 .ReturnsTable(new MockTable().AddColumns("ID", "Name")
                                              .AddRow(1, "Scott")
                                              .AddRow(2, "Bill"));
@@ -86,7 +110,7 @@ namespace DbMocker.Tests
             var conn = new MockDbConnection();
 
             conn.Mocks
-                .WhenAny()
+                .WhenTag("EMPLOYEES")
                 .ReturnsTable(MockTable.Empty()
                                        .AddColumns("ID", "Name")
                                        .AddRow(1, "Scott"));
@@ -102,7 +126,7 @@ namespace DbMocker.Tests
             var conn = new MockDbConnection();
 
             conn.Mocks
-                .WhenAny()
+                .WhenTag("COUNT_EMPLOYEES")
                 .ReturnsTable(MockTable.SingleCell("Count", 14));
 
             int count = GetNumberOfEmployees(conn);
@@ -116,7 +140,7 @@ namespace DbMocker.Tests
             var conn = new MockDbConnection();
 
             conn.Mocks
-                .WhenAny()
+                .WhenTag("COUNT_EMPLOYEES")
                 .ReturnsTable(cmd => MockTable.SingleCell("Count", cmd.Parameters.Count()));
 
             int count = GetNumberOfEmployees(conn);
@@ -130,7 +154,7 @@ namespace DbMocker.Tests
             var conn = new MockDbConnection();
 
             conn.Mocks
-                .WhenAny()
+                .WhenTag("COUNT_EMPLOYEES")
                 .ReturnsScalar<int>(14);
 
             int count = GetNumberOfEmployees(conn);
@@ -155,6 +179,30 @@ namespace DbMocker.Tests
             Assert.AreEqual(null, data[0][0]);
             Assert.AreEqual("Scott", data[0][1]);
         }
+
+        [TestMethod]
+        public void UnitTest8()
+        {
+            var conn = new MockDbConnection();
+
+            // Sample data rows
+            var samples = new[]
+                {
+                    new { ID = 0, Name = "Scott" },
+                    new { ID = 1, Name = "Denis" },
+                };
+
+            conn.Mocks
+                .WhenTag("EMPLOYEES")
+                .ReturnsTable(MockTable.FromType(samples));
+
+            var data = GetEmployees(conn);
+
+            Assert.AreEqual(2, data.Length);
+            Assert.AreEqual(0, data[0][0]);
+            Assert.AreEqual("Scott", data[0][1]);
+        }
+
 
     }
 }
