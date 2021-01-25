@@ -251,6 +251,10 @@ var conn = new MockDbConnection()
 
 ## Releases
 
+## Version 1.17
+- Fix consistent NewLine detection (\n, \r or both), used by `WhenTag` method.
+  Thanks [martinsmith1968](https://github.com/martinsmith1968).
+
 ## Version 1.16
 - Add `MockTable.FromType<T>` method to fill a mock table using existing .NET objects.
   Thanks [martinsmith1968](https://github.com/martinsmith1968).
