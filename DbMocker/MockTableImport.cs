@@ -18,7 +18,7 @@ namespace Apps72.Dev.Data.DbMocker
             bool mustRemoveEmptyLines = (options & CsvImportOptions.RemoveEmptyLines) == CsvImportOptions.RemoveEmptyLines;
             bool mustTrimLines = (options & CsvImportOptions.TrimLines) == CsvImportOptions.TrimLines;
 
-            foreach (string row in content.Split(Constants.SPLIT_NEWLINE, StringSplitOptions.None))
+            foreach (string row in content.Split(MockTable.SPLIT_NEWLINE, StringSplitOptions.None))
             {
                 if (mustRemoveEmptyLines && string.IsNullOrEmpty(row))
                 {

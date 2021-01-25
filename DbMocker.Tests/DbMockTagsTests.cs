@@ -50,6 +50,26 @@ namespace DbMocker.Tests
             Assert.AreEqual(99, result);
         }
 
+        [DataTestMethod()]
+        [DataRow("\r")]
+        [DataRow("\r\n")]
+        [DataRow("\n\r")]
+        [DataRow("\n")]
+        public void Mock_SimpleTag_WithReturnSeparators_Test(string crlf)
+        {
+            var conn = new MockDbConnection();
+
+            conn.Mocks
+                 .WhenTag("MyTag")
+                 .ReturnsScalar(99);
+
+            var cmd = conn.CreateCommand();
+            cmd.CommandText = $"-- MyTag{crlf}SELECT ... ";
+            var result = cmd.ExecuteScalar();
+
+            Assert.AreEqual(99, result);
+        }
+
         [TestMethod]
         [ExpectedException(typeof(MockException))]
         public void Mock_TagNotFound_Test()

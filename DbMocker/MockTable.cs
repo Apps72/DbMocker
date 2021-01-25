@@ -8,6 +8,7 @@ namespace Apps72.Dev.Data.DbMocker
     /// <summary />
     public partial class MockTable
     {
+        public static readonly char[] SPLIT_NEWLINE = { '\r', '\n' };
         private List<object[]> _rows = new List<object[]>();
 
         /// <summary />

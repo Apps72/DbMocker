@@ -44,11 +44,9 @@ namespace Apps72.Dev.Data.DbMocker
                 condition: (cmd) =>
                 {
                     string toSearch = $"-- {tagName}";
-
                     var lines = cmd.CommandText
-                        .Split(Constants.SPLIT_NEWLINE, StringSplitOptions.RemoveEmptyEntries);
-
-                    return lines.Contains(toSearch);
+                                   .Split(MockTable.SPLIT_NEWLINE, StringSplitOptions.RemoveEmptyEntries);
+                    return lines.Any(line => line.TrimEnd() == toSearch);
                 });
         }
 
