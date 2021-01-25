@@ -8,8 +8,6 @@ namespace Apps72.Dev.Data.DbMocker
 {
     public partial class MockTable
     {
-        private static readonly string[] SPLIT_NEWLINE = new string[] { Environment.NewLine };
-
         /// <summary />
         public static MockTable FromCsv(string content, string delimiter, CsvImportOptions options)
         {
@@ -20,7 +18,7 @@ namespace Apps72.Dev.Data.DbMocker
             bool mustRemoveEmptyLines = (options & CsvImportOptions.RemoveEmptyLines) == CsvImportOptions.RemoveEmptyLines;
             bool mustTrimLines = (options & CsvImportOptions.TrimLines) == CsvImportOptions.TrimLines;
 
-            foreach (string row in content.Split(SPLIT_NEWLINE, StringSplitOptions.None))
+            foreach (string row in content.Split(Constants.SPLIT_NEWLINE, StringSplitOptions.None))
             {
                 if (mustRemoveEmptyLines && string.IsNullOrEmpty(row))
                 {

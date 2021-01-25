@@ -9,7 +9,6 @@ namespace Apps72.Dev.Data.DbMocker
     public class MockConditions
     {
         internal bool MustValidateSqlServerCommandText = false;
-        private static readonly string NEW_LINE = Environment.NewLine;
         private List<MockReturns> _conditions = new List<MockReturns>();
 
         /// <summary />
@@ -44,9 +43,12 @@ namespace Apps72.Dev.Data.DbMocker
                 description: $"WhenTag({tagName})",
                 condition: (cmd) =>
                 {
-                    string toSearch = $"-- {tagName}{NEW_LINE}";
-                    return cmd.CommandText.StartsWith(toSearch) ||
-                           cmd.CommandText.Contains($"{NEW_LINE}{toSearch}");
+                    string toSearch = $"-- {tagName}";
+
+                    var lines = cmd.CommandText
+                        .Split(Constants.SPLIT_NEWLINE, StringSplitOptions.RemoveEmptyEntries);
+
+                    return lines.Contains(toSearch);
                 });
         }
 
