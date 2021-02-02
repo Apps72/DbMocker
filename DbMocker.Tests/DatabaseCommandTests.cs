@@ -379,5 +379,48 @@ namespace DbMocker.Tests
 
         }
 
+        [TestMethod]
+        public void Mock_ThrowException_Test()
+        {
+            var conn = new MockDbConnection();
+
+            conn.Mocks
+                .WhenAny()
+                .Throws(new Exception("TestException"));
+
+            using (var cmd = new DatabaseCommand(conn))
+            {
+                var exception = Assert.ThrowsException<Exception>(() =>
+                {
+                    cmd.CommandText.AppendLine("SELECT ...");
+                    cmd.ExecuteScalar<int>();
+                });
+
+                Assert.IsNotNull(exception);
+                Assert.AreEqual("TestException", exception.Message);
+            }
+        }
+
+        [TestMethod]
+        public void Mock_ThrowGenericException_Test()
+        {
+            var conn = new MockDbConnection();
+
+            conn.Mocks
+                .WhenAny()
+                .Throws<Exception>();
+
+            using (var cmd = new DatabaseCommand(conn))
+            {
+                var exception = Assert.ThrowsException<Exception>(() =>
+                {
+                    cmd.CommandText.AppendLine("SELECT ...");
+                    cmd.ExecuteScalar<int>();
+                });
+
+                Assert.IsNotNull(exception);
+            }
+        }
+
     }
 }
