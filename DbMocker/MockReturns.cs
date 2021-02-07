@@ -118,7 +118,7 @@ namespace Apps72.Dev.Data.DbMocker
         /// Throws the specified exception.
         /// </summary>
         /// <param name="exception">The exception.</param>
-        public void Throws(Exception exception)
+        public void ThrowsException(Exception exception)
         {
             ReturnsFunction = command => throw exception;
         }
@@ -127,7 +127,7 @@ namespace Apps72.Dev.Data.DbMocker
         /// Throws the specified exception type.
         /// </summary>
         /// <typeparam name="TException">The type of the exception.</typeparam>
-        public void Throws<TException>() where TException : Exception, new()
+        public void ThrowsException<TException>() where TException : Exception, new()
         {
             ReturnsFunction = command => throw new TException();
         }

@@ -386,7 +386,7 @@ namespace DbMocker.Tests
 
             conn.Mocks
                 .WhenAny()
-                .Throws(new Exception("TestException"));
+                .ThrowsException(new Exception("TestException"));
 
             using (var cmd = new DatabaseCommand(conn))
             {
@@ -408,7 +408,7 @@ namespace DbMocker.Tests
 
             conn.Mocks
                 .WhenAny()
-                .Throws<Exception>();
+                .ThrowsException<Exception>();
 
             using (var cmd = new DatabaseCommand(conn))
             {

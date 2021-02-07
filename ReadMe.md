@@ -251,6 +251,10 @@ var conn = new MockDbConnection()
 
 ## Releases
 
+## Version 1.18
+- Add methods `ThrowsException()` to throw an exception when a condition has occured.
+  Thanks [wessonben](https://github.com/wessonben).
+
 ## Version 1.17
 - Fix consistent NewLine detection (\n, \r or both), used by `WhenTag` method.
   Thanks [martinsmith1968](https://github.com/martinsmith1968).
