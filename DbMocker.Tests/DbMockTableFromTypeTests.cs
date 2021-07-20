@@ -172,5 +172,21 @@ namespace DbMocker.Tests
                 Assert.AreEqual(rowData[i].TimestampModified, table.Rows[i, 6]);
             }
         }
+
+        [TestMethod]
+        public void Mock_MockTable_FromType_with_AnonymousType_Test()
+        {
+            var table = MockTable.FromType(new[] 
+            {
+                new 
+                {
+                    Id = 123,
+                    Name = "My Name"
+                }
+            });
+
+            Assert.AreEqual(123, table.Rows[0, 0]);
+            Assert.AreEqual("My Name", table.Rows[0, 1]);
+        }
     }
 }
