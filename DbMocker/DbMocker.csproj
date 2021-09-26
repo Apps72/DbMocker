@@ -32,15 +32,7 @@ conn.Mocks
   </PropertyGroup>
 
   <ItemGroup>
-	<None Include="..\Library\Microsoft.SqlServer.SqlParser.dll">
-        <PackagePath>lib\netstandard2.0</PackagePath>
-        <Pack>true</Pack>
-        <Visible>false</Visible>
-    </None>
-  </ItemGroup>
-
-  <ItemGroup>
-    <PackageReference Include="Microsoft.SqlServer.Management.SqlParser" Version="160.20216.14" />
+    <PackageReference Include="Microsoft.SqlServer.Management.SqlParser" Version="160.21099.39" />
   </ItemGroup>
 
 </Project>
