@@ -251,6 +251,10 @@ var conn = new MockDbConnection()
 
 ## Releases
 
+## Version 1.19
+- Use a direct reference to SqlParser.dll.
+  Thanks [yyalkovich](https://github.com/yyalkovich).
+
 ## Version 1.18
 - Add methods `ThrowsException()` to throw an exception when a condition has occured.
   Thanks [wessonben](https://github.com/wessonben).
