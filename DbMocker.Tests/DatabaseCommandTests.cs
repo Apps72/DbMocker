@@ -48,6 +48,51 @@ namespace DbMocker.Tests
         }
 
         [TestMethod]
+        public void Mock_ContainsSql_NullableIntegerScalar_Null_Test()
+        {
+            // Issue #27 - https://github.com/Apps72/DbMocker/issues/27
+            // https://docs.microsoft.com/en-us/dotnet/api/system.data.common.dbcommand.executescalar
+            //   If the first column of the first row in the result set is not found, a null reference is returned.
+
+            var conn = new MockDbConnection();
+
+            conn.Mocks
+                .When(c => c.CommandText.Contains("SELECT"))
+                .ReturnsScalar((int?)null);
+
+            using (var cmd = new DatabaseCommand(conn))
+            {
+                cmd.CommandText.AppendLine("SELECT ...");
+
+                var result = cmd.ExecuteScalar();
+
+                Assert.AreEqual(null, result);
+            }
+        }
+
+        [TestMethod]
+        public void Mock_ContainsSql_NullableIntegerScalar_DbNull_Test()
+        {
+            // Issue #27 - https://github.com/Apps72/DbMocker/issues/27
+            // https://docs.microsoft.com/en-us/dotnet/api/system.data.common.dbcommand.executescalar
+            //   If the value in the database is null, the query returns DBNull.Value.
+
+            var conn = new MockDbConnection();
+
+            conn.Mocks
+                .When(c => c.CommandText.Contains("SELECT"))
+                .ReturnsScalar(DBNull.Value);
+
+            using (var cmd = new DatabaseCommand(conn))
+            {
+                cmd.CommandText.AppendLine("SELECT ...");
+                var result = cmd.ExecuteScalar();
+
+                Assert.AreEqual(DBNull.Value, result);
+            }
+        }
+
+        [TestMethod]
         public void Mock_ContainsSql_IntegerScalar_DbNull_Test()
         {
             var conn = new MockDbConnection();
