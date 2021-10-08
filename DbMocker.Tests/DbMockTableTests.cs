@@ -172,7 +172,7 @@ namespace DbMocker.Tests
 
             conn.Mocks
                 .WhenAny()
-                .ReturnsScalar<object>(null);
+                .ReturnsScalar<object>(DBNull.Value);
 
             object result = conn.CreateCommand().ExecuteScalar();
 

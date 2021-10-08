@@ -199,7 +199,7 @@ namespace Apps72.Dev.Data.DbMocker
                     Columns = Columns.WithNames(string.Empty),
                     Rows = new object[,]
                     {
-                        { GetValueOrDbNull(returns) }
+                        { returns }
                     }
                 };
             }
