@@ -251,6 +251,12 @@ var conn = new MockDbConnection()
 
 ## Releases
 
+## Version 1.20
+- #27 Fix `ExecuteScalar` method to respect the Microsoft documentation.
+  _"If the first column of the first row in the result set is not found, a null reference is returned. 
+  If the value in the database is null, the query returns DBNull.Value."_
+  Thanks [Andreas](https://github.com/htw8441).
+
 ## Version 1.19
 - Use a direct reference to SqlParser.dll.
   Thanks [yyalkovich](https://github.com/yyalkovich).
