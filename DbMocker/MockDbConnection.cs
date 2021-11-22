@@ -71,6 +71,12 @@ namespace Apps72.Dev.Data.DbMocker
             _connectionState = ConnectionState.Open;
         }
 
+        protected override void Dispose(bool disposing)
+        {
+            Close();
+            base.Dispose(disposing);
+        }
+
         /// <summary />
         protected override DbTransaction BeginDbTransaction(IsolationLevel isolationLevel)
         {
