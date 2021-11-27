@@ -251,6 +251,10 @@ var conn = new MockDbConnection()
 
 ## Releases
 
+## Version 1.21
+- #29 Fix `Dispose` method to change the ConnectionState to Closed.
+  Thanks [OlegKrymskyi](https://github.com/OlegKrymskyi).
+
 ## Version 1.20
 - #27 Fix `ExecuteScalar` method to respect the Microsoft documentation.
   _"If the first column of the first row in the result set is not found, a null reference is returned. 

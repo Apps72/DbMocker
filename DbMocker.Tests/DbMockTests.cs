@@ -385,5 +385,35 @@ namespace DbMocker.Tests
             Assert.AreEqual(10, result);
         }
 
+        [TestMethod]
+        public void Mock_Dispose_Test()
+        {
+            var conn = new MockDbConnection();
+
+            conn.Dispose();
+            Assert.AreEqual(conn.State, System.Data.ConnectionState.Closed);
+        }
+
+        [TestMethod]
+        public void Mock_UsingDispose_Test()
+        {
+            MockDbConnection conn;
+
+            using (conn = new MockDbConnection())
+            {
+
+            }
+
+            Assert.AreEqual(conn.State, System.Data.ConnectionState.Closed);
+        }
+
+        [TestMethod]
+        public void Mock_Close_Test()
+        {
+            var conn = new MockDbConnection();
+
+            conn.Close();
+            Assert.AreEqual(conn.State, System.Data.ConnectionState.Closed);
+        }
     }
 }

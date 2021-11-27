@@ -72,6 +72,13 @@ namespace Apps72.Dev.Data.DbMocker
         }
 
         /// <summary />
+        protected override void Dispose(bool disposing)
+        {
+            Close();
+            base.Dispose(disposing);
+        }
+
+        /// <summary />
         protected override DbTransaction BeginDbTransaction(IsolationLevel isolationLevel)
         {
             if (this.Transaction == null)
