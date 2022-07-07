@@ -6,11 +6,13 @@ using System.Globalization;
 
 namespace Apps72.Dev.Data.DbMocker.Helpers
 {
-    public static class MockDataReaderSchemaTableBuilder
-    {
+    /// <summary />
+    internal static class MockDataReaderSchemaTableBuilder
+    {        
         private static readonly Dictionary<DbType, DbTypeSchemaDescriptor> _dbTypeDescriptors = InitalizeDbTypeDescriptor();
 
-        public static DataTable BuildSchema(MockColumn[] columns, object[,] rows)
+        /// <summary />
+        internal static DataTable BuildSchema(MockColumn[] columns, object[,] rows)
         {
             DataRow row;
             DataTable schemaTable = new DataTable("SchemaTable");
@@ -87,6 +89,7 @@ namespace Apps72.Dev.Data.DbMocker.Helpers
             return schemaTable;
         }
 
+        /// <summary />
         private static bool IsNullable(Type type)
         {
             if (!type.IsValueType)
@@ -98,6 +101,7 @@ namespace Apps72.Dev.Data.DbMocker.Helpers
             return false; // value-type
         }
 
+        /// <summary />
         private static Type GetFieldType(Type type)
         {
             if (!type.IsValueType)
@@ -110,6 +114,7 @@ namespace Apps72.Dev.Data.DbMocker.Helpers
             return type;
         }
 
+        /// <summary />
         private static DbTypeSchemaDescriptor GetDbTyeDescriptor(DbType dbType)
         {
             if (_dbTypeDescriptors.ContainsKey(dbType))
@@ -118,6 +123,7 @@ namespace Apps72.Dev.Data.DbMocker.Helpers
             return _dbTypeDescriptors[DbType.Object];
         }
 
+        /// <summary />
         private static Dictionary<DbType, DbTypeSchemaDescriptor> InitalizeDbTypeDescriptor()
         {
             var dbTypeDescriptors = new Dictionary<DbType, DbTypeSchemaDescriptor>()
@@ -153,21 +159,5 @@ namespace Apps72.Dev.Data.DbMocker.Helpers
 
             return dbTypeDescriptors;
         }
-    }
-
-    internal class DbTypeSchemaDescriptor
-    {
-        public DbTypeSchemaDescriptor(DbType dbType, int columnSize, object numericPrecision, object numericScale)
-        {
-            DbType = dbType;
-            ColumnSize = columnSize;
-            NumericPrecision = numericPrecision;
-            NumericScale = numericScale;
-        }
-
-        public DbType DbType { get; }
-        public int ColumnSize { get; }
-        public object NumericPrecision { get; }
-        public object NumericScale { get; }
-    }
+    }   
 }

@@ -251,6 +251,10 @@ var conn = new MockDbConnection()
 
 ## Releases
 
+## Version 1.22
+- #31 Implement the `DbDataReader.GetSchemaTable()` method.
+  Thanks [javnov](httpshttps://github.com/javnov).
+
 ## Version 1.21
 - #29 Fix `Dispose` method to change the ConnectionState to Closed.
   Thanks [OlegKrymskyi](https://github.com/OlegKrymskyi).
