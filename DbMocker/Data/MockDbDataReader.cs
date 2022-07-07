@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using System.Data;
 using System.Data.Common;
 
 namespace Apps72.Dev.Data.DbMocker.Data
@@ -11,6 +12,7 @@ namespace Apps72.Dev.Data.DbMocker.Data
         private MockColumn[] _columns;
         private object[,] _rows;
         private int _currentRowIndex = -1;
+        private DataTable _schema;
 
         internal MockDbDataReader(MockTable[] tables)
         {
@@ -63,7 +65,7 @@ namespace Apps72.Dev.Data.DbMocker.Data
         {
             return _columns[ordinal].Type.Name;
         }
-        
+
         public override DateTime GetDateTime(int ordinal)
         {
             return (DateTime)GetValue(ordinal);
@@ -166,7 +168,7 @@ namespace Apps72.Dev.Data.DbMocker.Data
 
         public override bool IsDBNull(int ordinal)
         {
-            return GetValue(ordinal) == DBNull.Value || 
+            return GetValue(ordinal) == DBNull.Value ||
                   GetValue(ordinal) == null;
         }
 
@@ -180,6 +182,7 @@ namespace Apps72.Dev.Data.DbMocker.Data
             _columns = tables[_currentTableIndex].Columns ?? Array.Empty<MockColumn>();
             _rows = tables[_currentTableIndex].Rows ?? new object[,] { };
             _currentRowIndex = -1;
+            _schema = Helpers.MockDataReaderSchemaTableBuilder.BuildSchema(_columns, _rows);
 
             return true;
         }
@@ -188,6 +191,11 @@ namespace Apps72.Dev.Data.DbMocker.Data
         {
             _currentRowIndex++;
             return _rows?.GetLength(0) > _currentRowIndex;
+        }
+
+        public override DataTable GetSchemaTable()
+        {
+            return _schema;
         }
 
         #endregion
