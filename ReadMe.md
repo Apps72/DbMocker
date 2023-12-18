@@ -251,6 +251,9 @@ var conn = new MockDbConnection()
 
 ## Releases
 
+## Version 1.23
+- Dependencies updated.
+
 ## Version 1.22
 - #31 Implement the `DbDataReader.GetSchemaTable()` method.
   Thanks [javnov](httpshttps://github.com/javnov).
