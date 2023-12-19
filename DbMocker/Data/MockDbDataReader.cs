@@ -13,6 +13,7 @@ namespace Apps72.Dev.Data.DbMocker.Data
         private object[,] _rows;
         private int _currentRowIndex = -1;
         private DataTable _schema;
+        private bool _isClosed = false;
 
         internal MockDbDataReader(MockTable[] tables)
         {
@@ -32,7 +33,7 @@ namespace Apps72.Dev.Data.DbMocker.Data
 
         public override bool HasRows => _rows?.Length >= 1;
 
-        public override bool IsClosed => false;
+        public override bool IsClosed => _isClosed;
 
         public override int RecordsAffected => 0;
 
@@ -177,7 +178,10 @@ namespace Apps72.Dev.Data.DbMocker.Data
             _currentTableIndex++;
 
             if (_currentTableIndex >= tables.Length)
+            {
+                _isClosed = true;
                 return false;
+            }
 
             _columns = tables[_currentTableIndex].Columns ?? Array.Empty<MockColumn>();
             _rows = tables[_currentTableIndex].Rows ?? new object[,] { };

@@ -2,8 +2,12 @@ using Apps72.Dev.Data;
 using Apps72.Dev.Data.DbMocker;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
+using System.Data.Common;
+using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
+using System.Threading.Tasks;
+using System.Collections.Generic;
 
 namespace DbMocker.Tests
 {
@@ -467,5 +471,49 @@ namespace DbMocker.Tests
             }
         }
 
+        [DataRow(new int[] { 20 })]         // 1 table  with value in first row/cell = 20
+        [DataRow(new int[] { 10, 20, 30 })] // 3 tables with value in first row/cell = 10, 20, 30
+        [DataTestMethod()]
+        public void Mock_MultipleDataReader_Test(int[] CellValues)
+        {
+            var conn = new MockDbConnection();
+
+            var tables = Enumerable.Range(0, CellValues.Length).Select(i => MockTable.WithColumns("Count").AddRow(CellValues[i]));
+
+            conn.Mocks.WhenAny()
+                      .ReturnsDataset(tables.ToArray());
+
+            var count = GetCountValues(conn).ToArray();
+
+            Assert.AreEqual(CellValues.Length, count.Count());
+            Assert.AreEqual(CellValues.First(), count.First());
+            Assert.AreEqual(CellValues.Last(), count.Last());
+
+            // Returns a list with all Rows[0][0] values, for each tables.
+            IEnumerable<int> GetCountValues(DbConnection connection)
+            {
+                var result = new List<int>();
+                var dataSet = new DataSet();
+
+                using var cmd = connection.CreateCommand();
+                cmd.CommandText = "SELECT ...";
+
+                using (var myReader = cmd.ExecuteReader())
+                {
+                    do
+                    {
+                        var dataTable = new DataTable();
+                        dataTable.Load(myReader);
+                        dataSet.Tables.Add(dataTable);
+                    }
+                    while (myReader.IsClosed == false);
+                }
+
+                foreach (DataTable table in dataSet.Tables)
+                {
+                    yield return Convert.ToInt32(table.Rows[0][0]);
+                }
+            }
+        }
     }
 }
