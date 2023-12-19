@@ -253,6 +253,8 @@ var conn = new MockDbConnection()
 
 ## Version 1.23
 - Dependencies updated.
+- #32 Update `MockDbDataReader.IsClosed`
+  Thanks [kiainlogicdk](https://github.com/kiainlogicdk) for the discussion.
 
 ## Version 1.22
 - #31 Implement the `DbDataReader.GetSchemaTable()` method.
