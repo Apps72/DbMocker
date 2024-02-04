@@ -15,8 +15,8 @@ namespace DbMocker.Tests
             await using var connection = await dataSource.OpenConnectionAsync() as MockDbConnection;
 
             connection.Mocks
-                      .When(c => c.CommandText.Contains("SELECT"))
-                      .ReturnsScalar(14);
+                        .When(c => c.CommandText.Contains("SELECT"))
+                        .ReturnsScalar(14);
 
             using (var cmd = connection.CreateCommand())
             {
