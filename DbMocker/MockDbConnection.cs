@@ -7,6 +7,7 @@ namespace Apps72.Dev.Data.DbMocker
     /// <summary />
     public class MockDbConnection : DbConnection
     {
+        public static string MOCKER_CONNECTION_STRING = "Server=DbMockerServer;Database=DbMockerDatabase";
         private ConnectionState _connectionState = ConnectionState.Closed;
 
         /// <summary />
@@ -38,7 +39,7 @@ namespace Apps72.Dev.Data.DbMocker
         #region LEGACY METHODS
 
         /// <summary />
-        public override string ConnectionString { get; set; } = "Server=DbMockerServer;Database=DbMockerDatabase";
+        public override string ConnectionString { get; set; } = MOCKER_CONNECTION_STRING;
 
         /// <summary />
         public override string Database => "DbMockerDatabase";

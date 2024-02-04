@@ -251,6 +251,12 @@ var conn = new MockDbConnection()
 
 ## Releases
 
+## Version 2.0
+
+- Dependencies updated.
+- Library migrated to .NET 8.0.
+- Add MockDbDataSource to simulare a DbDataSource.
+
 ## Version 1.23
 - Dependencies updated.
 - #32 Update `MockDbDataReader.IsClosed`
