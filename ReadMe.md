@@ -251,7 +251,7 @@ var conn = new MockDbConnection()
 
 ## Releases
 
-## Version 1.23
+## Version 1.24
 - Dependencies updated.
 - #32 Update `MockDbDataReader.IsClosed`
   Thanks [kiainlogicdk](https://github.com/kiainlogicdk) for the discussion.

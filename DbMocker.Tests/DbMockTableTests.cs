@@ -214,6 +214,24 @@ namespace DbMocker.Tests
         }
 
         [TestMethod]
+        public void Mock_ReturnsRow_ByteArray_Test()
+        {
+            var conn = new MockDbConnection();
+            conn.Mocks
+                .WhenAny()
+                .ReturnsRow(new { Hash = new byte[] { 0, 1, 2, 4, 0, 0 } });
+
+            var reader = conn.CreateCommand().ExecuteReader();
+            reader.Read();
+            var buffer = new byte[] { 0, 0, 0, 0, 0, 0 };
+            var readBytesCount = reader.GetBytes(0, 1, buffer, 2, 3);
+
+            Assert.AreEqual(buffer[2], 1);
+            Assert.AreEqual(buffer[3], 2);
+            Assert.AreEqual(buffer[4], 4);
+        }
+
+        [TestMethod]
         public void Mock_ReturnsScalar_MockTableSingle_Test()
         {
             var conn = new MockDbConnection();
