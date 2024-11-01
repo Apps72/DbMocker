@@ -252,6 +252,10 @@ var conn = new MockDbConnection()
 ## Releases
 
 ## Version 1.24
+- #35 `MockDbDataReader.GetBytes` does fill the `buffer` param.
+  Thanks [Stepami](httpshttps://github.com/Stepami).
+
+## Version 1.23
 - Dependencies updated.
 - #32 Update `MockDbDataReader.IsClosed`
   Thanks [kiainlogicdk](https://github.com/kiainlogicdk) for the discussion.
