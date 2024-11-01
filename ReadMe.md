@@ -253,7 +253,7 @@ var conn = new MockDbConnection()
 
 ## Version 1.24
 - #35 `MockDbDataReader.GetBytes` does fill the `buffer` param.
-  Thanks [Stepami](httpshttps://github.com/Stepami).
+  Thanks [Stepami](https://github.com/Stepami).
 
 ## Version 1.23
 - Dependencies updated.
@@ -262,7 +262,7 @@ var conn = new MockDbConnection()
 
 ## Version 1.22
 - #31 Implement the `DbDataReader.GetSchemaTable()` method.
-  Thanks [javnov](httpshttps://github.com/javnov).
+  Thanks [javnov](https://github.com/javnov).
 
 ## Version 1.21
 - #29 Fix `Dispose` method to change the ConnectionState to Closed.
