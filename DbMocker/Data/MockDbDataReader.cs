@@ -49,6 +49,8 @@ namespace Apps72.Dev.Data.DbMocker.Data
 
         public override long GetBytes(int ordinal, long dataOffset, byte[] buffer, int bufferOffset, int length)
         {
+            var byteArray = (byte[])GetValue(ordinal);
+            Array.Copy(byteArray, dataOffset, buffer, bufferOffset, length);
             return length;
         }
 
