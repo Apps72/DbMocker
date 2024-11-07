@@ -11,12 +11,14 @@ namespace Apps72.Dev.Data.DbMocker
         /// <summary />
         public static MockTable FromType<T>(
             IEnumerable<T> rows = null,
-            BindingFlags propertyBindingFlags = DefaultFromTypeBindingFlags
+            BindingFlags propertyBindingFlags = DefaultFromTypeBindingFlags,
+            string[] columnsToInclude = null
         )
         {
             var propertyInfos = typeof(T).GetProperties(propertyBindingFlags);
 
             var columns = propertyInfos
+                .Where(propertyInfo => columnsToInclude == null || columnsToInclude.Contains(propertyInfo.Name))
                 .Select(propertyInfo => (propertyInfo.Name, propertyInfo.PropertyType))
                 .ToArray();
 
