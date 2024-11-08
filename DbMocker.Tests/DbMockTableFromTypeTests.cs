@@ -8,12 +8,12 @@ using Microsoft.EntityFrameworkCore;
 
 namespace DbMocker.Tests
 {
-	[TestClass]
+    [TestClass]
     public class DbMockTableFromTypeTests
     {
         [TestMethod]
         public void Mock_MockTable_FromType_Test()
-		{
+        {
             // Act
             var table = MockTable.FromType<SimpleModel>();
 
@@ -177,9 +177,9 @@ namespace DbMocker.Tests
         [TestMethod]
         public void Mock_MockTable_FromType_with_AnonymousType_Test()
         {
-            var table = MockTable.FromType(new[] 
+            var table = MockTable.FromType(new[]
             {
-                new 
+                new
                 {
                     Id = 123,
                     Name = "My Name"
@@ -193,41 +193,41 @@ namespace DbMocker.Tests
         [TestMethod]
         public void Should_Only_Return_Properties_From_Whitelist()
         {
-			using var context = new MyDbContext();
+            using var context = new MyDbContext();
 
-			var entityTypeModel = context.Model.FindEntityTypes(typeof(NavigationModel));
-			var properties = entityTypeModel.FirstOrDefault().GetProperties().ToList();
-			var table = MockTable.FromType<NavigationModel>(
+            var entityTypeModel = context.Model.FindEntityTypes(typeof(NavigationModel));
+            var properties = entityTypeModel.FirstOrDefault().GetProperties().ToList();
+            var table = MockTable.FromType<NavigationModel>(
                 null,
                 System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Instance,
                 properties.Select(p => p.Name).ToArray()
             );
 
-			Assert.IsNotNull(table);
+            Assert.IsNotNull(table);
 
-			Assert.AreEqual(7, table.Columns.Length);
+            Assert.AreEqual(7, table.Columns.Length);
             Assert.IsFalse(table.Columns.Any(c => c.Name == nameof(NavigationModel.RelatedModels)));
-		}
-	}
+        }
+    }
 
-	public class MyDbContext : DbContext
-	{
-		public DbSet<NavigationModel> SimpleModels { get; set; }
-		public DbSet<RelatedModel> RelatedModels { get; set; }
+    public class MyDbContext : DbContext
+    {
+        public DbSet<NavigationModel> SimpleModels { get; set; }
+        public DbSet<RelatedModel> RelatedModels { get; set; }
 
-		protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-		{
-			optionsBuilder.UseSqlServer("YourConnectionStringHere");
-		}
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            optionsBuilder.UseSqlServer("YourConnectionStringHere");
+        }
 
-		protected override void OnModelCreating(ModelBuilder modelBuilder)
-		{
-			modelBuilder.Entity<NavigationModel>()
-				.HasMany(sm => sm.RelatedModels)
-				.WithOne(rm => rm.NavigationModel)
-				.HasForeignKey(rm => rm.NavigationModelId);
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<NavigationModel>()
+                .HasMany(sm => sm.RelatedModels)
+                .WithOne(rm => rm.NavigationModel)
+                .HasForeignKey(rm => rm.NavigationModelId);
 
-			base.OnModelCreating(modelBuilder);
-		}
-	}
+            base.OnModelCreating(modelBuilder);
+        }
+    }
 }

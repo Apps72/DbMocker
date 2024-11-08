@@ -18,7 +18,10 @@ namespace Apps72.Dev.Data.DbMocker
             var propertyInfos = typeof(T).GetProperties(propertyBindingFlags);
 
             var columns = propertyInfos
-                .Where(propertyInfo => columnsToInclude == null || columnsToInclude.Contains(propertyInfo.Name))
+                .Where(propertyInfo =>
+                    columnsToInclude == null ||
+                    columnsToInclude.Length == 0 ||
+                    columnsToInclude.Contains(propertyInfo.Name))
                 .Select(propertyInfo => (propertyInfo.Name, propertyInfo.PropertyType))
                 .ToArray();
 
