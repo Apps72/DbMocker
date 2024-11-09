@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 
 namespace Apps72.Dev.Data.DbMocker
 {

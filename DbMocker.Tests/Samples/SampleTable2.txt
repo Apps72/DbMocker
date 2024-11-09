@@ -1,4 +1,4 @@
-﻿Id        Birth          
+Id        Birth          
 (int)     (datetime)
 
 123       2020-01-12

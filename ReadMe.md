@@ -1,4 +1,4 @@
-﻿# DbMocker - Simple Database Mocker for UnitTests
+# DbMocker - Simple Database Mocker for UnitTests
 
 ## Introduction
 

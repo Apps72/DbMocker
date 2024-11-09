@@ -1,4 +1,4 @@
-﻿using Apps72.Dev.Data.DbMocker.Helpers;
+using Apps72.Dev.Data.DbMocker.Helpers;
 using System;
 using System.Collections.Generic;
 using System.Data;

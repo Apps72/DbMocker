@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Apps72.Dev.Data.DbMocker;
 using DbMocker.Tests.SampleTypes;
 using Microsoft.VisualStudio.TestTools.UnitTesting;

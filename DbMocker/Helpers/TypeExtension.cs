@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Linq;
 
 namespace Apps72.Dev.Data.DbMocker.Helpers

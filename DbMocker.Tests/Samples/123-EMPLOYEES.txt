@@ -1,4 +1,4 @@
-﻿Id        Name          Age
+Id        Name          Age
 (int)     (string)      (int?)
 
 10        Scott         21

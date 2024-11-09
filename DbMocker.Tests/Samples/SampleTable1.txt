@@ -1,4 +1,4 @@
-﻿Id        Name          Age        Male
+Id        Name          Age        Male
 (int)     (string)      (int?)     (bool)
 
 1         Denis         21         true
