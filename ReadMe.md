@@ -251,6 +251,10 @@ var conn = new MockDbConnection()
 
 ## Releases
 
+## Version 1.25
+- #36 Accept white list of properties, with `MockTable.FromType` method.
+  Thanks [zewa666](https://github.com/zewa666).
+
 ## Version 1.24
 - #35 `MockDbDataReader.GetBytes` does fill the `buffer` param.
   Thanks [Stepami](https://github.com/Stepami).
