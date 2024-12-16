@@ -292,6 +292,36 @@ namespace DbMocker.Tests
         }
 
         [TestMethod]
+        public void Mock_MockTable_FromCsv_HandleNulls()
+        {
+            var conn = new MockDbConnection();
+
+            string csv = @" Id	Name	Birthdate
+                            1	Scott	1980-02-03
+                            2	null	1972-01-12
+                            3	Null	1965-03-14 ";
+
+            var table = MockTable.FromCsv(csv);
+
+            Assert.AreEqual("Id", table.Columns[0].Name);
+            Assert.AreEqual("Name", table.Columns[1].Name);
+
+            Assert.AreEqual(3, table.Rows.RowsCount());
+
+            Assert.AreEqual("Scott", table.Rows[0, 1]);
+            Assert.IsInstanceOfType(table.Rows[0, 1], typeof(string));
+
+            Assert.AreEqual(null, table.Rows[1, 1]);
+            Assert.AreEqual(null, table.Rows[2, 1]);
+
+            Assert.AreEqual(3, table.Rows[2, 0]);
+            Assert.IsInstanceOfType(table.Rows[2, 0], typeof(int));
+
+            Assert.AreEqual(new DateTime(1972, 1, 12), table.Rows[1, 2]);
+            Assert.IsInstanceOfType(table.Rows[1, 2], typeof(DateTime));
+        }
+
+        [TestMethod]
         public void Mock_CheckException_Test()
         {
             var conn = new MockDbConnection();
