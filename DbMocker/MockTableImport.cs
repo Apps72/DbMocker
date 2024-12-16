@@ -89,6 +89,9 @@ namespace Apps72.Dev.Data.DbMocker
 
             for (int i = 0; i < values.Length; i++)
             {
+                if (values[i].ToLowerInvariant() == "null")
+                    values[i] = null;
+                
                 if (i < types.Length)
                     result.Add(Convert.ChangeType(values[i], types[i]));
                 else
