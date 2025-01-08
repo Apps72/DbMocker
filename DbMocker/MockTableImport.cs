@@ -1,29 +1,30 @@
-using Apps72.Dev.Data.DbMocker.Helpers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using Apps72.Dev.Data.DbMocker.Helpers;
 
 namespace Apps72.Dev.Data.DbMocker
 {
     public partial class MockTable
     {
+        public const string DEFAULT_DELIMITER = "\t";
+
         /// <summary />
         public static MockTable FromCsv(string content, string delimiter, CsvImportOptions options)
         {
             var table = MockTable.Empty();
             Type[] types = null;
-            bool isFirstRow = true;          // First row = Column names
-            bool isFirstDataRow = false;     // Second row = First data row
-            bool mustRemoveEmptyLines = (options & CsvImportOptions.RemoveEmptyLines) == CsvImportOptions.RemoveEmptyLines;
-            bool mustTrimLines = (options & CsvImportOptions.TrimLines) == CsvImportOptions.TrimLines;
+            bool isFirstRow = true; // First row = Column names
+            bool isFirstDataRow = false; // Second row = First data row
+            bool mustRemoveEmptyLines =
+                (options & CsvImportOptions.RemoveEmptyLines) == CsvImportOptions.RemoveEmptyLines;
+            bool mustTrimLines =
+                (options & CsvImportOptions.TrimLines) == CsvImportOptions.TrimLines;
 
             foreach (string row in content.Split(MockTable.SPLIT_NEWLINE, StringSplitOptions.None))
             {
-                if (mustRemoveEmptyLines && string.IsNullOrEmpty(row))
-                {
-
-                }
+                if (mustRemoveEmptyLines && string.IsNullOrEmpty(row)) { }
                 else
                 {
                     string[] data;
@@ -41,7 +42,7 @@ namespace Apps72.Dev.Data.DbMocker
                         if (isFirstDataRow)
                             types = GetTypesOfFirstDataRow(data);
 
-                        table.AddRow(ConvertStringToTypes(data, types));
+                        table.AddRow(ConvertStringToTypes(data, types, options));
                     }
 
                     isFirstRow = false;
@@ -55,13 +56,17 @@ namespace Apps72.Dev.Data.DbMocker
         /// <summary />
         public static MockTable FromCsv(string content, string delimiter)
         {
-            return FromCsv(content, delimiter, CsvImportOptions.RemoveEmptyLines | CsvImportOptions.TrimLines);
+            return FromCsv(
+                content,
+                delimiter,
+                CsvImportOptions.RemoveEmptyLines | CsvImportOptions.TrimLines
+            );
         }
 
         /// <summary />
         public static MockTable FromCsv(string content)
         {
-            return FromCsv(content, "\t");
+            return FromCsv(content, DEFAULT_DELIMITER);
         }
 
         /// <summary />
@@ -83,15 +88,22 @@ namespace Apps72.Dev.Data.DbMocker
         }
 
         /// <summary />
-        private static object[] ConvertStringToTypes(string[] values, Type[] types)
+        private static object[] ConvertStringToTypes(
+            string[] values,
+            Type[] types,
+            CsvImportOptions options
+        )
         {
             var result = new List<object>();
 
             for (int i = 0; i < values.Length; i++)
             {
-                if (values[i].ToLowerInvariant() == "null")
+                if (
+                    (options & CsvImportOptions.AllowNullString) == CsvImportOptions.AllowNullString
+                    && values[i].ToLowerInvariant() == "null"
+                )
                     values[i] = null;
-                
+
                 if (i < types.Length)
                     result.Add(Convert.ChangeType(values[i], types[i]));
                 else
@@ -107,5 +119,6 @@ namespace Apps72.Dev.Data.DbMocker
         None = 0,
         RemoveEmptyLines = 1,
         TrimLines = 2,
+        AllowNullString = 4
     }
 }

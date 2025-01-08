@@ -1,9 +1,9 @@
-using Apps72.Dev.Data.DbMocker;
-using Apps72.Dev.Data.DbMocker.Helpers;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Data.Common;
 using System.Linq;
+using Apps72.Dev.Data.DbMocker;
+using Apps72.Dev.Data.DbMocker.Helpers;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace DbMocker.Tests
 {
@@ -15,13 +15,9 @@ namespace DbMocker.Tests
         {
             var conn = new MockDbConnection();
 
-            MockTable table = MockTable.Empty()
-                                 .AddColumns("Col1")
-                                 .AddRow(11);
+            MockTable table = MockTable.Empty().AddColumns("Col1").AddRow(11);
 
-            conn.Mocks
-                .WhenAny()
-                .ReturnsTable(table);
+            conn.Mocks.WhenAny().ReturnsTable(table);
 
             DbCommand cmd = conn.CreateCommand();
             object result = cmd.ExecuteScalar();
@@ -34,13 +30,9 @@ namespace DbMocker.Tests
         {
             var conn = new MockDbConnection();
 
-            MockTable table = MockTable.Empty()
-                                 .AddColumns(("Col1", typeof(int)))
-                                 .AddRow(11);
+            MockTable table = MockTable.Empty().AddColumns(("Col1", typeof(int))).AddRow(11);
 
-            conn.Mocks
-                .WhenAny()
-                .ReturnsTable(table);
+            conn.Mocks.WhenAny().ReturnsTable(table);
 
             DbCommand cmd = conn.CreateCommand();
             object result = cmd.ExecuteScalar();
@@ -53,12 +45,8 @@ namespace DbMocker.Tests
         {
             var conn = new MockDbConnection();
 
-            MockTable table = MockTable.WithColumns("Col1", "Col2")
-                                 .AddRow(11, 12)
-                                 .AddRow(13, 14);
-            conn.Mocks
-                .WhenAny()
-                .ReturnsTable(table);
+            MockTable table = MockTable.WithColumns("Col1", "Col2").AddRow(11, 12).AddRow(13, 14);
+            conn.Mocks.WhenAny().ReturnsTable(table);
 
             DbCommand cmd = conn.CreateCommand();
             DbDataReader result = cmd.ExecuteReader();
@@ -79,12 +67,8 @@ namespace DbMocker.Tests
         {
             var conn = new MockDbConnection();
 
-            MockTable table = MockTable.WithColumns("Col1", "Col2")
-                                       .AddRow(11, 12)
-                                       .AddRow(13, 14);
-            conn.Mocks
-                .WhenAny()
-                .ReturnsRow(table);
+            MockTable table = MockTable.WithColumns("Col1", "Col2").AddRow(11, 12).AddRow(13, 14);
+            conn.Mocks.WhenAny().ReturnsRow(table);
 
             DbCommand cmd = conn.CreateCommand();
             DbDataReader result = cmd.ExecuteReader();
@@ -105,12 +89,8 @@ namespace DbMocker.Tests
         {
             var conn = new MockDbConnection();
 
-            MockTable table = MockTable.WithColumns("Col1", "Col2")
-                                 .AddRow(null, 12)
-                                 .AddRow(13, 14);
-            conn.Mocks
-                .WhenAny()
-                .ReturnsTable(table);
+            MockTable table = MockTable.WithColumns("Col1", "Col2").AddRow(null, 12).AddRow(13, 14);
+            conn.Mocks.WhenAny().ReturnsTable(table);
 
             DbCommand cmd = conn.CreateCommand();
             DbDataReader result = cmd.ExecuteReader();
@@ -131,13 +111,11 @@ namespace DbMocker.Tests
         {
             var conn = new MockDbConnection();
 
-            MockTable table = MockTable.WithColumns(("Col1", typeof(int?)),
-                                                    ("Col2", typeof(int)))
-                                       .AddRow(null, 12)
-                                       .AddRow(13, 14);
-            conn.Mocks
-                .WhenAny()
-                .ReturnsTable(table);
+            MockTable table = MockTable
+                .WithColumns(("Col1", typeof(int?)), ("Col2", typeof(int)))
+                .AddRow(null, 12)
+                .AddRow(13, 14);
+            conn.Mocks.WhenAny().ReturnsTable(table);
 
             DbCommand cmd = conn.CreateCommand();
             DbDataReader result = cmd.ExecuteReader();
@@ -156,9 +134,7 @@ namespace DbMocker.Tests
         {
             var conn = new MockDbConnection();
 
-            conn.Mocks
-                .WhenAny()
-                .ReturnsScalar<object>(DBNull.Value);
+            conn.Mocks.WhenAny().ReturnsScalar<object>(DBNull.Value);
 
             object result = conn.CreateCommand().ExecuteScalar();
 
@@ -170,9 +146,7 @@ namespace DbMocker.Tests
         {
             var conn = new MockDbConnection();
 
-            conn.Mocks
-                .WhenAny()
-                .ReturnsScalar<object>(DBNull.Value);
+            conn.Mocks.WhenAny().ReturnsScalar<object>(DBNull.Value);
 
             object result = conn.CreateCommand().ExecuteScalar();
 
@@ -184,9 +158,7 @@ namespace DbMocker.Tests
         {
             var conn = new MockDbConnection();
 
-            conn.Mocks
-                .WhenAny()
-                .ReturnsRow(new { id = 1, Name = DBNull.Value });
+            conn.Mocks.WhenAny().ReturnsRow(new { id = 1, Name = DBNull.Value });
 
             DbDataReader result = conn.CreateCommand().ExecuteReader();
 
@@ -201,9 +173,7 @@ namespace DbMocker.Tests
         {
             var conn = new MockDbConnection();
 
-            conn.Mocks
-                .WhenAny()
-                .ReturnsRow(new { id = 1, Name = (string)null });
+            conn.Mocks.WhenAny().ReturnsRow(new { id = 1, Name = (string)null });
 
             DbDataReader result = conn.CreateCommand().ExecuteReader();
 
@@ -217,9 +187,7 @@ namespace DbMocker.Tests
         public void Mock_ReturnsRow_ByteArray_Test()
         {
             var conn = new MockDbConnection();
-            conn.Mocks
-                .WhenAny()
-                .ReturnsRow(new { Hash = new byte[] { 0, 1, 2, 4, 0, 0 } });
+            conn.Mocks.WhenAny().ReturnsRow(new { Hash = new byte[] { 0, 1, 2, 4, 0, 0 } });
 
             var reader = conn.CreateCommand().ExecuteReader();
             reader.Read();
@@ -238,9 +206,7 @@ namespace DbMocker.Tests
 
             var table = MockTable.SingleCell("Col1", 11);
 
-            conn.Mocks
-                .WhenAny()
-                .ReturnsTable(table);
+            conn.Mocks.WhenAny().ReturnsTable(table);
 
             DbCommand cmd = conn.CreateCommand();
             object result = cmd.ExecuteScalar();
@@ -254,9 +220,7 @@ namespace DbMocker.Tests
             var conn = new MockDbConnection();
 
             var table = MockTable.SingleCell(11);
-            conn.Mocks
-                .WhenAny()
-                .ReturnsTable(table);
+            conn.Mocks.WhenAny().ReturnsTable(table);
 
             DbCommand cmd = conn.CreateCommand();
             object result = cmd.ExecuteScalar();
@@ -269,7 +233,8 @@ namespace DbMocker.Tests
         {
             var conn = new MockDbConnection();
 
-            string csv = @" Id	Name	Birthdate
+            string csv =
+                @" Id	Name	Birthdate
                             1	Scott	1980-02-03
                             2	Bill	1972-01-12
                             3	Anders	1965-03-14 ";
@@ -296,12 +261,21 @@ namespace DbMocker.Tests
         {
             var conn = new MockDbConnection();
 
-            string csv = @" Id	Name	Birthdate
-                            1	Scott	1980-02-03
-                            2	null	1972-01-12
-                            3	Null	1965-03-14 ";
+            string csv =
+                @"
+Id	Name	Birthdate
+1	Scott	1980-02-03
+2	null	1972-01-12
+3	Null	1965-03-14
+";
 
-            var table = MockTable.FromCsv(csv);
+            var table = MockTable.FromCsv(
+                csv,
+                MockTable.DEFAULT_DELIMITER,
+                CsvImportOptions.RemoveEmptyLines
+                    | CsvImportOptions.TrimLines
+                    | CsvImportOptions.AllowNullString
+            );
 
             Assert.AreEqual("Id", table.Columns[0].Name);
             Assert.AreEqual("Name", table.Columns[1].Name);
@@ -326,9 +300,7 @@ namespace DbMocker.Tests
         {
             var conn = new MockDbConnection();
 
-            conn.Mocks
-                .WhenTag("NotFoundTag")
-                .ReturnsScalar(99);
+            conn.Mocks.WhenTag("NotFoundTag").ReturnsScalar(99);
 
             DbCommand cmd = conn.CreateCommand();
             cmd.CommandText = "SELECT * FROM EMP";
