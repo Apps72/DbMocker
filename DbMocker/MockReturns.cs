@@ -21,6 +21,9 @@ namespace Apps72.Dev.Data.DbMocker
 
         private Func<MockCommand, MockTable[]> _returnsFunction;
 
+        private readonly List<Action<MockCommand>> _callbacks = new List<Action<MockCommand>>();
+
+
         /// <summary />
         internal Func<MockCommand, MockTable[]> ReturnsFunction
         {
@@ -28,6 +31,11 @@ namespace Apps72.Dev.Data.DbMocker
             {
                 return (command) =>
                 {
+                    foreach (Action<MockCommand> callback in _callbacks)
+                    {
+                        callback(command);
+                    }
+
                     foreach (var mody in _modifyparameter)
                     {
                         mody(command);
@@ -85,7 +93,7 @@ namespace Apps72.Dev.Data.DbMocker
 
         /// <summary>
         /// Sets the expression to return a sample data object, when the condition occured.
-        /// This object is converted to a <seealso cref="MockTable"/> where columns are property names 
+        /// This object is converted to a <seealso cref="MockTable"/> where columns are property names
         /// and data in the first row are proerty values.
         /// </summary>
         /// <param name="returns">Sample data</param>
@@ -96,7 +104,7 @@ namespace Apps72.Dev.Data.DbMocker
 
         /// <summary>
         /// Sets a sample data object, when the condition occured.
-        /// This object is converted to a <seealso cref="MockTable"/> where columns are property names 
+        /// This object is converted to a <seealso cref="MockTable"/> where columns are property names
         /// and data in the first row are proerty values.
         /// </summary>
         /// <param name="returns">Sample data</param>
@@ -138,8 +146,8 @@ namespace Apps72.Dev.Data.DbMocker
         /// <param name="returns">Value to return</param>
         public MockReturns SetParameterValue(string parameterName, object value, ParameterDirection direction = ParameterDirection.Output)
         {
-            _modifyparameter.Add((command) => 
-            { 
+            _modifyparameter.Add((command) =>
+            {
                 var parameter = command.Parameters.FirstOrDefault(a => a.ParameterName == parameterName);
 
                 if (parameter == null)
@@ -225,6 +233,16 @@ namespace Apps72.Dev.Data.DbMocker
         private object GetValueOrDbNull(object value)
         {
             return value == null ? DBNull.Value : value;
+        }
+
+        public MockReturns Callback(Action<MockCommand> callback)
+        {
+            if (callback != null)
+            {
+                _callbacks.Add(callback);
+            }
+
+            return this;
         }
     }
 }
