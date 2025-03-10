@@ -1,9 +1,10 @@
+using System;
+using System.Data.Common;
+using System.Diagnostics;
+using System.Linq;
 using Apps72.Dev.Data.DbMocker;
 using Apps72.Dev.Data.DbMocker.Helpers;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
-using System.Data.Common;
-using System.Linq;
 
 namespace DbMocker.Tests
 {
@@ -51,6 +52,7 @@ namespace DbMocker.Tests
         [TestMethod]
         public void Mock_ReturnsSimple_MockTable_Test()
         {
+            var traced = false;
             var conn = new MockDbConnection();
 
             MockTable table = MockTable.WithColumns("Col1", "Col2")
@@ -58,6 +60,7 @@ namespace DbMocker.Tests
                                  .AddRow(13, 14);
             conn.Mocks
                 .WhenAny()
+                .Callback(_ => { traced = true; })
                 .ReturnsTable(table);
 
             DbCommand cmd = conn.CreateCommand();
@@ -65,6 +68,7 @@ namespace DbMocker.Tests
 
             result.Read();
 
+            Assert.IsTrue(traced);
             Assert.AreEqual(11, result.GetInt32(0));
             Assert.AreEqual(12, result.GetInt32(1));
 
@@ -154,14 +158,17 @@ namespace DbMocker.Tests
         [TestMethod]
         public void Mock_ReturnsSimple_DBNull_Test()
         {
+            var traced = false;
             var conn = new MockDbConnection();
 
             conn.Mocks
                 .WhenAny()
+                .Callback(_ => { traced = true; })
                 .ReturnsScalar<object>(DBNull.Value);
 
             object result = conn.CreateCommand().ExecuteScalar();
 
+            Assert.IsTrue(traced);
             Assert.AreEqual(DBNull.Value, result);
         }
 

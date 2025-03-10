@@ -17,12 +17,11 @@ namespace Apps72.Dev.Data.DbMocker
         public string Description { get; internal set; }
 
         /// <summary />
-        private List<Action<MockCommand>> _modifyparameter = new List<Action<MockCommand>>();
+        private List<Action<MockCommand>> _modifyParameter = new List<Action<MockCommand>>();
 
         private Func<MockCommand, MockTable[]> _returnsFunction;
 
         private readonly List<Action<MockCommand>> _callbacks = new List<Action<MockCommand>>();
-
 
         /// <summary />
         internal Func<MockCommand, MockTable[]> ReturnsFunction
@@ -36,7 +35,7 @@ namespace Apps72.Dev.Data.DbMocker
                         callback(command);
                     }
 
-                    foreach (var mody in _modifyparameter)
+                    foreach (var mody in _modifyParameter)
                     {
                         mody(command);
                     }
@@ -146,7 +145,7 @@ namespace Apps72.Dev.Data.DbMocker
         /// <param name="returns">Value to return</param>
         public MockReturns SetParameterValue(string parameterName, object value, ParameterDirection direction = ParameterDirection.Output)
         {
-            _modifyparameter.Add((command) =>
+            _modifyParameter.Add((command) =>
             {
                 var parameter = command.Parameters.FirstOrDefault(a => a.ParameterName == parameterName);
 
@@ -162,6 +161,21 @@ namespace Apps72.Dev.Data.DbMocker
 
                 parameter.Value = value;
             });
+
+            return this;
+        }
+
+        /// <summary>
+        /// Sets the expression to execute an action, to trace some data for example.
+        /// </summary>
+        /// <param name="callback"></param>
+        /// <returns></returns>
+        public MockReturns Callback(Action<MockCommand> callback)
+        {
+            if (callback != null)
+            {
+                _callbacks.Add(callback);
+            }
 
             return this;
         }
@@ -233,16 +247,6 @@ namespace Apps72.Dev.Data.DbMocker
         private object GetValueOrDbNull(object value)
         {
             return value == null ? DBNull.Value : value;
-        }
-
-        public MockReturns Callback(Action<MockCommand> callback)
-        {
-            if (callback != null)
-            {
-                _callbacks.Add(callback);
-            }
-
-            return this;
         }
     }
 }

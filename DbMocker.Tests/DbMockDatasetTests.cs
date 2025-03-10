@@ -1,10 +1,11 @@
-using Apps72.Dev.Data.DbMocker;
-using Apps72.Dev.Data.DbMocker.Helpers;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Data;
 using System.Data.Common;
+using System.Diagnostics;
 using System.Linq;
+using Apps72.Dev.Data.DbMocker;
+using Apps72.Dev.Data.DbMocker.Helpers;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace DbMocker.Tests
 {
@@ -14,6 +15,7 @@ namespace DbMocker.Tests
         [TestMethod]
         public void Mock_Dataset_MultipleTables_Test()
         {
+            var traced = false;
             var conn = new MockDbConnection();
 
             MockTable table1 = MockTable.WithColumns("Col1", "Col2")
@@ -24,6 +26,7 @@ namespace DbMocker.Tests
 
             conn.Mocks
                 .WhenAny()
+                .Callback(_ => { traced = true; })
                 .ReturnsDataset(table1, table2);
 
             // First DataTable
@@ -32,6 +35,7 @@ namespace DbMocker.Tests
 
             Assert.IsTrue(result.Read());
 
+            Assert.IsTrue(traced);
             Assert.AreEqual(11, result.GetInt32(0));
             Assert.AreEqual(12, result.GetInt32(1));
 
