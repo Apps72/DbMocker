@@ -251,6 +251,10 @@ var conn = new MockDbConnection()
 
 ## Releases
 
+## Version 1.26
+- #40 Add the Callback support to MockReturns with unit test.
+  Thanks [Tridy](https://github.com/Tridy).
+
 ## Version 1.25
 - #36 Accept white list of properties, with `MockTable.FromType` method.
   Thanks [zewa666](https://github.com/zewa666).
