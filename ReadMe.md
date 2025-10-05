@@ -73,7 +73,7 @@ public void UnitTest1()
 }
 ```
 
-See [https://apps72.com](https://apps72.com) for more information.
+See [https://github.com/Apps72/DbMocker/wiki](DbMocker Wiki pages) for more information.
 
 
 
