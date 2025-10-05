@@ -80,7 +80,6 @@ See [DbMocker Wiki pages](https://github.com/Apps72/DbMocker/wiki) for more info
 
 
 
-
 ## Conditions
 
 Use the `When` method to describe the condition to be detected. 
